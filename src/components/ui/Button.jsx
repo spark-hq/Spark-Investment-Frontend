@@ -16,6 +16,8 @@ const Button = ({
     success: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
     outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
+    start_trading: 'text-green-800 bg-white hover:bg-gray-100 hover-lift shadow-lg',
+    view_ai_insights: 'text-indigo-800 bg-white hover:bg-gray-100 hover-lift shadow-lg',
   };
   
   const sizes = {

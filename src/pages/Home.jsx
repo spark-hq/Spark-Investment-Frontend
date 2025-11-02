@@ -1,7 +1,18 @@
-import { Link } from 'react-router-dom';
-import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
-import { Sparkles, TrendingUp, Bot, Zap, Shield, LineChart, Wallet, Brain, Target, Users } from 'lucide-react';
+import { Link } from "react-router-dom";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import {
+  Sparkles,
+  TrendingUp,
+  Bot,
+  Zap,
+  Shield,
+  LineChart,
+  Wallet,
+  Brain,
+  Target,
+  Users,
+} from "lucide-react";
 
 const Home = () => {
   return (
@@ -21,16 +32,20 @@ const Home = () => {
               AI Intelligence
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Your personal AI assistant for tracking investments, live trading, and making data-driven decisions across all your portfolios.
+            Your personal AI assistant for tracking investments, live trading,
+            and making data-driven decisions across all your portfolios.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link to="/dashboard">
-              <Button size="lg" className="hover-lift group">
+              <Button size="lg" className="hover-lift flex items-center group">
                 <span>Get Started Free</span>
-                <Zap size={18} className="ml-2 group-hover:rotate-12 transition-transform" />
+                <Zap
+                  size={18}
+                  className="ml-2 group-hover:rotate-12 transition-transform"
+                />
               </Button>
             </Link>
             <Link to="/calculator">
@@ -64,18 +79,30 @@ const Home = () => {
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 text-center hover-lift">
                   <div className="text-5xl mb-3">📊</div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Smart Dashboard</h3>
-                  <p className="text-gray-600 text-sm">Track all investments in one place</p>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    Smart Dashboard
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Track all investments in one place
+                  </p>
                 </div>
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 text-center hover-lift">
                   <div className="text-5xl mb-3">🤖</div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">AI Analysis</h3>
-                  <p className="text-gray-600 text-sm">Get intelligent recommendations</p>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    AI Analysis
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Get intelligent recommendations
+                  </p>
                 </div>
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 text-center hover-lift">
                   <div className="text-5xl mb-3">⚡</div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">Live Trading</h3>
-                  <p className="text-gray-600 text-sm">Trade with AI assistance</p>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    Live Trading
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Trade with AI assistance
+                  </p>
                 </div>
               </div>
             </div>
@@ -90,74 +117,111 @@ const Home = () => {
             Everything You Need to Succeed
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Powerful features designed to help you make better investment decisions
+            Powerful features designed to help you make better investment
+            decisions
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
           {/* Feature 1 */}
-          <Card hover className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-indigo-200 transition-all">
+          <Card
+            hover
+            className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-indigo-200 transition-all"
+          >
             <div className="bg-indigo-100 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
               <Wallet className="text-indigo-600" size={28} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Multi-Platform Tracking</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Multi-Platform Tracking
+            </h3>
             <p className="text-gray-600 leading-relaxed">
-              Connect Zerodha, Groww, Upstox, and crypto exchanges. Track all your investments in one unified dashboard.
+              Connect Zerodha, Groww, Upstox, and crypto exchanges. Track all
+              your investments in one unified dashboard.
             </p>
           </Card>
 
           {/* Feature 2 */}
-          <Card hover className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-purple-200 transition-all">
+          <Card
+            hover
+            className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-purple-200 transition-all"
+          >
             <div className="bg-purple-100 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
               <Brain className="text-purple-600" size={28} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">AI-Powered Analysis</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              AI-Powered Analysis
+            </h3>
             <p className="text-gray-600 leading-relaxed">
-              Get intelligent insights, risk assessments, and future predictions powered by advanced AI algorithms.
+              Get intelligent insights, risk assessments, and future predictions
+              powered by advanced AI algorithms.
             </p>
           </Card>
 
           {/* Feature 3 */}
-          <Card hover className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-green-200 transition-all">
+          <Card
+            hover
+            className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-green-200 transition-all"
+          >
             <div className="bg-green-100 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
               <Zap className="text-green-600" size={28} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Live Trading Assistant</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Live Trading Assistant
+            </h3>
             <p className="text-gray-600 leading-relaxed">
-              Real-time trading with AI recommendations, stop-loss suggestions, and profit calculations.
+              Real-time trading with AI recommendations, stop-loss suggestions,
+              and profit calculations.
             </p>
           </Card>
 
           {/* Feature 4 */}
-          <Card hover className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-blue-200 transition-all">
+          <Card
+            hover
+            className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-blue-200 transition-all"
+          >
             <div className="bg-blue-100 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
               <LineChart className="text-blue-600" size={28} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Investment Calculator</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Investment Calculator
+            </h3>
             <p className="text-gray-600 leading-relaxed">
-              Calculate SIP, Lumpsum, and Step-up investments with detailed projections and visual charts.
+              Calculate SIP, Lumpsum, and Step-up investments with detailed
+              projections and visual charts.
             </p>
           </Card>
 
           {/* Feature 5 */}
-          <Card hover className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-pink-200 transition-all">
+          <Card
+            hover
+            className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-pink-200 transition-all"
+          >
             <div className="bg-pink-100 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
               <Bot className="text-pink-600" size={28} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Smart Auto-Invest</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Smart Auto-Invest
+            </h3>
             <p className="text-gray-600 leading-relaxed">
-              Let AI automatically invest based on your goals, risk tolerance, and market conditions.
+              Let AI automatically invest based on your goals, risk tolerance,
+              and market conditions.
             </p>
           </Card>
 
           {/* Feature 6 */}
-          <Card hover className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-orange-200 transition-all">
+          <Card
+            hover
+            className="p-8 animate-fadeIn hover-lift border-2 border-transparent hover:border-orange-200 transition-all"
+          >
             <div className="bg-orange-100 w-14 h-14 rounded-xl flex items-center justify-center mb-4">
               <Target className="text-orange-600" size={28} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">Goal Tracking</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              Goal Tracking
+            </h3>
             <p className="text-gray-600 leading-relaxed">
-              Set financial goals and track progress with smart milestones and achievement celebrations.
+              Set financial goals and track progress with smart milestones and
+              achievement celebrations.
             </p>
           </Card>
         </div>
@@ -180,32 +244,48 @@ const Home = () => {
               <div className="bg-gradient-to-br from-indigo-600 to-purple-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-6 hover-lift shadow-lg">
                 1
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Connect Accounts</h3>
-              <p className="text-gray-600">Link your trading and investment platforms securely</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Connect Accounts
+              </h3>
+              <p className="text-gray-600">
+                Link your trading and investment platforms securely
+              </p>
             </div>
 
             <div className="text-center animate-fadeIn">
               <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-6 hover-lift shadow-lg">
                 2
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Track Portfolio</h3>
-              <p className="text-gray-600">See all your investments in one unified dashboard</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Track Portfolio
+              </h3>
+              <p className="text-gray-600">
+                See all your investments in one unified dashboard
+              </p>
             </div>
 
             <div className="text-center animate-fadeIn">
               <div className="bg-gradient-to-br from-pink-600 to-red-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-6 hover-lift shadow-lg">
                 3
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Get AI Insights</h3>
-              <p className="text-gray-600">Receive intelligent recommendations and analysis</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Get AI Insights
+              </h3>
+              <p className="text-gray-600">
+                Receive intelligent recommendations and analysis
+              </p>
             </div>
 
             <div className="text-center animate-fadeIn">
               <div className="bg-gradient-to-br from-red-600 to-orange-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-6 hover-lift shadow-lg">
                 4
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Make Decisions</h3>
-              <p className="text-gray-600">Trade smarter with data-driven confidence</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                Make Decisions
+              </h3>
+              <p className="text-gray-600">
+                Trade smarter with data-driven confidence
+              </p>
             </div>
           </div>
         </div>
@@ -250,8 +330,12 @@ const Home = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl shadow-2xl p-12 text-white animate-scaleIn hover-lift">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-2">Trusted by Investors Worldwide</h2>
-            <p className="text-indigo-100">Join thousands who are investing smarter</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2">
+              Trusted by Investors Worldwide
+            </h2>
+            <p className="text-indigo-100">
+              Join thousands who are investing smarter
+            </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
@@ -292,7 +376,8 @@ const Home = () => {
                 <div className="text-yellow-400 text-2xl">★★★★★</div>
               </div>
               <p className="text-gray-600 mb-4 italic">
-                "The AI analysis feature helped me make better decisions. My portfolio returns improved by 25%!"
+                "The AI analysis feature helped me make better decisions. My
+                portfolio returns improved by 25%!"
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mr-3">
@@ -310,7 +395,8 @@ const Home = () => {
                 <div className="text-yellow-400 text-2xl">★★★★★</div>
               </div>
               <p className="text-gray-600 mb-4 italic">
-                "Finally, all my investments in one place! The live trading assistant is a game-changer."
+                "Finally, all my investments in one place! The live trading
+                assistant is a game-changer."
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold mr-3">
@@ -328,7 +414,8 @@ const Home = () => {
                 <div className="text-yellow-400 text-2xl">★★★★★</div>
               </div>
               <p className="text-gray-600 mb-4 italic">
-                "Simple, powerful, and intelligent. This is the future of investment management!"
+                "Simple, powerful, and intelligent. This is the future of
+                investment management!"
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 font-bold mr-3">
@@ -348,10 +435,14 @@ const Home = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <Card className="text-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 animate-fadeIn hover-lift shadow-2xl overflow-hidden relative">
           <div className="absolute inset-0 bg-white opacity-5">
-            <div className="absolute inset-0" style={{
-              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-              backgroundSize: '40px 40px'
-            }}></div>
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+                backgroundSize: "40px 40px",
+              }}
+            ></div>
           </div>
           <div className="relative z-10 max-w-3xl mx-auto py-12">
             <Sparkles className="mx-auto mb-6 animate-pulse" size={48} />
@@ -359,16 +450,24 @@ const Home = () => {
               Ready to Transform Your Investments?
             </h2>
             <p className="text-xl mb-8 text-indigo-100 leading-relaxed">
-              Join thousands of smart investors using AI to make better decisions. Start your journey today—completely free!
+              Join thousands of smart investors using AI to make better
+              decisions. Start your journey today—completely free!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/dashboard">
-                <Button size="lg" variant="outline" className="bg-white text-indigo-600 hover:bg-gray-100 border-0 hover-lift">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white text-indigo-600 hover:bg-gray-100 border-0 hover-lift"
+                >
                   Get Started Free →
                 </Button>
               </Link>
               <Link to="/investments">
-                <Button size="lg" className="bg-indigo-800 hover:bg-indigo-900 hover-lift">
+                <Button
+                  size="lg"
+                  className="bg-indigo-800 hover:bg-indigo-900 hover-lift"
+                >
                   View Demo
                 </Button>
               </Link>

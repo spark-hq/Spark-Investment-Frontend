@@ -340,6 +340,7 @@ const Dashboard = () => {
             </div>
             <Link to="/ai-analysis">
               <Button 
+                variant='view_ai_insights'
                 size="lg" 
                 className="bg-white text-indigo-800 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
               >
@@ -374,8 +375,10 @@ const Dashboard = () => {
             </div>
             <Link to="/live-trading">
               <Button 
+                variant='start_trading'
                 size="lg" 
-                className="bg-white text-green-800 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
+                className="bg-white text-green-900 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
+                      
               >
                 Start Trading →
               </Button>
