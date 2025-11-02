@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Calculator from './pages/Calculator';
 import Results from './pages/Results';
+import Investments from './pages/Investments';
 import NotFound from './pages/NotFound';
 import './App.css';
 
@@ -16,15 +17,9 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/investments" element={<Investments />} />
           
           {/* Placeholder routes for future pages */}
-          <Route path="/investments" element={
-            <div className="text-center py-20">
-              <h1 className="text-4xl font-bold text-blue-600">Investments Page</h1>
-              <p className="mt-4 text-gray-600">Coming soon...</p>
-            </div>
-          } />
-          
           <Route path="/ai-analysis" element={
             <div className="text-center py-20">
               <h1 className="text-4xl font-bold text-blue-600">AI Analysis Page</h1>

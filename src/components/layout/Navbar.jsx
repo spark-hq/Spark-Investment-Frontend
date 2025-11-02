@@ -52,6 +52,14 @@ const Navbar = () => {
               Dashboard
             </Link>
             <Link
+              to="/investments"
+              className={`${
+                isActive("/investments") ? "text-blue-600" : "text-gray-700"
+              } hover:text-blue-600 transition-colors duration-200 font-medium`}
+            >
+              Investments
+            </Link>
+            <Link
               to="/calculator"
               className={`${
                 isActive("/calculator") ? "text-blue-600" : "text-gray-700"
@@ -67,6 +75,7 @@ const Navbar = () => {
             >
               Results
             </Link>
+            
           </div>
 
           {/* Desktop CTA Button */}
