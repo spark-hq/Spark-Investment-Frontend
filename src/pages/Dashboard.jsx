@@ -26,6 +26,16 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
+import { 
+  TrendingUp, 
+  Activity, 
+  Sparkles, 
+  Brain, 
+  Zap,
+  ArrowUpRight,
+  ArrowDownRight,
+  RefreshCw
+} from 'lucide-react';
 
 const Dashboard = () => {
   const [greeting, setGreeting] = useState('');
@@ -39,32 +49,35 @@ const Dashboard = () => {
 
   const getActivityIcon = (type) => {
     switch(type) {
-      case 'buy': return '📈';
-      case 'sell': return '📉';
-      case 'sip': return '🔄';
-      default: return '💰';
+      case 'buy': return <ArrowDownRight className="text-green-600" size={20} />;
+      case 'sell': return <ArrowUpRight className="text-red-600" size={20} />;
+      case 'sip': return <RefreshCw className="text-blue-600" size={20} />;
+      default: return <Activity className="text-gray-600" size={20} />;
     }
   };
 
   const getActivityColor = (type) => {
     switch(type) {
-      case 'buy': return 'text-green-600 bg-green-50';
-      case 'sell': return 'text-red-600 bg-red-50';
-      case 'sip': return 'text-blue-600 bg-blue-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'buy': return 'bg-green-100';
+      case 'sell': return 'bg-red-100';
+      case 'sip': return 'bg-blue-100';
+      default: return 'bg-gray-100';
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            {greeting}! 👋
-          </h1>
+          <div className="flex items-center space-x-2 mb-2">
+            <h1 className="text-4xl font-bold text-gray-900">
+              {greeting}! 👋
+            </h1>
+            <Sparkles className="text-indigo-600 animate-pulse" size={32} />
+          </div>
           <p className="text-xl text-gray-600">
-            Here's your investment portfolio overview
+            Here's your AI-powered investment portfolio overview
           </p>
         </div>
 
@@ -74,26 +87,34 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <Card className="mb-8 animate-fadeIn">
+        <Card className="mb-8 animate-fadeIn border-2 border-indigo-100">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">Quick Actions</h3>
-              <p className="text-gray-600 text-sm">Manage your investments efficiently</p>
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl">
+                <Zap className="text-white" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">Quick Actions</h3>
+                <p className="text-gray-600 text-sm">Manage your investments efficiently</p>
+              </div>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link to="/investments">
-                <Button variant="primary" className="hover-lift">
-                  📊 View All Investments
+                <Button variant="primary" className="hover-lift flex items-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%]">
+                  <TrendingUp size={18} />
+                  <span>View Investments</span>
                 </Button>
               </Link>
               <Link to="/live-trading">
-                <Button variant="success" className="hover-lift">
-                  🤖 Start Live Trading
+                <Button variant="success" className="hover-lift flex items-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%]">
+                  <Activity size={18} />
+                  <span>Live Trading</span>
                 </Button>
               </Link>
               <Link to="/ai-analysis">
-                <Button variant="outline" className="hover-lift">
-                  🧠 AI Analysis
+                <Button variant="outline" className="hover-lift flex items-center space-x-2">
+                  <Brain size={18} />
+                  <span>AI Analysis</span>
                 </Button>
               </Link>
             </div>
@@ -108,47 +129,65 @@ const Dashboard = () => {
         {/* Charts Row */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Performance Chart */}
-          <Card title="Portfolio Performance" subtitle="Last 12 months" className="animate-fadeIn hover-lift">
+          <Card title="Portfolio Performance" subtitle="Last 12 months" className="animate-fadeIn hover-lift border-2 border-gray-100">
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" />
+                <defs>
+                  <linearGradient id="colorInvested" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                  </linearGradient>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis 
                   dataKey="month" 
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#6b7280' }}
                   angle={-45}
                   textAnchor="end"
                   height={80}
                 />
                 <YAxis 
                   tickFormatter={(value) => `₹${(value / 100000).toFixed(0)}L`}
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 12, fill: '#6b7280' }}
                 />
                 <Tooltip 
                   formatter={(value) => formatCurrency(value)}
+                  contentStyle={{ 
+                    backgroundColor: '#fff', 
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                  }}
                 />
                 <Legend />
                 <Line 
                   type="monotone" 
                   dataKey="invested" 
-                  stroke="#3B82F6" 
-                  strokeWidth={2}
+                  stroke="#6366f1" 
+                  strokeWidth={3}
                   name="Invested"
-                  dot={{ r: 3 }}
+                  dot={{ r: 4, fill: '#6366f1' }}
+                  fill="url(#colorInvested)"
                 />
                 <Line 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="#10B981" 
-                  strokeWidth={2}
+                  stroke="#10b981" 
+                  strokeWidth={3}
                   name="Current Value"
-                  dot={{ r: 3 }}
+                  dot={{ r: 4, fill: '#10b981' }}
+                  fill="url(#colorValue)"
                 />
               </LineChart>
             </ResponsiveContainer>
           </Card>
 
           {/* Asset Allocation */}
-          <Card title="Asset Allocation" subtitle="Investment distribution" className="animate-fadeIn hover-lift">
+          <Card title="Asset Allocation" subtitle="Investment distribution" className="animate-fadeIn hover-lift border-2 border-gray-100">
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -165,7 +204,15 @@ const Dashboard = () => {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Tooltip 
+                  formatter={(value) => formatCurrency(value)}
+                  contentStyle={{ 
+                    backgroundColor: '#fff', 
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                  }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </Card>
@@ -174,36 +221,46 @@ const Dashboard = () => {
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Top Performers - Takes 2 columns */}
-          <Card title="Top Performers" subtitle="Best performing investments" className="lg:col-span-2 animate-fadeIn hover-lift">
-            <div className="space-y-4">
-              {topPerformers.map((investment) => (
+          <Card 
+            title="Top Performers" 
+            subtitle="Best performing investments" 
+            className="lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
+          >
+            <div className="space-y-3">
+              {topPerformers.map((investment, index) => (
                 <div 
                   key={investment.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl hover:shadow-md transition-all border border-green-100"
                 >
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-gray-900">{investment.name}</h4>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-sm text-gray-600">{investment.platform}</span>
-                      <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">
-                        {investment.type}
-                      </span>
+                  <div className="flex items-center space-x-4 flex-1">
+                    <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center font-bold text-green-600 shadow-sm">
+                      #{index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-gray-900">{investment.name}</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-gray-600">{investment.platform}</span>
+                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs rounded-full font-semibold">
+                          {investment.type}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-bold text-gray-900">
                       {formatCurrency(investment.current)}
                     </p>
-                    <p className="text-sm text-green-600 font-medium">
-                      +{formatCurrency(investment.returns)} (+{investment.returnPercentage}%)
+                    <p className="text-sm text-green-600 font-semibold flex items-center justify-end space-x-1">
+                      <TrendingUp size={14} />
+                      <span>+{formatCurrency(investment.returns)} (+{investment.returnPercentage}%)</span>
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-4 text-center">
+            <div className="mt-6 text-center">
               <Link to="/investments">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="md" className="hover-lift">
                   View All Investments →
                 </Button>
               </Link>
@@ -211,15 +268,19 @@ const Dashboard = () => {
           </Card>
 
           {/* Recent Activity - Takes 1 column */}
-          <Card title="Recent Activity" subtitle="Latest transactions" className="animate-fadeIn hover-lift">
+          <Card 
+            title="Recent Activity" 
+            subtitle="Latest transactions" 
+            className="animate-fadeIn hover-lift border-2 border-blue-100"
+          >
             <div className="space-y-3">
               {recentActivity.slice(0, 5).map((activity) => (
                 <div 
                   key={activity.id}
-                  className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-start gap-3 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-md transition-all border border-gray-200"
                 >
                   <div className={`p-2 rounded-lg ${getActivityColor(activity.type)}`}>
-                    <span className="text-xl">{getActivityIcon(activity.type)}</span>
+                    {getActivityIcon(activity.type)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-sm text-gray-900 truncate">
@@ -229,20 +290,24 @@ const Dashboard = () => {
                       {activity.platform}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      {new Date(activity.date).toLocaleDateString()}
+                      {new Date(activity.date).toLocaleDateString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-900">
+                    <p className="text-sm font-bold text-gray-900">
                       {formatCurrency(activity.amount)}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-4 text-center">
+            <div className="mt-6 text-center">
               <Link to="/transactions">
-                <Button variant="outline" size="sm" fullWidth>
+                <Button variant="outline" size="md" fullWidth className="hover-lift">
                   View All Transactions →
                 </Button>
               </Link>
@@ -251,21 +316,33 @@ const Dashboard = () => {
         </div>
 
         {/* AI Insights Teaser */}
-        <Card className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 animate-fadeIn hover-lift">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <Card className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white animate-fadeIn hover-lift shadow-xl border-0 overflow-hidden relative">
+          <div className="absolute inset-0 bg-white opacity-5">
+            <div className="absolute inset-0" style={{
+              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+              backgroundSize: '40px 40px'
+            }}></div>
+          </div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="text-5xl">🤖</div>
+              <div className="bg-white bg-opacity-20 p-4 rounded-2xl backdrop-blur-sm">
+                <Brain className="text-white" size={48} />
+              </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  AI-Powered Investment Insights
+                <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+                  <span>AI-Powered Investment Insights</span>
+                  <Sparkles className="animate-pulse" size={24} />
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-indigo-100">
                   Get personalized analysis, predictions, and recommendations for your portfolio
                 </p>
               </div>
             </div>
             <Link to="/ai-analysis">
-              <Button size="lg" variant="primary" className="hover-lift whitespace-nowrap">
+              <Button 
+                size="lg" 
+                className="bg-white text-indigo-800 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
+              >
                 View AI Insights →
               </Button>
             </Link>
@@ -273,21 +350,33 @@ const Dashboard = () => {
         </Card>
 
         {/* Smart Trading Teaser */}
-        <Card className="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 animate-fadeIn hover-lift">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <Card className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white animate-fadeIn hover-lift shadow-xl border-0 overflow-hidden relative">
+          <div className="absolute inset-0 bg-white opacity-5">
+            <div className="absolute inset-0" style={{
+              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+              backgroundSize: '40px 40px'
+            }}></div>
+          </div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="text-5xl">📊</div>
+              <div className="bg-white bg-opacity-20 p-4 rounded-2xl backdrop-blur-sm">
+                <Activity className="text-white" size={48} />
+              </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  Live Smart Trading
+                <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+                  <span>Live Smart Trading</span>
+                  <Zap className="animate-pulse" size={24} />
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-green-100">
                   Trade with AI assistance - Get real-time insights, recommendations, and automated trading
                 </p>
               </div>
             </div>
             <Link to="/live-trading">
-              <Button size="lg" variant="success" className="hover-lift whitespace-nowrap">
+              <Button 
+                size="lg" 
+                className="bg-white text-green-800 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
+              >
                 Start Trading →
               </Button>
             </Link>
