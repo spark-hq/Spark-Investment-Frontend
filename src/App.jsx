@@ -13,7 +13,7 @@ function App() {
     <Router>
       <Layout>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/Spark-Investment-Frontend" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/results" element={<Results />} />
