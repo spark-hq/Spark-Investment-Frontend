@@ -10,10 +10,10 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Spark-Investment-Frontend">
       <Layout>
         <Routes>
-          <Route path="/Spark-Investment-Frontend" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/results" element={<Results />} />
