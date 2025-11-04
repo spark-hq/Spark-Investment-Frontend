@@ -64,6 +64,7 @@ const LiveTrading = () => {
         setChartData(data);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedAsset?.id, chartTimeframe, marketData]);
 
   const handleAssetSelect = (asset) => {
