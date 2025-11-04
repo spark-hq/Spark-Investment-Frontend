@@ -1,0 +1,323 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { TrendingUp, Sparkles, Zap, Shield, BarChart3 } from 'lucide-react';
+import Card from '../components/ui/StockCard';
+import ScreenCapturePanel from '../components/live-trading/ScreenCapturePanel';
+import AIScreenAnalyst from '../components/live-trading/AIScreenAnalyst';
+import AutoTradeSettings from '../components/live-trading/AutoTradeSettings';
+import ExecutionLog from '../components/live-trading/ExecutionLog';
+import TradingChart from '../components/live-trading/TradingChart';
+import MarketDataCards from '../components/live-trading/MarketDataCards';
+import OrderPanel from '../components/live-trading/OrderPanel';
+import {
+  initialMarketData,
+  aiAnalysisData,
+  defaultAutoTradeSettings,
+  initialExecutionLog,
+  platforms,
+  updatePrice,
+  calculateChange,
+  updatePriceHistory,
+  generateChartData,
+} from '../data/liveMarketData';
+
+const LiveTrading = () => {
+  const navigate = useNavigate();
+  const [selectedPlatform, setSelectedPlatform] = useState(platforms[0]);
+  const [marketData, setMarketData] = useState(initialMarketData);
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [chartTimeframe, setChartTimeframe] = useState('1D');
+  const [chartData, setChartData] = useState([]);
+  const [screenCaptureActive, setScreenCaptureActive] = useState(false);
+  const [autoTradeSettings, setAutoTradeSettings] = useState(defaultAutoTradeSettings);
+  const [executionLog, setExecutionLog] = useState(initialExecutionLog);
+
+  // Simulate live price updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMarketData((prevData) =>
+        prevData.map((asset) => {
+          const newPrice = updatePrice(asset.currentPrice, 0.005); // 0.5% max change
+          const changes = calculateChange(newPrice, asset.previousClose);
+
+          return {
+            ...asset,
+            currentPrice: newPrice,
+            change: changes.change,
+            changePercent: changes.changePercent,
+            priceHistory: updatePriceHistory(asset.priceHistory, newPrice),
+          };
+        })
+      );
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update chart data when asset or timeframe changes
+  useEffect(() => {
+    if (selectedAsset) {
+      const updatedAsset = marketData.find((a) => a.id === selectedAsset.id);
+      if (updatedAsset) {
+        setSelectedAsset(updatedAsset);
+        const data = generateChartData(updatedAsset, chartTimeframe);
+        setChartData(data);
+      }
+    }
+  }, [selectedAsset?.id, chartTimeframe, marketData]);
+
+  const handleAssetSelect = (asset) => {
+    // Toggle: If clicking the same asset, deselect it
+    if (selectedAsset?.id === asset.id) {
+      setSelectedAsset(null);
+      setChartData([]);
+      return;
+    }
+    
+    // Select new asset
+    setSelectedAsset(asset);
+    const data = generateChartData(asset, chartTimeframe);
+    setChartData(data);
+  };
+
+  const handleScreenCaptureStatusChange = (status) => {
+    setScreenCaptureActive(status === 'active');
+  };
+
+  const handleAutoTradeSettingsChange = (settings) => {
+    setAutoTradeSettings(settings);
+  };
+
+  const handleOrderPlaced = (order) => {
+    const newLogEntry = {
+      id: `TXN${Date.now()}`,
+      time: order.timestamp,
+      action: order.action,
+      asset: order.asset,
+      quantity: order.quantity,
+      price: order.price,
+      amount: order.price * order.quantity,
+      status: 'executed',
+      type: 'manual',
+      reason: 'Manual trade executed',
+    };
+
+    setExecutionLog((prev) => [newLogEntry, ...prev]);
+  };
+
+  const currentAIAnalysis = selectedAsset ? aiAnalysisData[selectedAsset.id] : null;
+  const suggestedStopLoss = currentAIAnalysis?.stopLoss || null;
+
+  // Calculate summary stats
+  const totalInvested = 125000; // Mock value
+  const totalValue = 132500; // Mock value
+  const totalProfit = totalValue - totalInvested;
+  const profitPercent = ((totalProfit / totalInvested) * 100).toFixed(2);
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 animate-fadeIn">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 flex items-center space-x-2 transition-colors"
+          >
+            <span>← Back</span>
+          </button>
+
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-2xl shadow-lg">
+                <TrendingUp className="text-white" size={32} />
+              </div>
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Live Trading</h1>
+                <p className="text-xl text-gray-600">AI-powered trading assistant</p>
+              </div>
+              <Sparkles className="text-purple-600 animate-pulse" size={32} />
+            </div>
+
+            {/* Platform Selector */}
+            <div className="flex items-center space-x-3">
+              <label className="text-sm font-semibold text-gray-700">Platform:</label>
+              <select
+                value={selectedPlatform.id}
+                onChange={(e) =>
+                  setSelectedPlatform(platforms.find((p) => p.id === e.target.value))
+                }
+                className="px-4 py-2 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:outline-none font-semibold text-gray-900 bg-white shadow-md"
+              >
+                {platforms.map((platform) => (
+                  <option key={platform.id} value={platform.id}>
+                    {platform.logo} {platform.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-fadeIn">
+          <Card className="bg-gradient-to-br from-indigo-600 to-purple-600 text-white hover-lift shadow-xl border-0 overflow-hidden relative">
+            <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+            <div className="relative z-10">
+              <div className="bg-white bg-opacity-20 p-3 rounded-xl backdrop-blur-sm w-12 h-12 flex items-center justify-center mb-3">
+                <BarChart3 size={24} />
+              </div>
+              <p className="text-indigo-100 text-sm mb-2 font-medium">Total Invested</p>
+              <h3 className="text-3xl font-bold mb-2">{formatCurrency(totalInvested)}</h3>
+              <p className="text-indigo-100 text-sm">Across {marketData.length} assets</p>
+            </div>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-green-600 to-emerald-600 text-white hover-lift shadow-xl border-0 overflow-hidden relative">
+            <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+            <div className="relative z-10">
+              <div className="bg-white bg-opacity-20 p-3 rounded-xl backdrop-blur-sm w-12 h-12 flex items-center justify-center mb-3">
+                <TrendingUp size={24} />
+              </div>
+              <p className="text-green-100 text-sm mb-2 font-medium">Current Value</p>
+              <h3 className="text-3xl font-bold mb-2">{formatCurrency(totalValue)}</h3>
+              <p className="text-green-100 text-sm">+{profitPercent}% growth</p>
+            </div>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-600 to-pink-600 text-white hover-lift shadow-xl border-0 overflow-hidden relative">
+            <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+            <div className="relative z-10">
+              <div className="bg-white bg-opacity-20 p-3 rounded-xl backdrop-blur-sm w-12 h-12 flex items-center justify-center mb-3">
+                <Zap size={24} />
+              </div>
+              <p className="text-purple-100 text-sm mb-2 font-medium">Total Profit</p>
+              <h3 className="text-3xl font-bold mb-2">{formatCurrency(totalProfit)}</h3>
+              <p className="text-purple-100 text-sm">Unrealized gains</p>
+            </div>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-yellow-600 to-orange-600 text-white hover-lift shadow-xl border-0 overflow-hidden relative">
+            <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+            <div className="relative z-10">
+              <div className="bg-white bg-opacity-20 p-3 rounded-xl backdrop-blur-sm w-12 h-12 flex items-center justify-center mb-3">
+                <Shield size={24} />
+              </div>
+              <p className="text-yellow-100 text-sm mb-2 font-medium">Auto-Trading</p>
+              <h3 className="text-3xl font-bold mb-2">
+                {autoTradeSettings.enabled ? 'Active' : 'Inactive'}
+              </h3>
+              <p className="text-yellow-100 text-sm">
+                {autoTradeSettings.enabled
+                  ? `${formatCurrency(autoTradeSettings.dailyLimit - 2500)} left`
+                  : 'Enable in settings'}
+              </p>
+            </div>
+          </Card>
+        </div>
+
+        {/* Market Data Cards */}
+        <div className="mb-8 animate-fadeIn">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+            <span>📊 Live Market Data</span>
+            <span className="text-sm font-normal text-gray-600">(Updates every 3 seconds)</span>
+          </h2>
+          <MarketDataCards
+            marketData={marketData}
+            selectedAsset={selectedAsset}
+            onAssetSelect={handleAssetSelect}
+          />
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fadeIn">
+          {/* Left Column - Charts & Orders */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Screen Capture Panel */}
+            <ScreenCapturePanel
+              onStatusChange={handleScreenCaptureStatusChange}
+              selectedAsset={selectedAsset}
+            />
+
+            {/* Order Panel */}
+            <OrderPanel
+              selectedAsset={selectedAsset}
+              onOrderPlaced={handleOrderPlaced}
+              autoStopLossEnabled={autoTradeSettings.autoStopLoss}
+              suggestedStopLoss={suggestedStopLoss}
+            />
+
+            {/* Trading Chart */}
+            <TradingChart
+              asset={selectedAsset}
+              chartData={chartData}
+              timeframe={chartTimeframe}
+              onTimeframeChange={setChartTimeframe}
+            />
+
+            {/* Execution Log */}
+            <ExecutionLog executionLog={executionLog} />
+          </div>
+
+          {/* Right Column - AI Analysis & Settings */}
+          <div className="space-y-6">
+            {/* AI Screen Analyst */}
+            <AIScreenAnalyst
+              selectedAsset={selectedAsset}
+              aiAnalysis={currentAIAnalysis}
+              isActive={screenCaptureActive}
+            />
+
+            {/* Auto-Trade Settings */}
+            <AutoTradeSettings
+              settings={autoTradeSettings}
+              onSettingsChange={handleAutoTradeSettingsChange}
+            />
+          </div>
+        </div>
+
+        {/* Bottom Info Card */}
+        <Card className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 animate-fadeIn hover-lift shadow-xl overflow-hidden relative">
+          <div className="absolute inset-0 bg-white opacity-5">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                backgroundSize: '40px 40px',
+              }}
+            ></div>
+          </div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white bg-opacity-20 p-4 rounded-2xl backdrop-blur-sm">
+                <Sparkles className="text-white" size={48} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold mb-2">AI-Powered Trading Intelligence</h3>
+                <p className="text-indigo-100">
+                  Experience real-time market analysis, automated trading, and intelligent risk
+                  management powered by advanced AI algorithms.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/ai-analysis')}
+              className="bg-white text-indigo-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-bold shadow-lg transition-all whitespace-nowrap"
+            >
+              View AI Analysis →
+            </button>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default LiveTrading;

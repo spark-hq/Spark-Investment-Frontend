@@ -1,0 +1,284 @@
+// src/pages/AIAnalysis.jsx
+
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Brain, Sparkles, ArrowLeft, RefreshCw, Download } from 'lucide-react';
+import Card from '../components/ui/Card';
+import Button from '../components/ui/Button';
+import RiskMeter from '../components/ai-analysis/RiskMeter';
+import ProConsList from '../components/ai-analysis/ProConsList';
+import PredictionChart from '../components/ai-analysis/PredictionChart';
+import AnalysisCard from '../components/ai-analysis/AnalysisCard';
+import HealthScore from '../components/ai-analysis/HealthScore';
+import AIExplanation from '../components/ai-analysis/AIExplanation';
+import ValuationBadge from '../components/ai-analysis/ValuationBadge';
+import { aiAnalysisData, availableInvestments } from '../data/aiAnalysisData';
+
+const AIAnalysis = () => {
+  const navigate = useNavigate();
+  const [selectedInvestmentId, setSelectedInvestmentId] = useState('INV001');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Get current analysis
+  const currentAnalysis = aiAnalysisData[selectedInvestmentId];
+
+  // Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  // Handle investment change
+  const handleInvestmentChange = (e) => {
+    setIsLoading(true);
+    setSelectedInvestmentId(e.target.value);
+    
+    // Simulate AI analysis loading
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+  };
+
+  // Handle refresh analysis
+  const handleRefresh = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+  };
+
+  // Handle download report
+  const handleDownload = () => {
+    alert('Download feature will be implemented with backend!');
+  };
+
+  if (!currentAnalysis) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">No analysis available for this investment.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 animate-fadeIn">
+          <button 
+            onClick={() => navigate('/dashboard')} 
+            className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 flex items-center space-x-2 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            <span>Back to Dashboard</span>
+          </button>
+
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-2xl shadow-lg">
+              <Brain className="text-white" size={32} />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+              AI Investment Analysis
+            </h1>
+            <Sparkles className="text-purple-600 animate-pulse" size={32} />
+          </div>
+          <p className="text-xl text-gray-600 text-center">
+            Deep insights powered by advanced AI algorithms
+          </p>
+        </div>
+
+        {/* Investment Selector Card */}
+        <Card className="mb-8 animate-fadeIn border-2 border-indigo-100 shadow-xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center space-x-4 flex-1 w-full">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl">
+                <Brain className="text-white" size={24} />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Investment for Analysis
+                </label>
+                <select
+                  value={selectedInvestmentId}
+                  onChange={handleInvestmentChange}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer text-base font-medium"
+                  disabled={isLoading}
+                >
+                  {availableInvestments.map((investment) => (
+                    <option key={investment.id} value={investment.id}>
+                      {investment.name} ({investment.symbol})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex space-x-3">
+              <Button
+                onClick={handleRefresh}
+                variant="outline"
+                className="hover-lift flex items-center space-x-2"
+                disabled={isLoading}
+              >
+                <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
+                <span>Refresh</span>
+              </Button>
+              <Button
+                onClick={handleDownload}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 hover-lift flex items-center space-x-2"
+                disabled={isLoading}
+              >
+                <Download size={18} />
+                <span>Download Report</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Analysis Date */}
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-600 text-center">
+              Analysis generated on: <span className="font-semibold text-gray-900">{currentAnalysis.analysisDate}</span>
+            </p>
+          </div>
+        </Card>
+
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 animate-fadeIn">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl mb-6 animate-pulse">
+              <Brain className="text-white" size={64} />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Analyzing Investment...</h3>
+            <p className="text-gray-600">AI is processing market data and generating insights</p>
+            <div className="mt-6 flex space-x-2">
+              <div className="w-3 h-3 bg-indigo-600 rounded-full animate-bounce"></div>
+              <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+              <div className="w-3 h-3 bg-pink-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Three Column Layout - Risk, Health, Valuation */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
+              <RiskMeter
+                riskLevel={currentAnalysis.riskLevel}
+                riskScore={currentAnalysis.riskScore}
+                volatility={currentAnalysis.volatility}
+              />
+              <HealthScore
+                healthScore={currentAnalysis.healthScore}
+                healthGrade={currentAnalysis.healthGrade}
+              />
+              <ValuationBadge
+                valuation={currentAnalysis.valuation}
+                valuationScore={currentAnalysis.valuationScore}
+              />
+            </div>
+
+            {/* Analysis Card - Full Width */}
+            <div className="mb-8 animate-fadeIn">
+              <AnalysisCard
+                analysis={currentAnalysis}
+                formatCurrency={formatCurrency}
+              />
+            </div>
+
+            {/* AI Explanation - Full Width */}
+            <div className="mb-8 animate-fadeIn">
+              <AIExplanation
+                explanation={currentAnalysis.aiExplanation}
+                recommendation={currentAnalysis.recommendation}
+              />
+            </div>
+
+            {/* Pros and Cons */}
+            <div className="mb-8 animate-fadeIn">
+              <ProConsList
+                pros={currentAnalysis.pros}
+                cons={currentAnalysis.cons}
+              />
+            </div>
+
+            {/* Prediction Chart */}
+            <div className="mb-8 animate-fadeIn">
+              <PredictionChart
+                historicalData={currentAnalysis.historicalData}
+                predictions={currentAnalysis.predictions}
+                investmentName={currentAnalysis.investmentName}
+                formatCurrency={formatCurrency}
+              />
+            </div>
+
+            {/* AI Disclaimer */}
+            <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 animate-fadeIn">
+              <div className="flex items-start space-x-4">
+                <div className="bg-yellow-100 p-3 rounded-xl flex-shrink-0">
+                  <Sparkles className="text-yellow-600" size={24} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-900 mb-2 text-lg">AI Analysis Disclaimer</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                    This AI-powered analysis is generated using advanced machine learning algorithms, historical market data, 
+                    and current market trends. The insights, predictions, and recommendations provided are for informational 
+                    purposes only and should not be considered as financial advice.
+                  </p>
+                  <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                    <li>Past performance does not guarantee future results</li>
+                    <li>Market conditions can change rapidly and unpredictably</li>
+                    <li>AI predictions have varying confidence levels</li>
+                    <li>Always conduct your own research before investing</li>
+                    <li>Consult a certified financial advisor for personalized advice</li>
+                  </ul>
+                </div>
+              </div>
+            </Card>
+
+            {/* CTA - Back to Dashboard */}
+            <Card className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 animate-fadeIn hover-lift shadow-xl overflow-hidden relative">
+              <div className="absolute inset-0 bg-white opacity-5">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                  backgroundSize: '40px 40px'
+                }}></div>
+              </div>
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-white bg-opacity-20 p-4 rounded-2xl backdrop-blur-sm">
+                    <Brain className="text-white" size={48} />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2">Ready to Take Action?</h3>
+                    <p className="text-indigo-100">
+                      View your complete portfolio or start live trading with AI assistance
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    onClick={() => navigate('/investments')}
+                    className="bg-white text-indigo-600 hover:bg-gray-100 hover-lift"
+                  >
+                    View Portfolio →
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/live-trading')}
+                    className="bg-green-600 hover:bg-green-700 hover-lift"
+                  >
+                    Start Trading →
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AIAnalysis;

@@ -94,9 +94,6 @@ const Footer = () => {
                   className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center space-x-2"
                 >
                   <span>AI Analysis</span>
-                  <span className="bg-purple-600 text-white px-1.5 py-0.5 rounded text-xs font-bold">
-                    NEW
-                  </span>
                 </Link>
               </li>
               <li>
