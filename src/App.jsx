@@ -7,6 +7,7 @@ import Results from "./pages/Results";
 import Investments from "./pages/Investments";
 import AIAnalysis from "./pages/AIAnalysis";
 import LiveTrading from "./pages/LiveTrading";
+import Transactions from "./pages/Transactions";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 function App() {
@@ -22,17 +23,7 @@ function App() {
           <Route path="/ai-analysis" element={<AIAnalysis />} />
           <Route path="/live-trading" element={<LiveTrading />} />
 
-          <Route
-            path="/transactions"
-            element={
-              <div className="text-center py-20">
-                <h1 className="text-4xl font-bold text-blue-600">
-                  Transactions Page
-                </h1>
-                <p className="mt-4 text-gray-600">Coming soon...</p>
-              </div>
-            }
-          />
+          <Route path="/transactions" element={<Transactions />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
