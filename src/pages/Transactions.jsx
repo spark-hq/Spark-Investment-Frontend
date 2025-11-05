@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Receipt, TrendingUp, DollarSign, AlertCircle, BarChart3, Sparkles } from 'lucide-react';
+import { Receipt, TrendingUp, DollarSign, AlertCircle, BarChart3, Sparkles, ArrowLeft } from 'lucide-react';
 import Card from '../components/ui/Card';
 import TransactionTable from '../components/transactions/TransactionTable';
 import TransactionFilters from '../components/transactions/TransactionFilters';
@@ -200,7 +200,8 @@ const Transactions = () => {
             onClick={() => navigate(-1)}
             className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 flex items-center space-x-2 transition-colors"
           >
-            <span>ê Back</span>
+            <ArrowLeft size={20} />
+            <span>Back</span>
           </button>
 
           <div className="flex items-center space-x-3 mb-2">

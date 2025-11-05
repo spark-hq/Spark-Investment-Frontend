@@ -25,7 +25,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'UPI',
     orderId: 'ZER240315001',
-    logo: '=‚',
+    logo: 'üõ¢Ô∏è',
     category: 'Stocks',
   },
   {
@@ -44,7 +44,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Bank Transfer',
     orderId: 'ZER240314002',
-    logo: '=ª',
+    logo: 'üíª',
     category: 'Stocks',
   },
   {
@@ -63,7 +63,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW240313001',
-    logo: '=»',
+    logo: 'üìà',
     category: 'Mutual Funds',
   },
   {
@@ -82,7 +82,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Crypto Wallet',
     orderId: 'BIN240312001',
-    logo: 'ø',
+    logo: '‚Çø',
     category: 'Cryptocurrency',
   },
   {
@@ -101,7 +101,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Credit to Account',
     orderId: 'ZER240311003',
-    logo: '<Ê',
+    logo: 'üè¶',
     category: 'Stocks',
   },
   {
@@ -120,7 +120,7 @@ export const transactions = [
     status: 'Pending',
     paymentMode: 'UPI',
     orderId: 'BIN240310002',
-    logo: 'û',
+    logo: 'Œû',
     category: 'Cryptocurrency',
   },
   {
@@ -139,7 +139,7 @@ export const transactions = [
     status: 'Failed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW240309002',
-    logo: '=Ä',
+    logo: 'üöÄ',
     category: 'Mutual Funds',
   },
   {
@@ -158,7 +158,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'UPI',
     orderId: 'ZER240308004',
-    logo: '=ª',
+    logo: 'üíª',
     category: 'Stocks',
   },
 
@@ -179,7 +179,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Bank Transfer',
     orderId: 'UPS240228001',
-    logo: '=ó',
+    logo: 'üöó',
     category: 'Stocks',
   },
   {
@@ -198,7 +198,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'UPI',
     orderId: 'UPS240225002',
-    logo: '<®',
+    logo: 'üé®',
     category: 'Stocks',
   },
   {
@@ -217,7 +217,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Bank Transfer',
     orderId: 'ZER240220005',
-    logo: '=¨',
+    logo: 'üö¨',
     category: 'Stocks',
   },
   {
@@ -236,7 +236,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW240215003',
-    logo: '<',
+    logo: 'üåü',
     category: 'Mutual Funds',
   },
   {
@@ -255,7 +255,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Credit to Account',
     orderId: 'ZER240210006',
-    logo: '<Ê',
+    logo: 'üè¶',
     category: 'Stocks',
   },
   {
@@ -274,7 +274,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Crypto Wallet',
     orderId: 'BIN240205003',
-    logo: 'Œ',
+    logo: '‚óé',
     category: 'Cryptocurrency',
   },
 
@@ -295,7 +295,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'UPI',
     orderId: 'ZER240128007',
-    logo: '=ª',
+    logo: 'üíª',
     category: 'Stocks',
   },
   {
@@ -314,7 +314,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW240120004',
-    logo: '<‚',
+    logo: 'üè¢',
     category: 'Mutual Funds',
   },
   {
@@ -333,7 +333,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Crypto Wallet',
     orderId: 'BIN240115004',
-    logo: '=7',
+    logo: 'üî∑',
     category: 'Cryptocurrency',
   },
   {
@@ -352,7 +352,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Bank Transfer',
     orderId: 'ZER240110008',
-    logo: '=ª',
+    logo: 'üíª',
     category: 'Stocks',
   },
 
@@ -373,7 +373,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Credit to Account',
     orderId: 'ZER231228009',
-    logo: '=¨',
+    logo: 'üö¨',
     category: 'Stocks',
   },
   {
@@ -392,7 +392,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW231220005',
-    logo: '=»',
+    logo: 'üìà',
     category: 'Mutual Funds',
   },
   {
@@ -411,7 +411,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'UPI',
     orderId: 'UPS231215003',
-    logo: '=…',
+    logo: 'üìâ',
     category: 'ETF',
   },
   {
@@ -430,7 +430,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Crypto Wallet',
     orderId: 'BIN231210005',
-    logo: 'ø',
+    logo: '‚Çø',
     category: 'Cryptocurrency',
   },
 
@@ -451,7 +451,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Bank Transfer',
     orderId: 'ZER231125010',
-    logo: '<Ê',
+    logo: 'üè¶',
     category: 'Stocks',
   },
   {
@@ -470,7 +470,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW231120006',
-    logo: '=Ä',
+    logo: 'üöÄ',
     category: 'Mutual Funds',
   },
   {
@@ -489,7 +489,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Credit to Account',
     orderId: 'ZER231115011',
-    logo: '=‚',
+    logo: 'üõ¢Ô∏è',
     category: 'Stocks',
   },
 
@@ -510,7 +510,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'UPI',
     orderId: 'BIN231030006',
-    logo: 'û',
+    logo: 'Œû',
     category: 'Cryptocurrency',
   },
   {
@@ -529,7 +529,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Bank Transfer',
     orderId: 'UPS231022004',
-    logo: '<®',
+    logo: 'üé®',
     category: 'Stocks',
   },
   {
@@ -548,7 +548,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Auto-Debit',
     orderId: 'GRW231015007',
-    logo: '<',
+    logo: 'üåü',
     category: 'Mutual Funds',
   },
   {
@@ -567,7 +567,7 @@ export const transactions = [
     status: 'Pending',
     paymentMode: 'UPI',
     orderId: 'ZER231010012',
-    logo: '=ª',
+    logo: 'üíª',
     category: 'Stocks',
   },
   {
@@ -586,7 +586,7 @@ export const transactions = [
     status: 'Completed',
     paymentMode: 'Credit to Account',
     orderId: 'ZER231005013',
-    logo: '<Ê',
+    logo: 'üè¶',
     category: 'Stocks',
   },
 ];
@@ -610,10 +610,10 @@ export const transactionFilters = {
   ],
   amountRanges: [
     { label: 'All Amounts', value: 'all' },
-    { label: 'π0 - π10,000', value: '0-10000' },
-    { label: 'π10,000 - π50,000', value: '10000-50000' },
-    { label: 'π50,000 - π1,00,000', value: '50000-100000' },
-    { label: 'π1,00,000+', value: '100000+' },
+    { label: '‚Çπ0 - ‚Çπ10,000', value: '0-10000' },
+    { label: '‚Çπ10,000 - ‚Çπ50,000', value: '10000-50000' },
+    { label: '‚Çπ50,000 - ‚Çπ1,00,000', value: '50000-100000' },
+    { label: '‚Çπ1,00,000+', value: '100000+' },
   ],
 };
 
