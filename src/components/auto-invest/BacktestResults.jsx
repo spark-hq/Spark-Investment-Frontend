@@ -1,14 +1,14 @@
 // src/components/auto-invest/BacktestResults.jsx
 
-import { TrendingUp, TrendingDown, Target, Activity, AlertTriangle, CheckCircle2, Award } from 'lucide-react';
+import { TrendingUp, TrendingDown, Target, Activity, AlertTriangle, CheckCircle2, Award, BarChart3 } from 'lucide-react';
 import { formatCurrency } from '../../utils/calculations';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const BacktestResults = ({ backtest }) => {
   if (!backtest) {
     return (
       <div className="bg-white rounded-xl shadow-md p-6 border-2 border-gray-100 text-center">
-        <div className="text-6xl mb-4">=Ê</div>
+        <div className="text-6xl mb-4">ðŸ“Š</div>
         <p className="text-lg font-semibold text-gray-700 mb-2">Select a plan to view backtest results</p>
         <p className="text-sm text-gray-500">Historical performance data will be displayed here</p>
       </div>
@@ -123,7 +123,7 @@ const BacktestResults = ({ backtest }) => {
         {/* Monthly Returns Chart */}
         <div>
           <h4 className="text-sm font-bold text-gray-900 mb-4 flex items-center space-x-2">
-            <BarChart className="text-indigo-600" size={18} />
+            <BarChart3 className="text-indigo-600" size={18} />
             <span>Recent Monthly Returns</span>
           </h4>
           <ResponsiveContainer width="100%" height={250}>
@@ -155,9 +155,12 @@ const BacktestResults = ({ backtest }) => {
               />
               <Bar
                 dataKey="return"
-                fill={(entry) => (entry.return >= 0 ? 'url(#colorPositive)' : 'url(#colorNegative)')}
                 radius={[4, 4, 0, 0]}
-              />
+              >
+                {backtest.monthlyReturns.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.return >= 0 ? '#10b981' : '#ef4444'} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
