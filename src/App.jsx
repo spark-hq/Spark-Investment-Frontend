@@ -23,7 +23,6 @@ function App() {
           <Route path="/investments" element={<Investments />} />
           <Route path="/ai-analysis" element={<AIAnalysis />} />
           <Route path="/live-trading" element={<LiveTrading />} />
-
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/auto-invest" element={<AutoInvest />} />
 
