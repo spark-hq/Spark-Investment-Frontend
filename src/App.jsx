@@ -9,6 +9,7 @@ import AIAnalysis from "./pages/AIAnalysis";
 import LiveTrading from "./pages/LiveTrading";
 import Transactions from "./pages/Transactions";
 import AutoInvest from "./pages/AutoInvest";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/live-trading" element={<LiveTrading />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/auto-invest" element={<AutoInvest />} />
+          <Route path="/settings" element={<Settings />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
