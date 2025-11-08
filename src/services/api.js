@@ -21,6 +21,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 const MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true';
 const DEBUG_MODE = import.meta.env.VITE_DEBUG_MODE === 'true';
 
+// Always log API configuration on startup
+console.log('🔧 API Configuration:');
+console.log('   MOCK_MODE:', MOCK_MODE ? '✅ ENABLED' : '❌ DISABLED');
+console.log('   VITE_MOCK_MODE env:', import.meta.env.VITE_MOCK_MODE);
+console.log('   Base URL:', API_BASE_URL);
+console.log('   WebSocket:', import.meta.env.VITE_WEBSOCKET_URL);
+
 // Axios instance with interceptors
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
