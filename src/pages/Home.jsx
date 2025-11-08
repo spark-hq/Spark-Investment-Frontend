@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
+import Disclaimer from "../components/legal/Disclaimer";
 import {
   Sparkles,
   TrendingUp,
@@ -477,6 +478,13 @@ const Home = () => {
             </p>
           </div>
         </Card>
+      </section>
+
+      {/* Disclaimer Section - Legal Compliance */}
+      <section className="disclaimer-section bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Disclaimer fullVersion />
+        </div>
       </section>
     </div>
   );

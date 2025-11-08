@@ -4,6 +4,7 @@ import PlatformCards from '../components/dashboard/PlatformCards';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { Link } from 'react-router-dom';
+import Disclaimer from '../components/legal/Disclaimer';
 import { 
   portfolioSummary, 
   connectedPlatforms, 
@@ -68,6 +69,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Disclaimer Section - Legal Compliance */}
+        <div className="mb-6">
+          <Disclaimer fullVersion />
+        </div>
+
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
           <div className="flex items-center space-x-2 mb-2">

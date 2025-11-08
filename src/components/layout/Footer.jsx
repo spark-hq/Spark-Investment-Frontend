@@ -107,33 +107,37 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Company Links */}
+          {/* Legal Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Company</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Legal</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
-                  About Us
-                </a>
+                <Link
+                  to="/terms"
+                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                >
+                  Terms of Service
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
-                  Blog
-                </a>
+                <Link
+                  to="/privacy"
+                  className="text-gray-400 hover:text-white transition-colors duration-200"
+                >
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
-                  Careers
-                </a>
+                <Link
+                  to="/terms"
+                  className="text-gray-400 hover:text-white transition-colors duration-200 flex items-center space-x-2"
+                >
+                  <span>⚠️ Disclaimer</span>
+                </Link>
               </li>
               <li>
                 <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
                   Contact
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
-                  Press Kit
                 </a>
               </li>
             </ul>
@@ -169,15 +173,15 @@ const Footer = () => {
             </div>
 
             <div className="flex items-center space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </Link>
+              <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
                 Terms of Service
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </Link>
+              <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
                 Disclaimer
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center space-x-1 text-gray-400 text-sm">
