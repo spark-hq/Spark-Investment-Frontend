@@ -5,8 +5,18 @@ import { io } from 'socket.io-client';
 import { generateMockMarketUpdate } from '../data/mockData';
 
 const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:5000';
-const MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true';
+// Force mock mode if env var is 'true' OR if undefined (safer default)
+const MOCK_MODE = import.meta.env.VITE_MOCK_MODE !== 'false';
 const DEBUG_MODE = import.meta.env.VITE_DEBUG_MODE === 'true';
+
+// Log initialization for debugging
+if (DEBUG_MODE) {
+  console.log('🔌 WebSocket Service Init:', {
+    MOCK_MODE,
+    WEBSOCKET_URL,
+    ENV_VAR: import.meta.env.VITE_MOCK_MODE,
+  });
+}
 
 let socket = null;
 let mockUpdateInterval = null;
@@ -17,10 +27,10 @@ let eventHandlers = new Map();
 // ===================================
 
 export const connectWebSocket = () => {
+  // Always use mock mode in development without backend
   if (MOCK_MODE) {
-    if (DEBUG_MODE) {
-      console.log('🔌 WebSocket: MOCK_MODE enabled - simulating real-time updates');
-    }
+    console.log('🔌 WebSocket: MOCK_MODE enabled - simulating real-time updates');
+    console.log('💡 To use real WebSocket, set VITE_MOCK_MODE=false in .env and restart dev server');
     startMockUpdates();
     return;
   }
@@ -32,6 +42,8 @@ export const connectWebSocket = () => {
     return;
   }
 
+  console.log('🔌 WebSocket: Attempting connection to', WEBSOCKET_URL);
+
   try {
     socket = io(WEBSOCKET_URL, {
       transports: ['websocket'],
@@ -39,6 +51,8 @@ export const connectWebSocket = () => {
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
       reconnectionAttempts: 5,
+      // Suppress console errors if backend is not available
+      autoConnect: true,
     });
 
     socket.on('connect', () => {
@@ -53,8 +67,18 @@ export const connectWebSocket = () => {
       }
     });
 
+    socket.on('connect_error', (error) => {
+      // Only log if in debug mode - suppress normal connection failures
+      if (DEBUG_MODE) {
+        console.warn('⚠️ WebSocket: Connection error (backend may not be running)', error.message);
+      }
+    });
+
     socket.on('error', (error) => {
-      console.error('❌ WebSocket Error:', error);
+      // Only log if in debug mode
+      if (DEBUG_MODE) {
+        console.error('❌ WebSocket Error:', error);
+      }
     });
 
     socket.on('reconnect', (attemptNumber) => {
