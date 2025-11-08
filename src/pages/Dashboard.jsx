@@ -14,24 +14,24 @@ import {
   recentActivity 
 } from '../data/portfolioData';
 import { formatCurrency } from '../utils/calculations';
-import { 
-  LineChart, 
-  Line, 
-  PieChart, 
-  Pie, 
+import {
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
   Cell,
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend, 
-  ResponsiveContainer 
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
 } from 'recharts';
-import { 
-  TrendingUp, 
-  Activity, 
-  Sparkles, 
-  Brain, 
+import {
+  TrendingUp,
+  Activity,
+  Sparkles,
+  Brain,
   Zap,
   ArrowUpRight,
   ArrowDownRight,
@@ -41,6 +41,15 @@ import {
 const Dashboard = () => {
   const [greeting, setGreeting] = useState('');
 
+  // Fetch all dashboard data using custom hooks
+  const { data: portfolioSummary, isLoading: summaryLoading, error: summaryError } = usePortfolioSummary();
+  const { data: connectedPlatforms, isLoading: platformsLoading } = useConnectedPlatforms();
+  const { data: performanceData, isLoading: performanceLoading } = usePortfolioPerformance('1Y');
+  const { data: assetAllocation, isLoading: allocationLoading } = useAssetAllocation();
+  const { data: topPerformers, isLoading: performersLoading } = useTopPerformers();
+  const { data: recentActivity, isLoading: activityLoading } = useRecentActivity(5);
+
+  // Set greeting based on time of day
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Good Morning');
@@ -65,6 +74,22 @@ const Dashboard = () => {
       default: return 'bg-gray-100';
     }
   };
+
+  // Show loading spinner while critical data is loading
+  if (summaryLoading) {
+    return <LoadingSpinner fullScreen message="Loading your dashboard..." />;
+  }
+
+  // Show error if critical data fails to load
+  if (summaryError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 flex items-center justify-center">
+        <div className="max-w-md">
+          <ErrorDisplay error={summaryError} retry={() => window.location.reload()} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
@@ -129,15 +154,22 @@ const Dashboard = () => {
 
         {/* Platform Cards */}
         <div className="mb-8 animate-fadeIn">
-          <PlatformCards platforms={connectedPlatforms} />
+          {platformsLoading ? (
+            <Card><LoadingSpinner message="Loading connected platforms..." /></Card>
+          ) : (
+            <PlatformCards platforms={connectedPlatforms || []} />
+          )}
         </div>
 
         {/* Charts Row */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Performance Chart */}
           <Card title="Portfolio Performance" subtitle="Last 12 months" className="animate-fadeIn hover-lift border-2 border-gray-100">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={performanceData}>
+            {performanceLoading ? (
+              <LoadingSpinner message="Loading performance data..." />
+            ) : (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={performanceData || []}>
                 <defs>
                   <linearGradient id="colorInvested" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
@@ -190,14 +222,18 @@ const Dashboard = () => {
                 />
               </LineChart>
             </ResponsiveContainer>
+            )}
           </Card>
 
           {/* Asset Allocation */}
           <Card title="Asset Allocation" subtitle="Investment distribution" className="animate-fadeIn hover-lift border-2 border-gray-100">
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={assetAllocation}
+            {allocationLoading ? (
+              <LoadingSpinner message="Loading asset allocation..." />
+            ) : (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={assetAllocation || []}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -206,14 +242,14 @@ const Dashboard = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {assetAllocation.map((entry, index) => (
+                  {(assetAllocation || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   formatter={(value) => formatCurrency(value)}
-                  contentStyle={{ 
-                    backgroundColor: '#fff', 
+                  contentStyle={{
+                    backgroundColor: '#fff',
                     border: '2px solid #e5e7eb',
                     borderRadius: '8px',
                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
@@ -221,19 +257,23 @@ const Dashboard = () => {
                 />
               </PieChart>
             </ResponsiveContainer>
+            )}
           </Card>
         </div>
 
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Top Performers - Takes 2 columns */}
-          <Card 
-            title="Top Performers" 
-            subtitle="Best performing investments" 
+          <Card
+            title="Top Performers"
+            subtitle="Best performing investments"
             className="lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
           >
-            <div className="space-y-3">
-              {topPerformers.map((investment, index) => (
+            {performersLoading ? (
+              <LoadingSpinner message="Loading top performers..." />
+            ) : (
+              <div className="space-y-3">
+                {(topPerformers || []).map((investment, index) => (
                 <div 
                   key={investment.id}
                   className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl hover:shadow-md transition-all border border-green-100"
@@ -263,7 +303,8 @@ const Dashboard = () => {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
             <div className="mt-6 text-center">
               <Link to="/investments">
                 <Button variant="outline" size="md" className="hover-lift">
@@ -274,13 +315,16 @@ const Dashboard = () => {
           </Card>
 
           {/* Recent Activity - Takes 1 column */}
-          <Card 
-            title="Recent Activity" 
-            subtitle="Latest transactions" 
+          <Card
+            title="Recent Activity"
+            subtitle="Latest transactions"
             className="animate-fadeIn hover-lift border-2 border-blue-100"
           >
-            <div className="space-y-3">
-              {recentActivity.slice(0, 5).map((activity) => (
+            {activityLoading ? (
+              <LoadingSpinner message="Loading recent activity..." />
+            ) : (
+              <div className="space-y-3">
+                {(recentActivity || []).slice(0, 5).map((activity) => (
                 <div 
                   key={activity.id}
                   className="flex items-start gap-3 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-md transition-all border border-gray-200"
@@ -310,7 +354,8 @@ const Dashboard = () => {
                   </div>
                 </div>
               ))}
-            </div>
+              </div>
+            )}
             <div className="mt-6 text-center">
               <Link to="/transactions">
                 <Button variant="outline" size="md" fullWidth className="hover-lift">
