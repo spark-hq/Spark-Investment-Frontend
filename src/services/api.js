@@ -86,20 +86,26 @@ apiClient.interceptors.response.use(
 export const portfolioAPI = {
   // Get portfolio summary
   getSummary: async () => {
+    console.log('🔍 getSummary - MOCK_MODE:', MOCK_MODE, '| env value:', import.meta.env.VITE_MOCK_MODE);
     if (MOCK_MODE) {
+      console.log('✅ Using Mock Data - GET /api/portfolio/summary');
       await simulateDelay(300);
       return mockResponse(mockPortfolio.summary);
     }
+    console.log('🌐 Calling Real API - GET /api/portfolio/summary');
     const response = await apiClient.get('/portfolio/summary');
     return response.data;
   },
 
   // Get connected platforms
   getPlatforms: async () => {
+    console.log('🔍 getPlatforms - MOCK_MODE:', MOCK_MODE);
     if (MOCK_MODE) {
+      console.log('✅ Using Mock Data - GET /api/portfolio/platforms');
       await simulateDelay(300);
       return mockResponse(mockPortfolio.platforms);
     }
+    console.log('🌐 Calling Real API - GET /api/portfolio/platforms');
     const response = await apiClient.get('/portfolio/platforms');
     return response.data;
   },
