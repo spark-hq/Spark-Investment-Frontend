@@ -19,115 +19,161 @@ import PlatformConnections from '../components/settings/PlatformConnections';
 import SecuritySettings from '../components/settings/SecuritySettings';
 import PreferenceSettings from '../components/settings/PreferenceSettings';
 import AppearanceSettings from '../components/settings/AppearanceSettings';
+import SafetyControls from '../components/settings/SafetyControls';
 
-// Import Settings Data
+// Import Loading and Error components
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ErrorDisplay } from '../components/ui/ErrorBoundary';
+
+// Import Settings Hooks
 import {
-  userProfile,
-  notificationSettings,
-  connectedPlatforms,
-  securitySettings,
-  preferenceSettings,
-  appearanceSettings,
-  availableOptions,
-} from '../data/settingsData';
+  useProfile,
+  useUpdateProfile,
+  useNotificationSettings,
+  useUpdateNotificationSettings,
+  useConnectedAccounts,
+  usePreferences,
+  useUpdatePreferences,
+  useSafetySettings,
+  useUpdateSafetySettings,
+} from '../hooks/useSettings';
 
 const Settings = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('profile');
+  const [activeTab, setActiveTab] = useState('safety');
 
-  // State for each settings section
-  const [profile, setProfile] = useState(userProfile);
-  const [notifications, setNotifications] = useState(notificationSettings);
-  const [platforms, setPlatforms] = useState(connectedPlatforms);
-  const [security, setSecurity] = useState(securitySettings);
-  const [preferences, setPreferences] = useState(preferenceSettings);
-  const [appearance, setAppearance] = useState(appearanceSettings);
+  // Fetch settings data using hooks
+  const { data: profile, isLoading: profileLoading, isError: profileError } = useProfile();
+  const { data: notifications, isLoading: notificationsLoading } = useNotificationSettings();
+  const { data: platforms, isLoading: platformsLoading } = useConnectedAccounts();
+  const { data: preferences, isLoading: preferencesLoading } = usePreferences();
+  const { data: safetySettings, isLoading: safetyLoading } = useSafetySettings();
+
+  // Mutation hooks
+  const updateProfile = useUpdateProfile();
+  const updateNotifications = useUpdateNotificationSettings();
+  const updatePreferences = useUpdatePreferences();
+  const updateSafetySettings = useUpdateSafetySettings();
+
+  // Combine loading states
+  const isLoading = profileLoading || notificationsLoading || platformsLoading || preferencesLoading || safetyLoading;
 
   // Tab configuration
   const tabs = [
+    { id: 'safety', name: 'Safety Controls', icon: Shield, color: 'red' },
     { id: 'profile', name: 'Profile', icon: User, color: 'indigo' },
     { id: 'notifications', name: 'Notifications', icon: Bell, color: 'blue' },
     { id: 'platforms', name: 'Platforms', icon: LinkIcon, color: 'green' },
-    { id: 'security', name: 'Security', icon: Shield, color: 'red' },
     { id: 'preferences', name: 'Preferences', icon: SettingsIcon, color: 'teal' },
     { id: 'appearance', name: 'Appearance', icon: Palette, color: 'purple' },
   ];
 
   // Handler functions
   const handleProfileSave = (updatedProfile) => {
-    setProfile(updatedProfile);
-    console.log('Profile updated:', updatedProfile);
-    // Here you would typically make an API call to save the data
+    updateProfile.mutate(updatedProfile);
   };
 
   const handleNotificationsSave = (updatedNotifications) => {
-    setNotifications(updatedNotifications);
-    console.log('Notifications updated:', updatedNotifications);
+    updateNotifications.mutate(updatedNotifications);
   };
 
   const handlePlatformConnect = (platformId) => {
     console.log('Connecting platform:', platformId);
-    // Logic to connect a new platform
+    // TODO: Implement platform connection API
   };
 
   const handlePlatformDisconnect = (platformId) => {
     console.log('Disconnecting platform:', platformId);
-    setPlatforms(
-      platforms.map((p) =>
-        p.id === platformId ? { ...p, status: 'Disconnected' } : p
-      )
-    );
+    // TODO: Implement platform disconnection API
   };
 
   const handlePlatformSync = async (platformId) => {
     console.log('Syncing platform:', platformId);
-    // Logic to sync platform data
+    // TODO: Implement platform sync API
     return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
-  const handleSecuritySave = (updatedSecurity) => {
-    setSecurity(updatedSecurity);
-    console.log('Security settings updated:', updatedSecurity);
+  const handlePreferencesSave = (updatedPreferences) => {
+    updatePreferences.mutate(updatedPreferences);
   };
 
-  const handlePreferencesSave = (updatedPreferences) => {
-    setPreferences(updatedPreferences);
-    console.log('Preferences updated:', updatedPreferences);
+  const handleSafetySave = (updatedSafety) => {
+    updateSafetySettings.mutate(updatedSafety);
   };
 
   const handleAppearanceSave = (updatedAppearance) => {
-    setAppearance(updatedAppearance);
     console.log('Appearance updated:', updatedAppearance);
+    // TODO: Add appearance settings API if needed
   };
 
   // Render active tab content
   const renderTabContent = () => {
+    // Show loading state
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center py-20">
+          <LoadingSpinner message="Loading settings..." />
+        </div>
+      );
+    }
+
+    // Show error state
+    if (profileError) {
+      return (
+        <ErrorDisplay
+          title="Failed to load settings"
+          message="There was an error loading your settings. Please try again."
+        />
+      );
+    }
+
     switch (activeTab) {
+      case 'safety':
+        return safetySettings ? (
+          <SafetyControls settings={safetySettings} onSave={handleSafetySave} />
+        ) : (
+          <LoadingSpinner message="Loading safety settings..." />
+        );
       case 'profile':
-        return <ProfileSettings profile={profile} onSave={handleProfileSave} />;
+        return profile ? (
+          <ProfileSettings profile={profile} onSave={handleProfileSave} />
+        ) : (
+          <LoadingSpinner message="Loading profile..." />
+        );
       case 'notifications':
-        return <NotificationSettings settings={notifications} onSave={handleNotificationsSave} />;
+        return notifications ? (
+          <NotificationSettings settings={notifications} onSave={handleNotificationsSave} />
+        ) : (
+          <LoadingSpinner message="Loading notifications..." />
+        );
       case 'platforms':
-        return (
+        return platforms ? (
           <PlatformConnections
             platforms={platforms}
             onConnect={handlePlatformConnect}
             onDisconnect={handlePlatformDisconnect}
             onSync={handlePlatformSync}
           />
+        ) : (
+          <LoadingSpinner message="Loading platforms..." />
         );
-      case 'security':
-        return <SecuritySettings settings={security} onSave={handleSecuritySave} />;
       case 'preferences':
-        return (
+        return preferences ? (
           <PreferenceSettings
             settings={preferences}
-            availableOptions={availableOptions}
+            availableOptions={{}} // TODO: Add available options from API
             onSave={handlePreferencesSave}
           />
+        ) : (
+          <LoadingSpinner message="Loading preferences..." />
         );
       case 'appearance':
-        return <AppearanceSettings settings={appearance} onSave={handleAppearanceSave} />;
+        return (
+          <AppearanceSettings
+            settings={{ theme: 'light', fontSize: 'medium' }}
+            onSave={handleAppearanceSave}
+          />
+        );
       default:
         return null;
     }
@@ -190,28 +236,37 @@ const Settings = () => {
               </nav>
 
               {/* User Info Card */}
-              <div className="mt-6 p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl text-white">
-                <div className="flex items-center space-x-3 mb-3">
-                  <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-lg font-bold backdrop-blur-sm">
-                    {profile.firstName[0]}
-                    {profile.lastName[0]}
+              {profile ? (
+                <div className="mt-6 p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl text-white">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-lg font-bold backdrop-blur-sm">
+                      {profile.firstName?.[0] || 'U'}
+                      {profile.lastName?.[0] || 'S'}
+                    </div>
+                    <div>
+                      <p className="font-bold text-sm">
+                        {profile.firstName} {profile.lastName}
+                      </p>
+                      <p className="text-xs text-indigo-100">{profile.email}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm">
-                      {profile.firstName} {profile.lastName}
-                    </p>
-                    <p className="text-xs text-indigo-100">{profile.email}</p>
+                  <div className="flex items-center space-x-2 text-xs">
+                    <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
+                      ✓ KYC {profile.kycStatus}
+                    </span>
+                    <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
+                      Member since {new Date(profile.memberSince).getFullYear()}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 text-xs">
-                  <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
-                    ✓ KYC {profile.kycStatus}
-                  </span>
-                  <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
-                    Member since {new Date(profile.memberSince).getFullYear()}
-                  </span>
+              ) : (
+                <div className="mt-6 p-4 bg-gradient-to-r from-gray-400 to-gray-500 rounded-xl text-white">
+                  <div className="animate-pulse space-y-2">
+                    <div className="h-4 bg-white bg-opacity-20 rounded"></div>
+                    <div className="h-3 bg-white bg-opacity-20 rounded w-3/4"></div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
