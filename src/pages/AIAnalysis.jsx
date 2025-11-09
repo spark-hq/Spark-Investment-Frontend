@@ -12,15 +12,39 @@ import AnalysisCard from '../components/ai-analysis/AnalysisCard';
 import HealthScore from '../components/ai-analysis/HealthScore';
 import AIExplanation from '../components/ai-analysis/AIExplanation';
 import ValuationBadge from '../components/ai-analysis/ValuationBadge';
-import { aiAnalysisData, availableInvestments } from '../data/aiAnalysisData';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ErrorDisplay } from '../components/ui/ErrorBoundary';
+import { useCompleteAIAnalysis } from '../hooks/useAI';
+import { useInvestments } from '../hooks/useInvestments';
 
 const AIAnalysis = () => {
   const navigate = useNavigate();
-  const [selectedInvestmentId, setSelectedInvestmentId] = useState('INV001');
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedInvestmentId, setSelectedInvestmentId] = useState(null);
 
-  // Get current analysis
-  const currentAnalysis = aiAnalysisData[selectedInvestmentId];
+  // Fetch user's investments for the selector
+  const { data: investments = [], isLoading: investmentsLoading } = useInvestments();
+
+  // Fetch AI analysis data
+  const {
+    insights,
+    recommendations,
+    riskAnalysis,
+    marketSentiment,
+    isLoading: aiLoading,
+    isError: aiError,
+    refetch
+  } = useCompleteAIAnalysis();
+
+  // Set first investment as default when investments load
+  if (!selectedInvestmentId && investments.length > 0) {
+    setSelectedInvestmentId(investments[0].id);
+  }
+
+  // Get currently selected investment
+  const selectedInvestment = investments.find(inv => inv.id === selectedInvestmentId);
+
+  // Combine loading states
+  const isLoading = investmentsLoading || aiLoading;
 
   // Format currency
   const formatCurrency = (amount) => {
@@ -33,21 +57,12 @@ const AIAnalysis = () => {
 
   // Handle investment change
   const handleInvestmentChange = (e) => {
-    setIsLoading(true);
     setSelectedInvestmentId(e.target.value);
-    
-    // Simulate AI analysis loading
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
   };
 
   // Handle refresh analysis
   const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
+    refetch(); // Refetch all AI data
   };
 
   // Handle download report
@@ -55,12 +70,50 @@ const AIAnalysis = () => {
     alert('Download feature will be implemented with backend!');
   };
 
+  // Show loading spinner while fetching data
+  if (investmentsLoading) {
+    return <LoadingSpinner fullScreen message="Loading your investments..." />;
+  }
+
+  // Show error if AI data fetch fails
+  if (aiError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4 flex items-center justify-center">
+        <div className="max-w-md">
+          <ErrorDisplay error={aiError} retry={refetch} />
+        </div>
+      </div>
+    );
+  }
+
+  // Create currentAnalysis object from AI data
+  const currentAnalysis = insights ? {
+    analysisDate: new Date().toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }),
+    riskLevel: riskAnalysis?.riskLevel || 'MEDIUM',
+    riskScore: riskAnalysis?.riskScore || 55,
+    volatility: riskAnalysis?.volatility || 'Moderate',
+    healthScore: insights?.healthScore || 75,
+    healthGrade: insights?.healthGrade || 'B+',
+    valuation: insights?.valuation || 'Fair Value',
+    valuationScore: insights?.valuationScore || 7.5,
+    recommendation: recommendations?.overallRecommendation || 'HOLD',
+    confidence: recommendations?.confidence || 0.82,
+    targetPrice: selectedInvestment?.currentPrice * 1.15 || 0,
+    stopLoss: selectedInvestment?.currentPrice * 0.92 || 0,
+    pros: recommendations?.pros || [],
+    cons: recommendations?.cons || [],
+    explanation: insights?.summary || 'AI analysis is being processed...',
+    predictionData: insights?.predictionData || []
+  } : null;
+
   if (!currentAnalysis) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">No analysis available for this investment.</p>
-        </div>
+        <LoadingSpinner message="Generating AI analysis..." />
       </div>
     );
   }
@@ -104,16 +157,20 @@ const AIAnalysis = () => {
                   Select Investment for Analysis
                 </label>
                 <select
-                  value={selectedInvestmentId}
+                  value={selectedInvestmentId || ''}
                   onChange={handleInvestmentChange}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer text-base font-medium"
-                  disabled={isLoading}
+                  disabled={aiLoading}
                 >
-                  {availableInvestments.map((investment) => (
-                    <option key={investment.id} value={investment.id}>
-                      {investment.name} ({investment.symbol})
-                    </option>
-                  ))}
+                  {investments.length === 0 ? (
+                    <option value="">No investments available</option>
+                  ) : (
+                    investments.map((investment) => (
+                      <option key={investment.id} value={investment.id}>
+                        {investment.name} ({investment.symbol}) - ₹{investment.currentPrice}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
             </div>
@@ -123,15 +180,15 @@ const AIAnalysis = () => {
                 onClick={handleRefresh}
                 variant="outline"
                 className="hover-lift flex items-center space-x-2"
-                disabled={isLoading}
+                disabled={aiLoading}
               >
-                <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
+                <RefreshCw size={18} className={aiLoading ? 'animate-spin' : ''} />
                 <span>Refresh</span>
               </Button>
               <Button
                 onClick={handleDownload}
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 hover-lift flex items-center space-x-2"
-                disabled={isLoading}
+                disabled={aiLoading}
               >
                 <Download size={18} />
                 <span>Download Report</span>
@@ -148,7 +205,7 @@ const AIAnalysis = () => {
         </Card>
 
         {/* Loading State */}
-        {isLoading ? (
+        {aiLoading ? (
           <div className="flex flex-col items-center justify-center py-20 animate-fadeIn">
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl mb-6 animate-pulse">
               <Brain className="text-white" size={64} />
