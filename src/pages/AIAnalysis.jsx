@@ -101,7 +101,7 @@ const AIAnalysis = () => {
     valuation: insights?.valuation || 'Fair Value',
     valuationScore: insights?.valuationScore || 7.5,
     recommendation: recommendations?.overallRecommendation || 'HOLD',
-    confidence: recommendations?.confidence || 0.82,
+    confidence: Math.round((recommendations?.confidence || 0.82) * 100),
     targetPrice: selectedInvestment?.currentPrice * 1.15 || 0,
     stopLoss: selectedInvestment?.currentPrice * 0.92 || 0,
     pros: recommendations?.pros || [],
@@ -295,7 +295,7 @@ const AIAnalysis = () => {
             {/* AI Explanation - Full Width */}
             <div className="mb-8 animate-fadeIn">
               <AIExplanation
-                explanation={currentAnalysis.aiExplanation}
+                explanation={currentAnalysis.explanation}
                 recommendation={currentAnalysis.recommendation}
               />
             </div>
