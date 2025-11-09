@@ -18,8 +18,9 @@ export const useInvestments = () => {
     queryFn: async () => {
       const response = await investmentsAPI.getAll();
 
-      // Transform mock data structure to match expected format
-      const allInvestments = [
+      // Use holdings array which contains all investments
+      // If holdings doesn't exist, combine the separated arrays
+      const allInvestments = response.data.holdings || [
         ...(response.data.stocks || []),
         ...(response.data.mutualFunds || []),
         ...(response.data.crypto || []),

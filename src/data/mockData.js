@@ -32,10 +32,10 @@ export const mockPortfolio = {
 // ===================================
 export const mockInvestments = {
   summary: investmentData.investmentSummary,
-  holdings: investmentData.holdings,
-  mutualFunds: investmentData.mutualFunds,
-  stocks: investmentData.stocks,
-  crypto: investmentData.crypto,
+  holdings: investmentData.investments, // Main investments array
+  mutualFunds: investmentData.investments.filter(inv => inv.type === 'Mutual Fund'),
+  stocks: investmentData.investments.filter(inv => inv.type === 'Stock'),
+  crypto: investmentData.investments.filter(inv => inv.type === 'Crypto'),
 };
 
 // ===================================
