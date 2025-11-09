@@ -137,7 +137,24 @@ const AIAnalysis = () => {
       `Technical indicators show ${selectedInvestment?.status === 'gain' ? 'positive momentum' : 'consolidation phase'} with key support levels holding well.`,
       `Sector trends remain favorable with increasing demand and limited regulatory headwinds in the near term.`,
       `Risk-adjusted returns are competitive compared to benchmark indices, making this a solid portfolio addition.`
-    ]
+    ],
+    historicalData: [
+      { year: -5, value: selectedInvestment?.currentPrice * 0.45 || 45000 },
+      { year: -4, value: selectedInvestment?.currentPrice * 0.58 || 58000 },
+      { year: -3, value: selectedInvestment?.currentPrice * 0.72 || 72000 },
+      { year: -2, value: selectedInvestment?.currentPrice * 0.85 || 85000 },
+      { year: -1, value: selectedInvestment?.currentPrice * 0.93 || 93000 },
+      { year: 0, value: selectedInvestment?.currentPrice || 100000 }
+    ],
+    predictions: [
+      { year: 0, value: selectedInvestment?.currentPrice || 100000, confidence: 100 },
+      { year: 1, value: selectedInvestment?.currentPrice * 1.12 || 112000, confidence: 85 },
+      { year: 2, value: selectedInvestment?.currentPrice * 1.26 || 126000, confidence: 75 },
+      { year: 3, value: selectedInvestment?.currentPrice * 1.42 || 142000, confidence: 65 },
+      { year: 4, value: selectedInvestment?.currentPrice * 1.60 || 160000, confidence: 55 },
+      { year: 5, value: selectedInvestment?.currentPrice * 1.80 || 180000, confidence: 45 }
+    ],
+    investmentName: selectedInvestment?.name || 'Investment'
   } : null;
 
   if (!currentAnalysis) {
