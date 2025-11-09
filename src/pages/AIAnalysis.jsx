@@ -128,7 +128,16 @@ const AIAnalysis = () => {
         comparison: 'Outperforming',
         differential: '+22.6%'
       }
-    }
+    },
+    diversificationScore: 7.5,
+    diversificationInsight: 'Your portfolio shows good diversification across multiple sectors and asset types. Consider adding more international exposure to further reduce geographic concentration risk.',
+    aiInsights: [
+      `${selectedInvestment?.name || 'This investment'} demonstrates strong fundamentals with consistent revenue growth and healthy profit margins.`,
+      `Current valuation appears fair based on industry P/E ratios and growth prospects, suggesting balanced risk-reward opportunity.`,
+      `Technical indicators show ${selectedInvestment?.status === 'gain' ? 'positive momentum' : 'consolidation phase'} with key support levels holding well.`,
+      `Sector trends remain favorable with increasing demand and limited regulatory headwinds in the near term.`,
+      `Risk-adjusted returns are competitive compared to benchmark indices, making this a solid portfolio addition.`
+    ]
   } : null;
 
   if (!currentAnalysis) {
