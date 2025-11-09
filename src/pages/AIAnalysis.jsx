@@ -107,7 +107,14 @@ const AIAnalysis = () => {
     pros: recommendations?.pros || [],
     cons: recommendations?.cons || [],
     explanation: insights?.summary || 'AI analysis is being processed...',
-    predictionData: insights?.predictionData || []
+    predictionData: insights?.predictionData || [],
+    sectorAnalysis: {
+      sector: selectedInvestment?.sector || 'Diversified',
+      sectorGrowth: 'Positive',
+      marketShare: 'Leading',
+      competitivePosition: 'Strong',
+      insights: `${selectedInvestment?.type || 'Investment'} showing strong fundamentals with balanced risk-reward profile. Sector outlook remains positive with good growth prospects.`
+    }
   } : null;
 
   if (!currentAnalysis) {
