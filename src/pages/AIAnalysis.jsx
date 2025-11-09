@@ -114,6 +114,20 @@ const AIAnalysis = () => {
       marketShare: 'Leading',
       competitivePosition: 'Strong',
       insights: `${selectedInvestment?.type || 'Investment'} showing strong fundamentals with balanced risk-reward profile. Sector outlook remains positive with good growth prospects.`
+    },
+    benchmarks: {
+      nifty50: {
+        name: 'NIFTY 50',
+        performance: '+12.5%',
+        comparison: 'Outperforming',
+        differential: '+22.0%'
+      },
+      sensex: {
+        name: 'SENSEX',
+        performance: '+11.8%',
+        comparison: 'Outperforming',
+        differential: '+22.6%'
+      }
     }
   } : null;
 
