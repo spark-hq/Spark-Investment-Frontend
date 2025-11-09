@@ -12,14 +12,17 @@ import { useNavigate } from "react-router-dom";
 import InvestmentFilters from "../components/investments/InvestmentFilters";
 import InvestmentTimeline from "../components/investments/InvestmentTimeline";
 import InvestmentDetailModal from "../components/investments/InvestmentDetailModal";
-import {
-  investments as allInvestments,
-  investmentSummary,
-} from "../data/investmentData";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { ErrorDisplay } from "../components/ui/ErrorBoundary";
+import { useInvestments, useInvestmentSummary } from "../hooks/useInvestments";
 
 const Investments = () => {
   const navigate = useNavigate();
   const [selectedInvestment, setSelectedInvestment] = useState(null);
+
+  // Fetch investments data from API
+  const { data: allInvestments = [], isLoading, error } = useInvestments();
+  const investmentSummary = useInvestmentSummary(allInvestments);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -157,6 +160,22 @@ const Investments = () => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+
+  // Show loading spinner while fetching data
+  if (isLoading) {
+    return <LoadingSpinner fullScreen message="Loading your investments..." />;
+  }
+
+  // Show error if data fetch fails
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 flex items-center justify-center">
+        <div className="max-w-md">
+          <ErrorDisplay error={error} retry={() => window.location.reload()} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
