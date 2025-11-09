@@ -55,7 +55,7 @@ export const mockMarketData = {
 // ===================================
 export const mockAIAnalysis = {
   portfolioInsights: aiAnalysisData.portfolioInsights,
-  recommendations: aiAnalysisData.recommendations,
+  recommendations: aiAnalysisData.portfolioRecommendations,
   riskAnalysis: aiAnalysisData.riskAnalysis,
   marketSentiment: aiAnalysisData.marketSentiment,
   aiChat: aiAnalysisData.chatMessages,
