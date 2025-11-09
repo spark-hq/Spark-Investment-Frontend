@@ -142,7 +142,7 @@ const Investments = () => {
     });
 
     setFilteredInvestments(result);
-  }, [filters, searchQuery]);
+  }, [filters, searchQuery, allInvestments]); // Added allInvestments dependency
 
   // Handle investment click (for detail view - will implement in next step)
   const handleInvestmentClick = (investment) => {
