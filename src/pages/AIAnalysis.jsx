@@ -1,6 +1,6 @@
 // src/pages/AIAnalysis.jsx
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Brain, Sparkles, ArrowLeft, RefreshCw, Download } from 'lucide-react';
 import Card from '../components/ui/Card';
@@ -36,12 +36,20 @@ const AIAnalysis = () => {
   } = useCompleteAIAnalysis();
 
   // Set first investment as default when investments load
-  if (!selectedInvestmentId && investments.length > 0) {
-    setSelectedInvestmentId(investments[0].id);
-  }
+  useEffect(() => {
+    if (!selectedInvestmentId && investments.length > 0) {
+      setSelectedInvestmentId(investments[0].id);
+    }
+  }, [investments, selectedInvestmentId]);
 
   // Get currently selected investment
   const selectedInvestment = investments.find(inv => inv.id === selectedInvestmentId);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('🔄 Selected Investment ID:', selectedInvestmentId);
+    console.log('📊 Selected Investment:', selectedInvestment);
+  }, [selectedInvestmentId, selectedInvestment]);
 
   // Combine loading states
   const isLoading = investmentsLoading || aiLoading;
@@ -86,8 +94,13 @@ const AIAnalysis = () => {
     );
   }
 
-  // Create currentAnalysis object from AI data
-  const currentAnalysis = insights ? {
+  // Create currentAnalysis object from AI data (memoized to detect changes)
+  const currentAnalysis = useMemo(() => {
+    console.log('🔄 Recalculating currentAnalysis for:', selectedInvestment?.name);
+
+    if (!insights) return null;
+
+    return {
     analysisDate: new Date().toLocaleDateString('en-IN', {
       day: '2-digit',
       month: 'short',
@@ -155,7 +168,8 @@ const AIAnalysis = () => {
       { year: 5, value: selectedInvestment?.currentPrice * 1.80 || 180000, confidence: 45 }
     ],
     investmentName: selectedInvestment?.name || 'Investment'
-  } : null;
+    };
+  }, [insights, recommendations, riskAnalysis, selectedInvestment]);
 
   if (!currentAnalysis) {
     return (
