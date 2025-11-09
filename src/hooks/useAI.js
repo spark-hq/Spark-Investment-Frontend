@@ -108,6 +108,23 @@ export const useAIChat = () => {
 };
 
 // ===================================
+// Investment-Specific AI Analysis
+// ===================================
+export const useInvestmentAnalysis = (investmentId) => {
+  return useQuery({
+    queryKey: ['ai', 'investment-analysis', investmentId],
+    queryFn: async () => {
+      if (!investmentId) return null;
+      const response = await aiAPI.getInvestmentAnalysis(investmentId);
+      return response.data;
+    },
+    enabled: !!investmentId, // Only run query if investmentId exists
+    staleTime: 300000, // 5 minutes
+    refetchInterval: 600000, // Refetch every 10 minutes
+  });
+};
+
+// ===================================
 // Complete AI Analysis (for AI Analysis page)
 // ===================================
 export const useCompleteAIAnalysis = () => {

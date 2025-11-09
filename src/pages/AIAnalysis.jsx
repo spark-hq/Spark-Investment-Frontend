@@ -14,7 +14,7 @@ import AIExplanation from '../components/ai-analysis/AIExplanation';
 import ValuationBadge from '../components/ai-analysis/ValuationBadge';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { ErrorDisplay } from '../components/ui/ErrorBoundary';
-import { useCompleteAIAnalysis } from '../hooks/useAI';
+import { useInvestmentAnalysis } from '../hooks/useAI';
 import { useInvestments } from '../hooks/useInvestments';
 
 const AIAnalysis = () => {
@@ -24,16 +24,13 @@ const AIAnalysis = () => {
   // Fetch user's investments for the selector
   const { data: investments = [], isLoading: investmentsLoading } = useInvestments();
 
-  // Fetch AI analysis data
+  // Fetch AI analysis data for selected investment
   const {
-    insights,
-    recommendations,
-    riskAnalysis,
-    marketSentiment,
+    data: investmentAnalysis,
     isLoading: aiLoading,
     isError: aiError,
     refetch
-  } = useCompleteAIAnalysis();
+  } = useInvestmentAnalysis(selectedInvestmentId);
 
   // Set first investment as default when investments load
   useEffect(() => {
@@ -49,7 +46,8 @@ const AIAnalysis = () => {
   useEffect(() => {
     console.log('🔄 Selected Investment ID:', selectedInvestmentId);
     console.log('📊 Selected Investment:', selectedInvestment);
-  }, [selectedInvestmentId, selectedInvestment]);
+    console.log('🤖 Investment Analysis Data:', investmentAnalysis);
+  }, [selectedInvestmentId, selectedInvestment, investmentAnalysis]);
 
   // Combine loading states
   const isLoading = investmentsLoading || aiLoading;
@@ -94,82 +92,79 @@ const AIAnalysis = () => {
     );
   }
 
-  // Create currentAnalysis object from AI data (memoized to detect changes)
+  // Create currentAnalysis object from investment-specific AI data
   const currentAnalysis = useMemo(() => {
     console.log('🔄 Recalculating currentAnalysis for:', selectedInvestment?.name);
+    console.log('📊 Using investment analysis:', investmentAnalysis);
 
-    if (!insights) return null;
+    // Return null if no analysis data available yet
+    if (!investmentAnalysis) return null;
 
+    // Use the per-investment analysis data directly from the API
     return {
-    analysisDate: new Date().toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    }),
-    riskLevel: riskAnalysis?.riskLevel || 'MEDIUM',
-    riskScore: riskAnalysis?.riskScore || 55,
-    volatility: riskAnalysis?.volatility || 'Moderate',
-    healthScore: insights?.healthScore || 75,
-    healthGrade: insights?.healthGrade || 'B+',
-    valuation: insights?.valuation || 'Fair Value',
-    valuationScore: insights?.valuationScore || 7.5,
-    recommendation: recommendations?.overallRecommendation || 'HOLD',
-    confidence: Math.round((recommendations?.confidence || 0.82) * 100),
-    targetPrice: selectedInvestment?.currentPrice * 1.15 || 0,
-    stopLoss: selectedInvestment?.currentPrice * 0.92 || 0,
-    pros: recommendations?.pros || [],
-    cons: recommendations?.cons || [],
-    explanation: insights?.summary || 'AI analysis is being processed...',
-    predictionData: insights?.predictionData || [],
-    sectorAnalysis: {
-      sector: selectedInvestment?.sector || 'Diversified',
-      sectorGrowth: 'Positive',
-      marketShare: 'Leading',
-      competitivePosition: 'Strong',
-      insights: `${selectedInvestment?.type || 'Investment'} showing strong fundamentals with balanced risk-reward profile. Sector outlook remains positive with good growth prospects.`
-    },
-    benchmarks: {
-      nifty50: {
-        name: 'NIFTY 50',
-        performance: '+12.5%',
-        comparison: 'Outperforming',
-        differential: '+22.0%'
+      analysisDate: investmentAnalysis.analysisDate || new Date().toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }),
+      // Risk metrics from per-investment analysis
+      riskLevel: investmentAnalysis.riskLevel || 'MEDIUM',
+      riskScore: investmentAnalysis.riskScore || 55,
+      volatility: investmentAnalysis.volatility || 'Moderate',
+      // Health metrics from per-investment analysis
+      healthScore: investmentAnalysis.healthScore || 75,
+      healthGrade: investmentAnalysis.healthGrade || 'B+',
+      // Valuation from per-investment analysis
+      valuation: investmentAnalysis.valuation || 'Fair Value',
+      valuationScore: investmentAnalysis.valuationScore || 7.5,
+      // Recommendation from per-investment analysis
+      recommendation: investmentAnalysis.recommendation || 'HOLD',
+      confidence: investmentAnalysis.confidence || 75,
+      targetPrice: investmentAnalysis.targetPrice || selectedInvestment?.currentPrice * 1.15 || 0,
+      stopLoss: investmentAnalysis.stopLoss || selectedInvestment?.currentPrice * 0.92 || 0,
+      // Pros and cons from per-investment analysis
+      pros: investmentAnalysis.pros || [],
+      cons: investmentAnalysis.cons || [],
+      // AI explanation from per-investment analysis
+      explanation: investmentAnalysis.aiExplanation || 'AI analysis is being processed...',
+      // Sector analysis from per-investment analysis
+      sectorAnalysis: investmentAnalysis.sectorAnalysis || {
+        sector: selectedInvestment?.sector || 'Diversified',
+        sectorGrowth: 'Positive',
+        marketShare: 'Leading',
+        competitivePosition: 'Strong',
+        insights: `Analysis for ${selectedInvestment?.name || 'this investment'} is being generated.`
       },
-      sensex: {
-        name: 'SENSEX',
-        performance: '+11.8%',
-        comparison: 'Outperforming',
-        differential: '+22.6%'
-      }
-    },
-    diversificationScore: 7.5,
-    diversificationInsight: 'Your portfolio shows good diversification across multiple sectors and asset types. Consider adding more international exposure to further reduce geographic concentration risk.',
-    aiInsights: [
-      `${selectedInvestment?.name || 'This investment'} demonstrates strong fundamentals with consistent revenue growth and healthy profit margins.`,
-      `Current valuation appears fair based on industry P/E ratios and growth prospects, suggesting balanced risk-reward opportunity.`,
-      `Technical indicators show ${selectedInvestment?.status === 'gain' ? 'positive momentum' : 'consolidation phase'} with key support levels holding well.`,
-      `Sector trends remain favorable with increasing demand and limited regulatory headwinds in the near term.`,
-      `Risk-adjusted returns are competitive compared to benchmark indices, making this a solid portfolio addition.`
-    ],
-    historicalData: [
-      { year: -5, value: selectedInvestment?.currentPrice * 0.45 || 45000 },
-      { year: -4, value: selectedInvestment?.currentPrice * 0.58 || 58000 },
-      { year: -3, value: selectedInvestment?.currentPrice * 0.72 || 72000 },
-      { year: -2, value: selectedInvestment?.currentPrice * 0.85 || 85000 },
-      { year: -1, value: selectedInvestment?.currentPrice * 0.93 || 93000 },
-      { year: 0, value: selectedInvestment?.currentPrice || 100000 }
-    ],
-    predictions: [
-      { year: 0, value: selectedInvestment?.currentPrice || 100000, confidence: 100 },
-      { year: 1, value: selectedInvestment?.currentPrice * 1.12 || 112000, confidence: 85 },
-      { year: 2, value: selectedInvestment?.currentPrice * 1.26 || 126000, confidence: 75 },
-      { year: 3, value: selectedInvestment?.currentPrice * 1.42 || 142000, confidence: 65 },
-      { year: 4, value: selectedInvestment?.currentPrice * 1.60 || 160000, confidence: 55 },
-      { year: 5, value: selectedInvestment?.currentPrice * 1.80 || 180000, confidence: 45 }
-    ],
-    investmentName: selectedInvestment?.name || 'Investment'
+      // Benchmarks from per-investment analysis
+      benchmarks: investmentAnalysis.benchmarks || {
+        nifty50: {
+          name: 'NIFTY 50',
+          performance: 'N/A',
+          comparison: 'Calculating',
+          differential: 'N/A'
+        },
+        sensex: {
+          name: 'SENSEX',
+          performance: 'N/A',
+          comparison: 'Calculating',
+          differential: 'N/A'
+        }
+      },
+      // Diversification from per-investment analysis
+      diversificationScore: investmentAnalysis.diversificationScore || 7.0,
+      diversificationInsight: investmentAnalysis.diversificationInsight || 'Diversification analysis is being calculated.',
+      // AI insights from per-investment analysis
+      aiInsights: investmentAnalysis.aiInsights || [
+        'AI is analyzing this investment...',
+        'Detailed insights will be available shortly.',
+        'Please wait while we process market data.'
+      ],
+      // Historical data and predictions from per-investment analysis
+      historicalData: investmentAnalysis.historicalData || [],
+      predictions: investmentAnalysis.predictions || [],
+      investmentName: selectedInvestment?.name || investmentAnalysis.investmentName || 'Investment'
     };
-  }, [insights, recommendations, riskAnalysis, selectedInvestment]);
+  }, [investmentAnalysis, selectedInvestment]);
 
   if (!currentAnalysis) {
     return (
