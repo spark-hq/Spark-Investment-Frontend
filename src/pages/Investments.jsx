@@ -21,8 +21,63 @@ const Investments = () => {
   const [selectedInvestment, setSelectedInvestment] = useState(null);
 
   // Fetch investments data from API
-  const { data: allInvestments = [], isLoading, error } = useInvestments();
-  const investmentSummary = useInvestmentSummary(allInvestments);
+  const { data: apiInvestments = [], isLoading, error } = useInvestments();
+
+  // Local state for live price updates
+  const [liveInvestments, setLiveInvestments] = useState([]);
+
+  // Initialize live investments when API data loads
+  useEffect(() => {
+    if (apiInvestments.length > 0) {
+      setLiveInvestments(apiInvestments.map(inv => ({
+        ...inv,
+        priceDirection: 'neutral' // Initial state
+      })));
+    }
+  }, [apiInvestments]);
+
+  // Real-time price simulation (MOCK_MODE only)
+  useEffect(() => {
+    const MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true';
+
+    if (MOCK_MODE && liveInvestments.length > 0) {
+      console.log('🔄 Starting real-time price simulation (every 3 seconds)');
+
+      const interval = setInterval(() => {
+        setLiveInvestments(prev =>
+          prev.map(inv => {
+            // Random price change between -0.5% to +0.5%
+            const priceChangePercent = (Math.random() - 0.5) * 0.01; // ±0.5%
+            const newCurrentPrice = inv.currentPrice * (1 + priceChangePercent);
+            const newCurrentValue = newCurrentPrice * inv.quantity;
+            const invested = inv.investedAmount || inv.invested || 0;
+            const newReturns = newCurrentValue - invested;
+            const newReturnsPercentage = invested > 0
+              ? ((newReturns / invested) * 100)
+              : 0;
+
+            return {
+              ...inv,
+              currentPrice: parseFloat(newCurrentPrice.toFixed(2)),
+              currentValue: parseFloat(newCurrentValue.toFixed(2)),
+              returns: parseFloat(newReturns.toFixed(2)),
+              returnsPercentage: parseFloat(newReturnsPercentage.toFixed(2)),
+              status: newReturns >= 0 ? 'profit' : 'loss',
+              priceDirection: priceChangePercent > 0 ? 'up' : priceChangePercent < 0 ? 'down' : 'neutral',
+              lastPriceChange: priceChangePercent
+            };
+          })
+        );
+      }, 3000); // Update every 3 seconds
+
+      return () => {
+        console.log('🛑 Stopping real-time price simulation');
+        clearInterval(interval);
+      };
+    }
+  }, [liveInvestments.length]); // Only depend on length to avoid infinite loop
+
+  const investmentSummary = useInvestmentSummary(liveInvestments);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -53,7 +108,7 @@ const Investments = () => {
 
   // Apply filters, search, and sort
   useEffect(() => {
-    let result = [...allInvestments];
+    let result = [...liveInvestments];
 
     // Apply platform filter
     if (filters.platform !== "All") {
@@ -142,7 +197,7 @@ const Investments = () => {
     });
 
     setFilteredInvestments(result);
-  }, [filters, searchQuery, allInvestments]); // Added allInvestments dependency
+  }, [filters, searchQuery, liveInvestments]); // Update when live prices change
 
   // Handle investment click (for detail view - will implement in next step)
   const handleInvestmentClick = (investment) => {
@@ -206,7 +261,7 @@ const Investments = () => {
                 <div className="flex items-center space-x-2 text-indigo-600">
                   <Package size={24} />
                   <span className="text-2xl font-bold">
-                    {allInvestments.length}
+                    {liveInvestments.length}
                   </span>
                 </div>
                 <p className="text-sm text-gray-600 mt-1">Total Investments</p>
