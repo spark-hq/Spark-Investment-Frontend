@@ -8,6 +8,7 @@ import {
   Bell,
   Link as LinkIcon,
   Shield,
+  Lock,
   Settings as SettingsIcon,
   Palette,
 } from "lucide-react";
@@ -24,6 +25,9 @@ import SafetyControls from "../components/settings/SafetyControls";
 // Import Loading and Error components
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { ErrorDisplay } from "../components/ui/ErrorBoundary";
+
+// Import Settings Data
+import { availableOptions } from '../data/settingsData';
 
 // Import Settings Hooks
 import {
@@ -118,6 +122,11 @@ const Settings = () => {
     updateSafetySettings.mutate(updatedSafety);
   };
 
+  const handleSecuritySave = (updatedSecurity) => {
+    console.log('Security settings updated:', updatedSecurity);
+    // TODO: Add security settings API if needed
+  };
+
   const handleAppearanceSave = (updatedAppearance) => {
     console.log("Appearance updated:", updatedAppearance);
     // TODO: Add appearance settings API if needed
@@ -175,7 +184,7 @@ const Settings = () => {
         return preferences ? (
           <PreferenceSettings
             settings={preferences}
-            availableOptions={{}} // TODO: Add available options from API
+            availableOptions={availableOptions}
             onSave={handlePreferencesSave}
           />
         ) : (
