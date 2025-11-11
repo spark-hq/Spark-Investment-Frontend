@@ -84,8 +84,8 @@ export const mockAutoInvest = {
 // ===================================
 export const mockSettings = {
   profile: settingsData.userProfile,
-  preferences: settingsData.preferences,
-  connectedAccounts: settingsData.connectedAccounts,
+  preferences: settingsData.preferenceSettings,
+  connectedAccounts: settingsData.connectedPlatforms,
   notifications: settingsData.notificationSettings,
 };
 
