@@ -76,7 +76,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Language */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
+            <label className=" text-sm font-medium text-gray-700 mb-2">Language</label>
             <select
               value={localSettings.language}
               onChange={(e) => handleChange('language', e.target.value)}
@@ -92,7 +92,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Currency */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <DollarSign size={14} />
               <span>Currency</span>
             </label>
@@ -111,7 +111,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Timezone */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <Clock size={14} />
               <span>Timezone</span>
             </label>
@@ -130,7 +130,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Date Format */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <Calendar size={14} />
               <span>Date Format</span>
             </label>
@@ -147,7 +147,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Number Format */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <Hash size={14} />
               <span>Number Format</span>
             </label>
@@ -173,7 +173,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Default View */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Default View</label>
+            <label className=" text-sm font-medium text-gray-700 mb-2">Default View</label>
             <select
               value={localSettings.defaultView}
               onChange={(e) => handleChange('defaultView', e.target.value)}
@@ -188,7 +188,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Chart Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <BarChart3 size={14} />
               <span>Default Chart Type</span>
             </label>
@@ -206,7 +206,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Data Refresh Interval */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <RefreshCw size={14} />
               <span>Data Refresh Interval</span>
             </label>
@@ -225,7 +225,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {/* Items Per Page */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
+            <label className=" text-sm font-medium text-gray-700 mb-2 flex items-center space-x-1">
               <List size={14} />
               <span>Items Per Page</span>
             </label>
@@ -267,7 +267,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline- h-4 w-4 transform rounded-full bg-white transition-transform ${
                   localSettings.compactMode ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
@@ -290,7 +290,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline- h-4 w-4 transform rounded-full bg-white transition-transform ${
                   localSettings.animations ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
@@ -313,7 +313,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline- h-4 w-4 transform rounded-full bg-white transition-transform ${
                   localSettings.soundEffects ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
@@ -343,7 +343,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline- h-4 w-4 transform rounded-full bg-white transition-transform ${
                   localSettings.autoLogout ? 'translate-x-6' : 'translate-x-1'
                 }`}
               />
@@ -352,7 +352,7 @@ const PreferenceSettings = ({ settings, availableOptions, onSave }) => {
 
           {localSettings.autoLogout && (
             <div className="p-4 bg-gray-50 rounded-lg animate-fadeIn">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className=" text-sm font-medium text-gray-700 mb-2">
                 Auto Logout Time
               </label>
               <select
