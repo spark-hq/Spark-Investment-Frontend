@@ -8,6 +8,7 @@ import {
   Bell,
   Link as LinkIcon,
   Shield,
+  Lock,
   Settings as SettingsIcon,
   Palette,
 } from 'lucide-react';
@@ -24,6 +25,9 @@ import SafetyControls from '../components/settings/SafetyControls';
 // Import Loading and Error components
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { ErrorDisplay } from '../components/ui/ErrorBoundary';
+
+// Import Settings Data
+import { availableOptions } from '../data/settingsData';
 
 // Import Settings Hooks
 import {
@@ -64,6 +68,7 @@ const Settings = () => {
     { id: 'profile', name: 'Profile', icon: User, color: 'indigo' },
     { id: 'notifications', name: 'Notifications', icon: Bell, color: 'blue' },
     { id: 'platforms', name: 'Platforms', icon: LinkIcon, color: 'green' },
+    { id: 'security', name: 'Security', icon: Lock, color: 'orange' },
     { id: 'preferences', name: 'Preferences', icon: SettingsIcon, color: 'teal' },
     { id: 'appearance', name: 'Appearance', icon: Palette, color: 'purple' },
   ];
@@ -99,6 +104,11 @@ const Settings = () => {
 
   const handleSafetySave = (updatedSafety) => {
     updateSafetySettings.mutate(updatedSafety);
+  };
+
+  const handleSecuritySave = (updatedSecurity) => {
+    console.log('Security settings updated:', updatedSecurity);
+    // TODO: Add security settings API if needed
   };
 
   const handleAppearanceSave = (updatedAppearance) => {
@@ -157,11 +167,18 @@ const Settings = () => {
         ) : (
           <LoadingSpinner message="Loading platforms..." />
         );
+      case 'security':
+        return (
+          <SecuritySettings
+            settings={{ twoFactorEnabled: false, loginAlerts: true }}
+            onSave={handleSecuritySave}
+          />
+        );
       case 'preferences':
         return preferences ? (
           <PreferenceSettings
             settings={preferences}
-            availableOptions={{}} // TODO: Add available options from API
+            availableOptions={availableOptions}
             onSave={handlePreferencesSave}
           />
         ) : (
@@ -214,6 +231,7 @@ const Settings = () => {
                     blue: 'bg-blue-100 text-blue-700 border-blue-300',
                     green: 'bg-green-100 text-green-700 border-green-300',
                     red: 'bg-red-100 text-red-700 border-red-300',
+                    orange: 'bg-orange-100 text-orange-700 border-orange-300',
                     teal: 'bg-teal-100 text-teal-700 border-teal-300',
                     purple: 'bg-purple-100 text-purple-700 border-purple-300',
                   };
