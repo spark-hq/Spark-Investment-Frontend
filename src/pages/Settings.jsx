@@ -27,7 +27,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { ErrorDisplay } from "../components/ui/ErrorBoundary";
 
 // Import Settings Data
-import { availableOptions } from '../data/settingsData';
+import { availableOptions } from "../data/settingsData";
 
 // Import Settings Hooks
 import {
@@ -123,7 +123,7 @@ const Settings = () => {
   };
 
   const handleSecuritySave = (updatedSecurity) => {
-    console.log('Security settings updated:', updatedSecurity);
+    console.log("Security settings updated:", updatedSecurity);
     // TODO: Add security settings API if needed
   };
 
@@ -179,6 +179,13 @@ const Settings = () => {
           />
         ) : (
           <LoadingSpinner message="Loading platforms..." />
+        );
+      case "security":
+        return (
+          <SecuritySettings
+            settings={{ twoFactorEnabled: false, loginAlerts: true }}
+            onSave={handleSecuritySave}
+          />
         );
       case "preferences":
         return preferences ? (
