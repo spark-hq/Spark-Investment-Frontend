@@ -8,8 +8,15 @@ import TransactionTable from '../components/transactions/TransactionTable';
 import TransactionFilters from '../components/transactions/TransactionFilters';
 import TransactionModal from '../components/transactions/TransactionModal';
 import TransactionCharts from '../components/transactions/TransactionCharts';
-import { transactions, transactionSummary } from '../data/transactionData';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ErrorDisplay } from '../components/ui/ErrorBoundary';
 import { formatCurrency } from '../utils/calculations';
+import {
+  useTransactions,
+  useTransactionSummary,
+  useTransactionExport,
+  useFilteredTransactions,
+} from '../hooks/useTransactions';
 
 const Transactions = () => {
   const navigate = useNavigate();
@@ -27,94 +34,14 @@ const Transactions = () => {
     endDate: '',
   });
 
-  // Filter transactions
+  // Fetch transactions and summary from API
+  const { data: transactions, isLoading: transactionsLoading, isError: transactionsError } = useTransactions();
+  const { data: transactionSummary, isLoading: summaryLoading } = useTransactionSummary('1M');
+  const exportMutation = useTransactionExport();
+
+  // Filter transactions using the custom hook
   const filteredTransactions = useMemo(() => {
-    return transactions.filter((transaction) => {
-      // Search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matchesSearch =
-          transaction.asset.toLowerCase().includes(query) ||
-          transaction.symbol.toLowerCase().includes(query) ||
-          transaction.orderId.toLowerCase().includes(query) ||
-          transaction.platform.toLowerCase().includes(query);
-        if (!matchesSearch) return false;
-      }
-
-      // Platform filter
-      if (filters.platform !== 'All' && transaction.platform !== filters.platform) {
-        return false;
-      }
-
-      // Type filter
-      if (filters.type !== 'All' && transaction.type !== filters.type) {
-        return false;
-      }
-
-      // Status filter
-      if (filters.status !== 'All' && transaction.status !== filters.status) {
-        return false;
-      }
-
-      // Category filter
-      if (filters.category !== 'All' && transaction.category !== filters.category) {
-        return false;
-      }
-
-      // Payment Mode filter
-      if (filters.paymentMode !== 'All' && transaction.paymentMode !== filters.paymentMode) {
-        return false;
-      }
-
-      // Date Range filter
-      if (filters.dateRange !== 'all') {
-        const transactionDate = new Date(transaction.date);
-        const now = new Date();
-
-        if (filters.dateRange === 'custom') {
-          if (filters.startDate) {
-            const startDate = new Date(filters.startDate);
-            if (transactionDate < startDate) return false;
-          }
-          if (filters.endDate) {
-            const endDate = new Date(filters.endDate);
-            endDate.setHours(23, 59, 59, 999);
-            if (transactionDate > endDate) return false;
-          }
-        } else {
-          const daysMap = {
-            '1d': 1,
-            '7d': 7,
-            '30d': 30,
-            '3m': 90,
-            '6m': 180,
-            '1y': 365,
-          };
-          const days = daysMap[filters.dateRange];
-          if (days) {
-            const cutoffDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-            if (transactionDate < cutoffDate) return false;
-          }
-        }
-      }
-
-      // Amount Range filter
-      if (filters.amountRange !== 'all') {
-        const amount = transaction.totalAmount;
-        const ranges = {
-          '0-10000': [0, 10000],
-          '10000-50000': [10000, 50000],
-          '50000-100000': [50000, 100000],
-          '100000+': [100000, Infinity],
-        };
-        const range = ranges[filters.amountRange];
-        if (range && (amount < range[0] || amount >= range[1])) {
-          return false;
-        }
-      }
-
-      return true;
-    });
+    return useFilteredTransactions(transactions || [], filters, searchQuery);
   }, [transactions, searchQuery, filters]);
 
   // Handle filter change
@@ -140,8 +67,18 @@ const Transactions = () => {
     setSelectedTransaction(null);
   };
 
-  // Export to CSV
+  // Export to CSV - Use API mutation
   const handleExportCSV = () => {
+    // If API export is available, use it
+    if (exportMutation) {
+      exportMutation.mutate({
+        format: 'csv',
+        filters: filters,
+      });
+      return;
+    }
+
+    // Fallback to client-side export (for mock mode or API failure)
     const headers = [
       'Date',
       'Type',
@@ -186,10 +123,40 @@ const Transactions = () => {
     window.URL.revokeObjectURL(url);
   };
 
-  // Export to PDF (placeholder)
+  // Export to PDF - Use API mutation
   const handleExportPDF = () => {
-    alert('PDF export functionality will be implemented in the next phase. For now, please use CSV export.');
+    exportMutation.mutate({
+      format: 'pdf',
+      filters: filters,
+    });
   };
+
+  // Show loading state
+  if (transactionsLoading || summaryLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-20">
+            <LoadingSpinner message="Loading transactions..." />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (transactionsError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ErrorDisplay
+            title="Failed to load transactions"
+            message="There was an error loading your transaction history. Please try again."
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
@@ -226,9 +193,9 @@ const Transactions = () => {
                 <Receipt size={24} />
               </div>
               <p className="text-indigo-100 text-sm mb-2 font-medium">Total Transactions</p>
-              <h3 className="text-3xl font-bold mb-2">{transactionSummary.totalTransactions}</h3>
+              <h3 className="text-3xl font-bold mb-2">{transactionSummary?.totalTransactions || 0}</h3>
               <p className="text-indigo-100 text-sm">
-                {transactionSummary.completedTransactions} completed
+                {transactionSummary?.completedTransactions || 0} completed
               </p>
             </div>
           </Card>
@@ -242,7 +209,7 @@ const Transactions = () => {
               </div>
               <p className="text-green-100 text-sm mb-2 font-medium">Total Buy Amount</p>
               <h3 className="text-3xl font-bold mb-2">
-                {formatCurrency(transactionSummary.totalBuyAmount)}
+                {formatCurrency(transactionSummary?.totalBuyAmount || 0)}
               </h3>
               <p className="text-green-100 text-sm">Including fees & taxes</p>
             </div>
@@ -257,7 +224,7 @@ const Transactions = () => {
               </div>
               <p className="text-orange-100 text-sm mb-2 font-medium">Total Sell Amount</p>
               <h3 className="text-3xl font-bold mb-2">
-                {formatCurrency(transactionSummary.totalSellAmount)}
+                {formatCurrency(transactionSummary?.totalSellAmount || 0)}
               </h3>
               <p className="text-orange-100 text-sm">After deductions</p>
             </div>
@@ -272,10 +239,10 @@ const Transactions = () => {
               </div>
               <p className="text-yellow-100 text-sm mb-2 font-medium">Pending/Failed</p>
               <h3 className="text-3xl font-bold mb-2">
-                {transactionSummary.pendingTransactions + transactionSummary.failedTransactions}
+                {(transactionSummary?.pendingTransactions || 0) + (transactionSummary?.failedTransactions || 0)}
               </h3>
               <p className="text-yellow-100 text-sm">
-                {transactionSummary.pendingTransactions}P / {transactionSummary.failedTransactions}F
+                {transactionSummary?.pendingTransactions || 0}P / {transactionSummary?.failedTransactions || 0}F
               </p>
             </div>
           </Card>
