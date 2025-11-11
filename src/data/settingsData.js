@@ -200,6 +200,17 @@ export const preferenceSettings = {
   itemsPerPage: 20,
   autoLogout: true,
   autoLogoutTime: 30, // minutes
+  // Auto-Trading Safety Settings
+  safetySettings: {
+    autoTradingEnabled: false,
+    dailyLimit: 10000,
+    perTradeLimit: 2000,
+    minConfidenceThreshold: 75,
+    emergencyStopActive: false,
+    requireApproval: true,
+    allowAfterHours: false,
+    maxDailyTrades: 5,
+  },
 };
 
 // APPEARANCE SETTINGS
