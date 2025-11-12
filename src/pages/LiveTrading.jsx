@@ -183,7 +183,7 @@ const LiveTrading = () => {
                 <TrendingUp className="text-white" size={32} />
               </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Live Trading</h1>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Live Trading</h1>
                 <p className="text-xl text-gray-600">AI-powered trading assistant</p>
               </div>
               <Sparkles className="text-purple-600 animate-pulse" size={32} />
@@ -218,7 +218,7 @@ const LiveTrading = () => {
                 <BarChart3 size={24} />
               </div>
               <p className="text-indigo-100 text-sm mb-2 font-medium">Total Invested</p>
-              <h3 className="text-3xl font-bold mb-2">{formatCurrency(totalInvested)}</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">{formatCurrency(totalInvested)}</h3>
               <p className="text-indigo-100 text-sm">Across {marketData.length} assets</p>
             </div>
           </Card>
@@ -230,7 +230,7 @@ const LiveTrading = () => {
                 <TrendingUp size={24} />
               </div>
               <p className="text-green-100 text-sm mb-2 font-medium">Current Value</p>
-              <h3 className="text-3xl font-bold mb-2">{formatCurrency(totalValue)}</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">{formatCurrency(totalValue)}</h3>
               <p className="text-green-100 text-sm">+{profitPercent}% growth</p>
             </div>
           </Card>
@@ -242,7 +242,7 @@ const LiveTrading = () => {
                 <Zap size={24} />
               </div>
               <p className="text-purple-100 text-sm mb-2 font-medium">Total Profit</p>
-              <h3 className="text-3xl font-bold mb-2">{formatCurrency(totalProfit)}</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">{formatCurrency(totalProfit)}</h3>
               <p className="text-purple-100 text-sm">Unrealized gains</p>
             </div>
           </Card>
@@ -254,7 +254,7 @@ const LiveTrading = () => {
                 <Shield size={24} />
               </div>
               <p className="text-yellow-100 text-sm mb-2 font-medium">Auto-Trading</p>
-              <h3 className="text-3xl font-bold mb-2">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
                 {autoTradeSettings.enabled ? 'Active' : 'Inactive'}
               </h3>
               <p className="text-yellow-100 text-sm">
@@ -268,7 +268,7 @@ const LiveTrading = () => {
 
         {/* Market Data Cards */}
         <div className="mb-8 animate-fadeIn">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
             <span>📊 Live Market Data</span>
             <span className="text-sm font-normal text-gray-600">(Updates every 3 seconds)</span>
           </h2>
@@ -343,7 +343,7 @@ const LiveTrading = () => {
                 <Sparkles className="text-white" size={48} />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2">AI-Powered Trading Intelligence</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">AI-Powered Trading Intelligence</h3>
                 <p className="text-indigo-100">
                   Experience real-time market analysis, automated trading, and intelligent risk
                   management powered by advanced AI algorithms.

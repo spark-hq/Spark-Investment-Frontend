@@ -119,7 +119,7 @@ const AutoInvest = () => {
               <Bot className="text-white" size={32} />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Auto-Invest AI</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Auto-Invest AI</h1>
               <p className="text-xl text-gray-600">Automated investing powered by artificial intelligence</p>
             </div>
             <Sparkles className="text-purple-600 animate-pulse" size={32} />
@@ -135,7 +135,7 @@ const AutoInvest = () => {
               </div>
               <div>
                 <p className="text-blue-100 text-sm font-medium">AI Plans Available</p>
-                <h3 className="text-3xl font-bold">{aiInvestmentPlans.length}</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">{aiInvestmentPlans.length}</h3>
               </div>
             </div>
           </Card>
@@ -147,7 +147,7 @@ const AutoInvest = () => {
               </div>
               <div>
                 <p className="text-green-100 text-sm font-medium">Total Returns</p>
-                <h3 className="text-3xl font-bold">+{formatCurrency(performanceMetrics.totalReturns)}</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">+{formatCurrency(performanceMetrics.totalReturns)}</h3>
               </div>
             </div>
           </Card>
@@ -159,7 +159,7 @@ const AutoInvest = () => {
               </div>
               <div>
                 <p className="text-purple-100 text-sm font-medium">Active Plans</p>
-                <h3 className="text-3xl font-bold">{performanceMetrics.totalPlansActive}</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">{performanceMetrics.totalPlansActive}</h3>
               </div>
             </div>
           </Card>
@@ -217,7 +217,7 @@ const AutoInvest = () => {
           {activeTab === 'plans' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center space-x-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center space-x-2">
                   <Bot className="text-indigo-600" size={28} />
                   <span>AI-Recommended Investment Plans</span>
                 </h2>
@@ -252,7 +252,7 @@ const AutoInvest = () => {
           {activeTab === 'backtest' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Historical Backtesting</h2>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4">Historical Backtesting</h2>
                 <p className="text-gray-600 mb-4">
                   Select a plan to view its historical performance over the past 5 years
                 </p>
@@ -289,7 +289,7 @@ const AutoInvest = () => {
           {activeTab === 'rules' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
                   <Settings className="text-indigo-600" size={28} />
                   <span>Investment Rule Builder</span>
                 </h2>
@@ -323,7 +323,7 @@ const AutoInvest = () => {
         {/* Transaction Log Section */}
         {activeTab === 'performance' && autoInvestTransactions.length > 0 && (
           <div className="mt-8 bg-white rounded-xl shadow-md p-6 border-2 border-gray-100 animate-fadeIn">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Recent Auto-Invest Transactions</h3>
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4">Recent Auto-Invest Transactions</h3>
             <div className="space-y-2">
               {autoInvestTransactions.slice(0, 5).map((transaction) => (
                 <div

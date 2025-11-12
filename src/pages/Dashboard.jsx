@@ -105,7 +105,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
           <div className="flex items-center space-x-2 mb-2">
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
               {greeting}! 👋
             </h1>
             <Sparkles className="text-indigo-600 animate-pulse" size={32} />
@@ -128,7 +128,7 @@ const Dashboard = () => {
                 <Zap className="text-white" size={24} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-1">Quick Actions</h3>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1">Quick Actions</h3>
                 <p className="text-gray-600 text-sm">Manage your investments efficiently</p>
               </div>
             </div>
@@ -286,7 +286,7 @@ const Dashboard = () => {
                       #{index + 1}
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-gray-900">{investment.name}</h4>
+                      <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">{investment.name}</h4>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs text-gray-600">{investment.platform}</span>
                         <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs rounded-full font-semibold">
@@ -383,7 +383,7 @@ const Dashboard = () => {
                 <Brain className="text-white" size={48} />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex items-center space-x-2">
                   <span>AI-Powered Investment Insights</span>
                   <Sparkles className="animate-pulse" size={24} />
                 </h3>
@@ -418,7 +418,7 @@ const Dashboard = () => {
                 <Activity className="text-white" size={48} />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex items-center space-x-2">
                   <span>Live Smart Trading</span>
                   <Zap className="animate-pulse" size={24} />
                 </h3>
