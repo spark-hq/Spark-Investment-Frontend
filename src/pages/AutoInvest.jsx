@@ -1,6 +1,6 @@
 // src/pages/AutoInvest.jsx
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bot, ArrowLeft, Sparkles, Zap, TrendingUp, Settings } from 'lucide-react';
 import Card from '../components/ui/Card';
@@ -8,10 +8,15 @@ import InvestmentPlanCard from '../components/auto-invest/InvestmentPlanCard';
 import PerformanceTracker from '../components/auto-invest/PerformanceTracker';
 import BacktestResults from '../components/auto-invest/BacktestResults';
 import RuleBuilder from '../components/auto-invest/RuleBuilder';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ErrorDisplay } from '../components/ui/ErrorBoundary';
 import {
-  aiInvestmentPlans,
-  backtestResults,
-  activeAutoInvestPlans,
+  useStrategies,
+  useBacktestResults,
+  useActivatePlan,
+  useUpdateStrategy,
+} from '../hooks/useAutoInvest';
+import {
   autoInvestTransactions,
   performanceMetrics,
 } from '../data/autoInvestData';
@@ -19,25 +24,43 @@ import { formatCurrency } from '../utils/calculations';
 
 const AutoInvest = () => {
   const navigate = useNavigate();
-  const [activePlans, setActivePlans] = useState(activeAutoInvestPlans);
   const [selectedPlanForBacktest, setSelectedPlanForBacktest] = useState('PLAN002');
   const [selectedPlanForRules, setSelectedPlanForRules] = useState(null);
   const [activeTab, setActiveTab] = useState('plans'); // plans, performance, backtest, rules
 
+  // Fetch strategies and backtest results from API
+  const { data: strategies, isLoading: strategiesLoading, isError: strategiesError } = useStrategies();
+  const { data: backtestData, isLoading: backtestLoading } = useBacktestResults(selectedPlanForBacktest);
+  const activatePlan = useActivatePlan();
+  const updateStrategy = useUpdateStrategy();
+
+  // Compute aiInvestmentPlans from strategies
+  const aiInvestmentPlans = useMemo(() => {
+    return strategies || [];
+  }, [strategies]);
+
+  // Compute activePlans (plans with status 'Active' or 'Paused')
+  const activePlans = useMemo(() => {
+    if (!strategies) return [];
+    return strategies.filter(s => s.status === 'Active' || s.status === 'Paused');
+  }, [strategies]);
+
   // Handle plan activation
   const handleActivatePlan = (plan) => {
-    alert(`Activating ${plan.name}!\n\nIn the production version, this would:\n1. Set up automated investment rules\n2. Connect to your trading platforms\n3. Start executing trades based on AI recommendations\n\nFor now, this is a demo.`);
+    if (confirm(`Activate ${plan.name}?\n\nThis will:\n1. Set up automated investment rules\n2. Connect to your trading platforms\n3. Start executing trades based on AI recommendations`)) {
+      activatePlan.mutate(plan);
+    }
   };
 
   // Handle plan toggle (pause/resume)
   const handleTogglePlan = (planId) => {
-    setActivePlans((prev) =>
-      prev.map((p) =>
-        p.id === planId
-          ? { ...p, status: p.status === 'Active' ? 'Paused' : 'Active' }
-          : p
-      )
-    );
+    const plan = activePlans.find(p => p.id === planId);
+    if (plan) {
+      updateStrategy.mutate({
+        id: planId,
+        updates: { status: plan.status === 'Active' ? 'Paused' : 'Active' },
+      });
+    }
   };
 
   // Handle plan selection for backtest
@@ -50,6 +73,33 @@ const AutoInvest = () => {
     setSelectedPlanForRules(plan);
     setActiveTab('rules');
   };
+
+  // Show loading state
+  if (strategiesLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-20">
+            <LoadingSpinner message="Loading AI investment strategies..." />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (strategiesError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ErrorDisplay
+            title="Failed to load strategies"
+            message="There was an error loading AI investment strategies. Please try again."
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
@@ -225,7 +275,13 @@ const AutoInvest = () => {
                 </div>
               </div>
 
-              <BacktestResults backtest={backtestResults[selectedPlanForBacktest]} />
+              {backtestLoading ? (
+                <div className="flex items-center justify-center py-10">
+                  <LoadingSpinner message="Loading backtest results..." />
+                </div>
+              ) : (
+                <BacktestResults backtest={backtestData?.[selectedPlanForBacktest] || backtestData} />
+              )}
             </div>
           )}
 
