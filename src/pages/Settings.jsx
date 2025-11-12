@@ -239,7 +239,9 @@ const Settings = () => {
         {/* Main Content */}
         <div className="space-y-6">
           {/* Mobile Horizontal Tabs - Only visible on mobile */}
-          <div className="lg:hidden overflow-x-auto">
+          <div className="lg:hidden overflow-x-auto scrollbar-hide relative">
+            {/* Scroll Indicator - Right Edge Fade */}
+            <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-l from-indigo-50 to-transparent pointer-events-none z-10"></div>
             <div className="flex space-x-2 min-w-max pb-2 px-1">
               {tabs.map((tab) => {
                 const IconComponent = tab.icon;

@@ -136,7 +136,9 @@ const TransactionTable = ({ transactions, onTransactionClick }) => {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden">
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto scrollbar-hide relative">
+        {/* Scroll Indicator - Right Edge Fade */}
+        <div className="absolute top-0 right-0 bottom-0 w-12 bg-gradient-to-l from-white via-white to-transparent pointer-events-none z-10 lg:hidden"></div>
         <table className="w-full">
           <thead className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b-2 border-indigo-100">
             <tr>
@@ -174,7 +176,7 @@ const TransactionTable = ({ transactions, onTransactionClick }) => {
               <tr>
                 <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
                   <div className="flex flex-col items-center space-y-2">
-                    <div className="text-6xl">=í</div>
+                    <div className="text-6xl">=ï¿½</div>
                     <p className="text-lg font-semibold">No transactions found</p>
                     <p className="text-sm">Try adjusting your filters</p>
                   </div>

@@ -113,6 +113,15 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
+        {/* Drag Handle - Mobile Swipe Indicator */}
+        <div className="sticky top-0 bg-white pt-3 pb-0 rounded-t-2xl z-20 flex justify-center">
+          <div
+            className="w-12 h-1 bg-gray-300 rounded-full"
+            role="separator"
+            aria-label="Swipe down to close"
+          ></div>
+        </div>
+
         {/* Modal Header */}
         <div className="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-t-2xl z-10">
           <div className="flex items-start justify-between">
