@@ -184,16 +184,16 @@ const Dashboard = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis 
-                  dataKey="month" 
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 14, fill: '#6b7280' }}
                   angle={-45}
                   textAnchor="end"
                   height={80}
                 />
-                <YAxis 
+                <YAxis
                   tickFormatter={(value) => `₹${(value / 100000).toFixed(0)}L`}
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
+                  tick={{ fontSize: 14, fill: '#6b7280' }}
                 />
                 <Tooltip 
                   formatter={(value) => formatCurrency(value)}
