@@ -237,81 +237,119 @@ const Settings = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-4 sticky top-6">
-              <nav className="space-y-2">
-                {tabs.map((tab) => {
-                  const IconComponent = tab.icon;
-                  const isActive = activeTab === tab.id;
+        <div className="space-y-6">
+          {/* Mobile Horizontal Tabs - Only visible on mobile */}
+          <div className="lg:hidden overflow-x-auto">
+            <div className="flex space-x-2 min-w-max pb-2 px-1">
+              {tabs.map((tab) => {
+                const IconComponent = tab.icon;
+                const isActive = activeTab === tab.id;
 
-                  // Color mapping for active tabs
-                  const activeColorClasses = {
-                    indigo: "bg-indigo-100 text-indigo-700 border-indigo-300",
-                    blue: "bg-blue-100 text-blue-700 border-blue-300",
-                    green: "bg-green-100 text-green-700 border-green-300",
-                    red: "bg-red-100 text-red-700 border-red-300",
-                    teal: "bg-teal-100 text-teal-700 border-teal-300",
-                    purple: "bg-purple-100 text-purple-700 border-purple-300",
-                  };
+                // Color mapping for active tabs
+                const activeColorClasses = {
+                  indigo: "bg-indigo-600 text-white",
+                  blue: "bg-blue-600 text-white",
+                  green: "bg-green-600 text-white",
+                  red: "bg-red-600 text-white",
+                  teal: "bg-teal-600 text-white",
+                  purple: "bg-purple-600 text-white",
+                };
 
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg font-semibold transition-all ${
-                        isActive
-                          ? `${activeColorClasses[tab.color]} border-2`
-                          : "bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-transparent"
-                      }`}
-                    >
-                      <IconComponent size={20} />
-                      <span>{tab.name}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-
-              {/* User Info Card */}
-              {profile ? (
-                <div className="mt-6 p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl text-white">
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-lg font-bold backdrop-blur-sm">
-                      {profile.firstName?.[0] || "U"}
-                      {profile.lastName?.[0] || "S"}
-                    </div>
-                    <div>
-                      <p className="font-bold text-sm">
-                        {profile.firstName} {profile.lastName}
-                      </p>
-                      <p className="text-xs text-indigo-100">{profile.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2 text-xs">
-                    <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
-                      ✓ KYC {profile.kycStatus}
-                    </span>
-                    <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
-                      Member since {new Date(profile.memberSince).getFullYear()}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-6 p-4 bg-gradient-to-r from-gray-400 to-gray-500 rounded-xl text-white">
-                  <div className="animate-pulse space-y-2">
-                    <div className="h-4 bg-white bg-opacity-20 rounded"></div>
-                    <div className="h-3 bg-white bg-opacity-20 rounded w-3/4"></div>
-                  </div>
-                </div>
-              )}
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg font-semibold whitespace-nowrap min-h-[44px] transition-all ${
+                      isActive
+                        ? activeColorClasses[tab.color]
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    <IconComponent size={18} />
+                    <span className="text-sm">{tab.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Content Area */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              {renderTabContent()}
+          {/* Desktop Sidebar + Content Layout - Only visible on large screens */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Sidebar Navigation - Hidden on mobile */}
+            <div className="hidden lg:block lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-lg p-4 sticky top-6">
+                <nav className="space-y-2">
+                  {tabs.map((tab) => {
+                    const IconComponent = tab.icon;
+                    const isActive = activeTab === tab.id;
+
+                    // Color mapping for active tabs
+                    const activeColorClasses = {
+                      indigo: "bg-indigo-100 text-indigo-700 border-indigo-300",
+                      blue: "bg-blue-100 text-blue-700 border-blue-300",
+                      green: "bg-green-100 text-green-700 border-green-300",
+                      red: "bg-red-100 text-red-700 border-red-300",
+                      teal: "bg-teal-100 text-teal-700 border-teal-300",
+                      purple: "bg-purple-100 text-purple-700 border-purple-300",
+                    };
+
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg font-semibold transition-all ${
+                          isActive
+                            ? `${activeColorClasses[tab.color]} border-2`
+                            : "bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-transparent"
+                        }`}
+                      >
+                        <IconComponent size={20} />
+                        <span>{tab.name}</span>
+                      </button>
+                    );
+                  })}
+                </nav>
+
+                {/* User Info Card */}
+                {profile ? (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl text-white">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-lg font-bold backdrop-blur-sm">
+                        {profile.firstName?.[0] || "U"}
+                        {profile.lastName?.[0] || "S"}
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm">
+                          {profile.firstName} {profile.lastName}
+                        </p>
+                        <p className="text-xs text-indigo-100">{profile.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 text-xs">
+                      <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
+                        ✓ KYC {profile.kycStatus}
+                      </span>
+                      <span className="px-2 py-1 bg-white bg-opacity-20 rounded-full backdrop-blur-sm">
+                        Member since {new Date(profile.memberSince).getFullYear()}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-gray-400 to-gray-500 rounded-xl text-white">
+                    <div className="animate-pulse space-y-2">
+                      <div className="h-4 bg-white bg-opacity-20 rounded"></div>
+                      <div className="h-3 bg-white bg-opacity-20 rounded w-3/4"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Content Area */}
+            <div className="lg:col-span-3">
+              <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+                {renderTabContent()}
+              </div>
             </div>
           </div>
         </div>
