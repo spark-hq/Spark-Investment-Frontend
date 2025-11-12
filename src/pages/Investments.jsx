@@ -90,8 +90,7 @@ const Investments = () => {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredInvestments, setFilteredInvestments] =
-    useState(allInvestments);
+  const [filteredInvestments, setFilteredInvestments] = useState([]);
 
   // Handle filter change
   const handleFilterChange = (filterType, value) => {

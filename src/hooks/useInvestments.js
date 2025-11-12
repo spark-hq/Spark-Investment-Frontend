@@ -3,7 +3,7 @@
 // ===================================
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { investmentsAPI } from '../services/api';
-import { useStore } from '../store/useStore';
+import useStore from '../store/useStore';
 
 // ===================================
 // Query Hooks

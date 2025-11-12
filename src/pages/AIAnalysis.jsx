@@ -1,6 +1,6 @@
 // src/pages/AIAnalysis.jsx
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Brain, Sparkles, ArrowLeft, RefreshCw, Download } from 'lucide-react';
 import Card from '../components/ui/Card';
@@ -12,15 +12,48 @@ import AnalysisCard from '../components/ai-analysis/AnalysisCard';
 import HealthScore from '../components/ai-analysis/HealthScore';
 import AIExplanation from '../components/ai-analysis/AIExplanation';
 import ValuationBadge from '../components/ai-analysis/ValuationBadge';
-import { aiAnalysisData, availableInvestments } from '../data/aiAnalysisData';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ErrorDisplay } from '../components/ui/ErrorBoundary';
+import { useInvestmentAnalysis } from '../hooks/useAI';
+import { useInvestments } from '../hooks/useInvestments';
 
 const AIAnalysis = () => {
   const navigate = useNavigate();
-  const [selectedInvestmentId, setSelectedInvestmentId] = useState('INV001');
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedInvestmentId, setSelectedInvestmentId] = useState(null);
 
-  // Get current analysis
-  const currentAnalysis = aiAnalysisData[selectedInvestmentId];
+  // Fetch user's investments for the selector
+  const { data: investments = [], isLoading: investmentsLoading } = useInvestments();
+
+  // Fetch AI analysis data for selected investment
+  const {
+    insights,
+    recommendations,
+    riskAnalysis,
+    // marketSentiment,
+    isLoading: aiLoading,
+    isError: aiError,
+    refetch
+  } = useInvestmentAnalysis(selectedInvestmentId);
+
+  // Set first investment as default when investments load
+  useEffect(() => {
+    if (!selectedInvestmentId && investments.length > 0) {
+      setSelectedInvestmentId(investments[0].id);
+    }
+  }, [investments, selectedInvestmentId]);
+
+  // Get currently selected investment
+  const selectedInvestment = investments.find(inv => inv.id === selectedInvestmentId);
+
+  // Debug logging
+  useEffect(() => {
+    console.log('🔄 Selected Investment ID:', selectedInvestmentId);
+    console.log('📊 Selected Investment:', selectedInvestment);
+    console.log('🤖 Investment Analysis Data:', investmentAnalysis);
+  }, [selectedInvestmentId, selectedInvestment, investmentAnalysis]);
+
+  // Combine loading states
+  const isLoading = investmentsLoading || aiLoading;
 
   // Format currency
   const formatCurrency = (amount) => {
@@ -33,21 +66,12 @@ const AIAnalysis = () => {
 
   // Handle investment change
   const handleInvestmentChange = (e) => {
-    setIsLoading(true);
     setSelectedInvestmentId(e.target.value);
-    
-    // Simulate AI analysis loading
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
   };
 
   // Handle refresh analysis
   const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
+    refetch(); // Refetch all AI data
   };
 
   // Handle download report
@@ -55,12 +79,100 @@ const AIAnalysis = () => {
     alert('Download feature will be implemented with backend!');
   };
 
+  // Show loading spinner while fetching data
+  if (investmentsLoading) {
+    return <LoadingSpinner fullScreen message="Loading your investments..." />;
+  }
+
+  // Show error if AI data fetch fails
+  if (aiError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4 flex items-center justify-center">
+        <div className="max-w-md">
+          <ErrorDisplay error={aiError} retry={refetch} />
+        </div>
+      </div>
+    );
+  }
+
+  // Create currentAnalysis object from investment-specific AI data
+  const currentAnalysis = useMemo(() => {
+    console.log('🔄 Recalculating currentAnalysis for:', selectedInvestment?.name);
+    console.log('📊 Using investment analysis:', investmentAnalysis);
+
+    // Return null if no analysis data available yet
+    if (!investmentAnalysis) return null;
+
+    // Use the per-investment analysis data directly from the API
+    return {
+      analysisDate: investmentAnalysis.analysisDate || new Date().toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }),
+      // Risk metrics from per-investment analysis
+      riskLevel: investmentAnalysis.riskLevel || 'MEDIUM',
+      riskScore: investmentAnalysis.riskScore || 55,
+      volatility: investmentAnalysis.volatility || 'Moderate',
+      // Health metrics from per-investment analysis
+      healthScore: investmentAnalysis.healthScore || 75,
+      healthGrade: investmentAnalysis.healthGrade || 'B+',
+      // Valuation from per-investment analysis
+      valuation: investmentAnalysis.valuation || 'Fair Value',
+      valuationScore: investmentAnalysis.valuationScore || 7.5,
+      // Recommendation from per-investment analysis
+      recommendation: investmentAnalysis.recommendation || 'HOLD',
+      confidence: investmentAnalysis.confidence || 75,
+      targetPrice: investmentAnalysis.targetPrice || selectedInvestment?.currentPrice * 1.15 || 0,
+      stopLoss: investmentAnalysis.stopLoss || selectedInvestment?.currentPrice * 0.92 || 0,
+      // Pros and cons from per-investment analysis
+      pros: investmentAnalysis.pros || [],
+      cons: investmentAnalysis.cons || [],
+      // AI explanation from per-investment analysis
+      explanation: investmentAnalysis.aiExplanation || 'AI analysis is being processed...',
+      // Sector analysis from per-investment analysis
+      sectorAnalysis: investmentAnalysis.sectorAnalysis || {
+        sector: selectedInvestment?.sector || 'Diversified',
+        sectorGrowth: 'Positive',
+        marketShare: 'Leading',
+        competitivePosition: 'Strong',
+        insights: `Analysis for ${selectedInvestment?.name || 'this investment'} is being generated.`
+      },
+      // Benchmarks from per-investment analysis
+      benchmarks: investmentAnalysis.benchmarks || {
+        nifty50: {
+          name: 'NIFTY 50',
+          performance: 'N/A',
+          comparison: 'Calculating',
+          differential: 'N/A'
+        },
+        sensex: {
+          name: 'SENSEX',
+          performance: 'N/A',
+          comparison: 'Calculating',
+          differential: 'N/A'
+        }
+      },
+      // Diversification from per-investment analysis
+      diversificationScore: investmentAnalysis.diversificationScore || 7.0,
+      diversificationInsight: investmentAnalysis.diversificationInsight || 'Diversification analysis is being calculated.',
+      // AI insights from per-investment analysis
+      aiInsights: investmentAnalysis.aiInsights || [
+        'AI is analyzing this investment...',
+        'Detailed insights will be available shortly.',
+        'Please wait while we process market data.'
+      ],
+      // Historical data and predictions from per-investment analysis
+      historicalData: investmentAnalysis.historicalData || [],
+      predictions: investmentAnalysis.predictions || [],
+      investmentName: selectedInvestment?.name || investmentAnalysis.investmentName || 'Investment'
+    };
+  }, [investmentAnalysis, selectedInvestment]);
+
   if (!currentAnalysis) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">No analysis available for this investment.</p>
-        </div>
+        <LoadingSpinner message="Generating AI analysis..." />
       </div>
     );
   }
@@ -104,16 +216,20 @@ const AIAnalysis = () => {
                   Select Investment for Analysis
                 </label>
                 <select
-                  value={selectedInvestmentId}
+                  value={selectedInvestmentId || ''}
                   onChange={handleInvestmentChange}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer text-base font-medium"
-                  disabled={isLoading}
+                  disabled={aiLoading}
                 >
-                  {availableInvestments.map((investment) => (
-                    <option key={investment.id} value={investment.id}>
-                      {investment.name} ({investment.symbol})
-                    </option>
-                  ))}
+                  {investments.length === 0 ? (
+                    <option value="">No investments available</option>
+                  ) : (
+                    investments.map((investment) => (
+                      <option key={investment.id} value={investment.id}>
+                        {investment.name} ({investment.symbol}) - ₹{investment.currentPrice}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
             </div>
@@ -123,15 +239,15 @@ const AIAnalysis = () => {
                 onClick={handleRefresh}
                 variant="outline"
                 className="hover-lift flex items-center space-x-2"
-                disabled={isLoading}
+                disabled={aiLoading}
               >
-                <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
+                <RefreshCw size={18} className={aiLoading ? 'animate-spin' : ''} />
                 <span>Refresh</span>
               </Button>
               <Button
                 onClick={handleDownload}
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 hover-lift flex items-center space-x-2"
-                disabled={isLoading}
+                disabled={aiLoading}
               >
                 <Download size={18} />
                 <span>Download Report</span>
@@ -148,7 +264,7 @@ const AIAnalysis = () => {
         </Card>
 
         {/* Loading State */}
-        {isLoading ? (
+        {aiLoading ? (
           <div className="flex flex-col items-center justify-center py-20 animate-fadeIn">
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl mb-6 animate-pulse">
               <Brain className="text-white" size={64} />
@@ -191,7 +307,7 @@ const AIAnalysis = () => {
             {/* AI Explanation - Full Width */}
             <div className="mb-8 animate-fadeIn">
               <AIExplanation
-                explanation={currentAnalysis.aiExplanation}
+                explanation={currentAnalysis.explanation}
                 recommendation={currentAnalysis.recommendation}
               />
             </div>

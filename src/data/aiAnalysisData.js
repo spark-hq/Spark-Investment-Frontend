@@ -429,4 +429,134 @@ export const recommendations = {
   'Strong Sell': { color: 'red', icon: '⚠️', confidence: 30 },
 };
 
+// ===================================
+// Portfolio-Wide AI Analysis Data
+// ===================================
+
+// Portfolio Insights
+export const portfolioInsights = {
+  healthScore: 78,
+  healthGrade: 'B+',
+  diversification: 'Good',
+  valuation: 'Fair Value',
+  valuationScore: 7.2,
+  summary: 'Your portfolio shows strong performance with balanced diversification across multiple sectors. Risk exposure is moderate with good potential for long-term growth. Consider rebalancing to increase exposure to high-growth sectors while maintaining current risk levels.',
+  keyMetrics: {
+    totalReturn: '+34.45%',
+    volatility: 'Moderate',
+    sharpeRatio: 1.42,
+    betaRatio: 0.95
+  },
+  predictionData: []
+};
+
+// Risk Analysis
+export const riskAnalysis = {
+  riskLevel: 'MEDIUM',
+  riskScore: 58,
+  volatility: 'Moderate',
+  riskBreakdown: {
+    marketRisk: 45,
+    sectorRisk: 52,
+    concentrationRisk: 38,
+    liquidityRisk: 25
+  },
+  recommendations: [
+    'Diversify into defensive sectors (FMCG, Pharma)',
+    'Reduce concentration in energy sector (currently 28%)',
+    'Consider adding fixed income instruments'
+  ]
+};
+
+// Market Sentiment
+export const marketSentiment = {
+  overall: 'BULLISH',
+  score: 72,
+  confidence: 0.85,
+  sentiment: 'Positive',
+  indicators: {
+    technical: 'Bullish',
+    fundamental: 'Neutral',
+    news: 'Positive',
+    socialMedia: 'Very Positive'
+  },
+  summary: 'Market sentiment remains positive with strong buying interest across sectors. Technical indicators suggest continued uptrend, though some consolidation expected.',
+  lastUpdated: new Date().toISOString()
+};
+
+// Portfolio Recommendations
+export const portfolioRecommendations = {
+  overallRecommendation: 'HOLD',
+  confidence: 0.82,
+  pros: [
+    'Strong diversification across sectors reduces risk',
+    'Portfolio showing consistent positive returns (+34%)',
+    'Good mix of growth and value stocks',
+    'Low concentration risk with 20 holdings'
+  ],
+  cons: [
+    'High exposure to energy sector (28%)',
+    'Limited defensive stocks (Pharma, FMCG)',
+    'Some holdings showing overbought signals',
+    'Could benefit from fixed income allocation'
+  ],
+  actions: [
+    {
+      type: 'BUY',
+      symbol: 'HDFC',
+      name: 'HDFC Bank',
+      reason: 'Undervalued with strong fundamentals',
+      confidence: 0.85,
+      targetAllocation: '8%'
+    },
+    {
+      type: 'SELL',
+      symbol: 'RELIANCE',
+      name: 'Reliance Industries',
+      reason: 'Book partial profits after 35% gains',
+      confidence: 0.75,
+      targetAllocation: '5%'
+    },
+    {
+      type: 'HOLD',
+      symbol: 'TCS',
+      name: 'Tata Consultancy Services',
+      reason: 'Stable performer, maintain current position',
+      confidence: 0.80,
+      targetAllocation: '6%'
+    }
+  ]
+};
+
+// Quick Insights
+export const quickInsights = [
+  {
+    id: 1,
+    type: 'opportunity',
+    title: 'Undervalued Stock Detected',
+    description: 'HDFC Bank showing strong fundamentals with 15% undervaluation',
+    action: 'Consider increasing position',
+    confidence: 0.82
+  },
+  {
+    id: 2,
+    type: 'warning',
+    title: 'Profit Taking Opportunity',
+    description: 'Reliance Industries up 35% - consider partial profit booking',
+    action: 'Book 30% profits',
+    confidence: 0.75
+  },
+  {
+    id: 3,
+    type: 'info',
+    title: 'Sector Rotation Detected',
+    description: 'Money flowing from IT to Banking sector',
+    action: 'Monitor portfolio allocation',
+    confidence: 0.88
+  }
+];
+
+// Chat Messages (for AI chat feature)
+export const chatMessages = [];
+
 export default aiAnalysisData;

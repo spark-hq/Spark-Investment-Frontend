@@ -411,6 +411,38 @@ export const aiAPI = {
     const response = await apiClient.get('/ai/quick-insights');
     return response.data;
   },
+
+  // Get investment-specific AI analysis
+  getInvestmentAnalysis: async (investmentId) => {
+    if (MOCK_MODE) {
+      await simulateDelay(700);
+      // Import aiAnalysisData to get per-investment analysis
+      const { aiAnalysisData } = await import('../data/aiAnalysisData.js');
+      const investmentAnalysis = aiAnalysisData[investmentId];
+
+      if (!investmentAnalysis) {
+        // Return default analysis if investment not found
+        return mockResponse({
+          investmentId,
+          recommendation: 'HOLD',
+          confidence: 75,
+          riskLevel: 'MEDIUM',
+          riskScore: 55,
+          volatility: 'Moderate',
+          healthScore: 70,
+          healthGrade: 'B',
+          valuation: 'Fair Value',
+          pros: ['No specific analysis available'],
+          cons: ['Limited data for this investment'],
+          aiExplanation: 'Detailed analysis for this investment is being generated.',
+        });
+      }
+
+      return mockResponse(investmentAnalysis);
+    }
+    const response = await apiClient.get(`/ai/investments/${investmentId}/analysis`);
+    return response.data;
+  },
 };
 
 // ===================================

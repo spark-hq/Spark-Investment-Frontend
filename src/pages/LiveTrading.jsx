@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Sparkles, Zap, Shield, BarChart3 } from 'lucide-react';
 import Card from '../components/ui/StockCard';
@@ -9,13 +9,18 @@ import ExecutionLog from '../components/live-trading/ExecutionLog';
 import TradingChart from '../components/live-trading/TradingChart';
 import MarketDataCards from '../components/live-trading/MarketDataCards';
 import OrderPanel from '../components/live-trading/OrderPanel';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { ErrorDisplay } from '../components/ui/ErrorBoundary';
+import {
+  useLiveMarketData,
+  useExecuteTrade,
+  useExecutionLog,
+} from '../hooks/useLiveTrading';
 import {
   initialMarketData,
   aiAnalysisData,
   defaultAutoTradeSettings,
-  initialExecutionLog,
   platforms,
-  updatePrice,
   calculateChange,
   updatePriceHistory,
   generateChartData,
@@ -24,35 +29,49 @@ import {
 const LiveTrading = () => {
   const navigate = useNavigate();
   const [selectedPlatform, setSelectedPlatform] = useState(platforms[0]);
-  const [marketData, setMarketData] = useState(initialMarketData);
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [chartTimeframe, setChartTimeframe] = useState('1D');
   const [chartData, setChartData] = useState([]);
   const [screenCaptureActive, setScreenCaptureActive] = useState(false);
   const [autoTradeSettings, setAutoTradeSettings] = useState(defaultAutoTradeSettings);
-  const [executionLog, setExecutionLog] = useState(initialExecutionLog);
 
-  // Simulate live price updates
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMarketData((prevData) =>
-        prevData.map((asset) => {
-          const newPrice = updatePrice(asset.currentPrice, 0.005); // 0.5% max change
-          const changes = calculateChange(newPrice, asset.previousClose);
+  // Extract symbols from initialMarketData
+  const symbols = useMemo(() => initialMarketData.map(asset => asset.symbol), []);
 
-          return {
-            ...asset,
-            currentPrice: newPrice,
-            change: changes.change,
-            changePercent: changes.changePercent,
-            priceHistory: updatePriceHistory(asset.priceHistory, newPrice),
-          };
-        })
-      );
-    }, 3000); // Update every 3 seconds
+  // Fetch live market data from API (updates every 3 seconds)
+  const { data: liveQuotes, isLoading: marketLoading, isError: marketError } = useLiveMarketData(symbols, {
+    refetchInterval: 3000,
+  });
 
-    return () => clearInterval(interval);
-  }, []);
+  // Fetch execution log from API
+  const { executionLog: apiExecutionLog, isLoading: logLoading } = useExecutionLog();
+
+  // Use API execution log or fallback to empty array
+  const executionLog = apiExecutionLog || [];
+
+  // Execute trade mutation
+  const executeTrade = useExecuteTrade();
+
+  // Transform live quotes into marketData format
+  const marketData = useMemo(() => {
+    if (!liveQuotes || liveQuotes.length === 0) {
+      return initialMarketData;
+    }
+
+    return initialMarketData.map((asset, index) => {
+      const liveQuote = liveQuotes[index];
+      if (!liveQuote) return asset;
+
+      return {
+        ...asset,
+        currentPrice: liveQuote.price || asset.currentPrice,
+        change: liveQuote.change || asset.change,
+        changePercent: liveQuote.changePercent || asset.changePercent,
+        volume: liveQuote.volume || asset.volume,
+        priceHistory: asset.priceHistory, // Keep existing history for now
+      };
+    });
+  }, [liveQuotes]);
 
   // Update chart data when asset or timeframe changes
   useEffect(() => {
@@ -90,20 +109,16 @@ const LiveTrading = () => {
   };
 
   const handleOrderPlaced = (order) => {
-    const newLogEntry = {
-      id: `TXN${Date.now()}`,
-      time: order.timestamp,
+    // Execute trade using API mutation
+    executeTrade.mutate({
       action: order.action,
+      symbol: order.symbol || order.asset,
       asset: order.asset,
       quantity: order.quantity,
       price: order.price,
-      amount: order.price * order.quantity,
-      status: 'executed',
-      type: 'manual',
-      reason: 'Manual trade executed',
-    };
-
-    setExecutionLog((prev) => [newLogEntry, ...prev]);
+      orderType: order.orderType || 'market',
+      timestamp: order.timestamp,
+    });
   };
 
   const currentAIAnalysis = selectedAsset ? aiAnalysisData[selectedAsset.id] : null;
@@ -122,6 +137,33 @@ const LiveTrading = () => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+
+  // Show loading state on initial load
+  if (marketLoading && (!marketData || marketData.length === 0)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-center py-20">
+            <LoadingSpinner message="Loading live market data..." />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (marketError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4">
+        <div className="max-w-7xl mx-auto">
+          <ErrorDisplay
+            title="Failed to load market data"
+            message="There was an error loading live market data. Please try again."
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4">

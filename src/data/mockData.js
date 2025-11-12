@@ -55,7 +55,7 @@ export const mockMarketData = {
 // ===================================
 export const mockAIAnalysis = {
   portfolioInsights: aiAnalysisData.portfolioInsights,
-  recommendations: aiAnalysisData.recommendations,
+  recommendations: aiAnalysisData.portfolioRecommendations,
   riskAnalysis: aiAnalysisData.riskAnalysis,
   marketSentiment: aiAnalysisData.marketSentiment,
   aiChat: aiAnalysisData.chatMessages,
@@ -84,8 +84,8 @@ export const mockAutoInvest = {
 // ===================================
 export const mockSettings = {
   profile: settingsData.userProfile,
-  preferences: settingsData.preferences,
-  connectedAccounts: settingsData.connectedAccounts,
+  preferences: settingsData.preferenceSettings,
+  connectedAccounts: settingsData.connectedPlatforms,
   notifications: settingsData.notificationSettings,
 };
 
