@@ -2,6 +2,7 @@
 // Investment Hooks - React Query hooks for investment data
 // ===================================
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { investmentsAPI } from '../services/api';
 import useStore from '../store/useStore';
 
@@ -134,40 +135,43 @@ export const useDeleteInvestment = () => {
 // Helper hook for investment summary
 // ===================================
 export const useInvestmentSummary = (investments = []) => {
-  if (!investments || investments.length === 0) {
+  // Memoize expensive calculations to prevent recalculation on every render
+  return useMemo(() => {
+    if (!investments || investments.length === 0) {
+      return {
+        totalInvested: 0,
+        totalCurrentValue: 0,
+        totalReturns: 0,
+        overallReturnsPercentage: 0,
+        profitableInvestments: 0,
+        lossInvestments: 0,
+      };
+    }
+
+    const totalInvested = investments.reduce((sum, inv) => sum + (inv.investedAmount || inv.invested || 0), 0);
+    const totalCurrentValue = investments.reduce((sum, inv) => sum + (inv.currentValue || 0), 0);
+    const totalReturns = totalCurrentValue - totalInvested;
+    const overallReturnsPercentage = totalInvested > 0
+      ? ((totalReturns / totalInvested) * 100).toFixed(2)
+      : 0;
+
+    const profitableInvestments = investments.filter(inv => {
+      const returns = (inv.currentValue || 0) - (inv.investedAmount || inv.invested || 0);
+      return returns > 0;
+    }).length;
+
+    const lossInvestments = investments.filter(inv => {
+      const returns = (inv.currentValue || 0) - (inv.investedAmount || inv.invested || 0);
+      return returns < 0;
+    }).length;
+
     return {
-      totalInvested: 0,
-      totalCurrentValue: 0,
-      totalReturns: 0,
-      overallReturnsPercentage: 0,
-      profitableInvestments: 0,
-      lossInvestments: 0,
+      totalInvested,
+      totalCurrentValue,
+      totalReturns,
+      overallReturnsPercentage,
+      profitableInvestments,
+      lossInvestments,
     };
-  }
-
-  const totalInvested = investments.reduce((sum, inv) => sum + (inv.investedAmount || inv.invested || 0), 0);
-  const totalCurrentValue = investments.reduce((sum, inv) => sum + (inv.currentValue || 0), 0);
-  const totalReturns = totalCurrentValue - totalInvested;
-  const overallReturnsPercentage = totalInvested > 0
-    ? ((totalReturns / totalInvested) * 100).toFixed(2)
-    : 0;
-
-  const profitableInvestments = investments.filter(inv => {
-    const returns = (inv.currentValue || 0) - (inv.investedAmount || inv.invested || 0);
-    return returns > 0;
-  }).length;
-
-  const lossInvestments = investments.filter(inv => {
-    const returns = (inv.currentValue || 0) - (inv.investedAmount || inv.invested || 0);
-    return returns < 0;
-  }).length;
-
-  return {
-    totalInvested,
-    totalCurrentValue,
-    totalReturns,
-    overallReturnsPercentage,
-    profitableInvestments,
-    lossInvestments,
-  };
+  }, [investments]); // Only recalculate when investments array changes
 };

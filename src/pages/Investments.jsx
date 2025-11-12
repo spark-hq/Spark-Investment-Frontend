@@ -1,6 +1,6 @@
 // src/pages/Investments.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   TrendingUp,
   TrendingDown,
@@ -90,23 +90,22 @@ const Investments = () => {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredInvestments, setFilteredInvestments] = useState([]);
 
-  // Handle filter change
-  const handleFilterChange = (filterType, value) => {
+  // Handle filter change - Memoized with useCallback
+  const handleFilterChange = useCallback((filterType, value) => {
     setFilters((prev) => ({
       ...prev,
       [filterType]: value,
     }));
-  };
+  }, []);
 
-  // Handle search change
-  const handleSearchChange = (query) => {
+  // Handle search change - Memoized with useCallback
+  const handleSearchChange = useCallback((query) => {
     setSearchQuery(query);
-  };
+  }, []);
 
-  // Apply filters, search, and sort
-  useEffect(() => {
+  // Apply filters, search, and sort - Memoized with useMemo instead of useEffect
+  const filteredInvestments = useMemo(() => {
     let result = [...liveInvestments];
 
     // Apply platform filter
@@ -195,16 +194,17 @@ const Investments = () => {
       }
     });
 
-    setFilteredInvestments(result);
-  }, [filters, searchQuery, liveInvestments]); // Update when live prices change
+    return result;
+  }, [filters, searchQuery, liveInvestments]);
 
-  // Handle investment click (for detail view - will implement in next step)
-  const handleInvestmentClick = (investment) => {
+  // Handle investment click - Memoized with useCallback
+  const handleInvestmentClick = useCallback((investment) => {
     setSelectedInvestment(investment);
-  };
-  const handleCloseModal = () => {
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
     setSelectedInvestment(null);
-  };
+  }, []);
 
   // Format currency
   const formatCurrency = (amount) => {

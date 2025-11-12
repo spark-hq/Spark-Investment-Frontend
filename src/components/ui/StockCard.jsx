@@ -1,18 +1,18 @@
 import React from 'react';
 
-export const Card = React.forwardRef(({ 
-  className = '', 
-  children, 
+export const Card = React.memo(React.forwardRef(({
+  className = '',
+  children,
   onClick,
   style,
   role,
   tabIndex,
   onKeyPress,
-  ...props 
+  ...props
 }, ref) => {
   // Make card keyboard accessible if clickable
   const isClickable = !!onClick;
-  
+
   const handleKeyPress = (e) => {
     if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
@@ -37,7 +37,7 @@ export const Card = React.forwardRef(({
       {children}
     </div>
   );
-});
+}));
 
 Card.displayName = 'Card';
 

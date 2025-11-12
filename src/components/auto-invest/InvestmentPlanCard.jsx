@@ -1,6 +1,6 @@
 // src/components/auto-invest/InvestmentPlanCard.jsx
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   TrendingUp,
   Shield,
@@ -16,7 +16,7 @@ import {
 import { formatCurrency } from '../../utils/calculations';
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
-const InvestmentPlanCard = ({ plan, onActivate, isActive }) => {
+const InvestmentPlanCard = React.memo(({ plan, onActivate, isActive }) => {
   const [expanded, setExpanded] = useState(false);
 
   // Risk level colors
@@ -281,6 +281,8 @@ const InvestmentPlanCard = ({ plan, onActivate, isActive }) => {
       </div>
     </div>
   );
-};
+});
+
+InvestmentPlanCard.displayName = 'InvestmentPlanCard';
 
 export default InvestmentPlanCard;

@@ -1,6 +1,6 @@
 // src/components/investments/InvestmentDetailModal.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   X,
   TrendingUp,
@@ -45,8 +45,8 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
     });
   };
 
-  // Generate dummy performance data (last 6 months)
-  const generatePerformanceData = () => {
+  // Generate dummy performance data (last 6 months) - Memoized
+  const performanceData = useMemo(() => {
     const data = [];
     const months = ['6mo ago', '5mo ago', '4mo ago', '3mo ago', '2mo ago', '1mo ago', 'Now'];
     const startValue = investment.investedAmount;
@@ -61,13 +61,11 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
       });
     }
     return data;
-  };
+  }, [investment.investedAmount, investment.currentValue]);
 
-  const performanceData = generatePerformanceData();
-
-  // Generate dummy transaction history
-  const generateTransactions = () => {
-    const transactions = [
+  // Generate dummy transaction history - Memoized
+  const transactions = useMemo(() => {
+    const txns = [
       {
         id: 'TXN001',
         type: 'Buy',
@@ -81,7 +79,7 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
 
     // Add some random transactions
     if (investment.quantity > 10) {
-      transactions.push({
+      txns.push({
         id: 'TXN002',
         type: 'Buy',
         date: new Date(new Date(investment.purchaseDate).getTime() + 30 * 24 * 60 * 60 * 1000)
@@ -94,10 +92,8 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
       });
     }
 
-    return transactions;
-  };
-
-  const transactions = generateTransactions();
+    return txns;
+  }, [investment.purchaseDate, investment.quantity, investment.avgPrice, investment.investedAmount]);
 
   // Get platform color
   const getPlatformColor = (platform) => {
