@@ -1,7 +1,8 @@
+import React from 'react';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import Card from '../ui/StockCard';
 
-const MarketDataCards = ({ marketData, selectedAsset, onAssetSelect }) => {
+const MarketDataCards = React.memo(({ marketData, selectedAsset, onAssetSelect }) => {
   const formatCurrency = (amount, type) => {
     if (type === 'Crypto') {
       return `$${amount.toLocaleString()}`;
@@ -166,6 +167,8 @@ const MarketDataCards = ({ marketData, selectedAsset, onAssetSelect }) => {
       })}
     </div>
   );
-};
+});
+
+MarketDataCards.displayName = 'MarketDataCards';
 
 export default MarketDataCards;

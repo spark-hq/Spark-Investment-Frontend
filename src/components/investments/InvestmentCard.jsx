@@ -3,7 +3,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Calendar, Package, DollarSign } from 'lucide-react';
 
-const InvestmentCard = ({ investment, onClick }) => {
+const InvestmentCard = React.memo(({ investment, onClick }) => {
   const isProfit = investment.status === 'profit';
   const statusColor = isProfit ? 'text-green-600' : 'text-red-600';
   const statusBgColor = isProfit ? 'bg-green-50' : 'bg-red-50';
@@ -164,6 +164,8 @@ const InvestmentCard = ({ investment, onClick }) => {
       </div>
     </div>
   );
-};
+});
+
+InvestmentCard.displayName = 'InvestmentCard';
 
 export default InvestmentCard;
