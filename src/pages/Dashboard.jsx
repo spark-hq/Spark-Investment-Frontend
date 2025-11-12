@@ -165,7 +165,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts Row */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 mb-8">
           {/* Performance Chart */}
           <Card title="Portfolio Performance" subtitle="Last 12 months" className="animate-fadeIn hover-lift border-2 border-gray-100">
             {performanceLoading ? (
@@ -265,12 +265,12 @@ const Dashboard = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Top Performers - Takes 2 columns */}
           <Card
             title="Top Performers"
             subtitle="Best performing investments"
-            className="lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
+            className="md:col-span-2 lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
           >
             {performersLoading ? (
               <LoadingSpinner message="Loading top performers..." />

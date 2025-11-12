@@ -102,8 +102,8 @@ const AutoInvest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-4 sm:py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
           <button
@@ -167,10 +167,10 @@ const AutoInvest = () => {
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-xl shadow-md p-2 mb-8 animate-fadeIn">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             <button
               onClick={() => setActiveTab('plans')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
                 activeTab === 'plans'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-gray-100'
@@ -180,7 +180,7 @@ const AutoInvest = () => {
             </button>
             <button
               onClick={() => setActiveTab('performance')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
                 activeTab === 'performance'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-gray-100'
@@ -190,7 +190,7 @@ const AutoInvest = () => {
             </button>
             <button
               onClick={() => setActiveTab('backtest')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
                 activeTab === 'backtest'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-gray-100'
@@ -200,7 +200,7 @@ const AutoInvest = () => {
             </button>
             <button
               onClick={() => setActiveTab('rules')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
                 activeTab === 'rules'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                   : 'text-gray-700 hover:bg-gray-100'
