@@ -18,7 +18,24 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 
 const SecuritySettings = ({ settings, onSave }) => {
-  const [localSettings, setLocalSettings] = useState(settings);
+  // const [localSettings, setLocalSettings] = useState(settings);
+  const [localSettings, setLocalSettings] = useState({
+  twoFactorAuth: {
+    enabled: false,
+    method: "SMS",
+    enabledDate: new Date().toISOString(),
+  },
+  biometric: {
+    enabled: false,
+    type: "Fingerprint",
+  },
+  sessionTimeout: 30,
+  loginAlerts: true,
+  trustedDevices: [],
+  loginHistory: [],
+  ...settings, // override defaults with provided data
+});
+
   const [saved, setSaved] = useState(false);
 
   const handleToggle = (field) => {

@@ -76,16 +76,12 @@ const Settings = () => {
 
   // Tab configuration
   const tabs = [
-    { id: "safety", name: "Safety Controls", icon: Shield, color: "red" },
     { id: "profile", name: "Profile", icon: User, color: "indigo" },
     { id: "notifications", name: "Notifications", icon: Bell, color: "blue" },
     { id: "platforms", name: "Platforms", icon: LinkIcon, color: "green" },
-    {
-      id: "preferences",
-      name: "Preferences",
-      icon: SettingsIcon,
-      color: "teal",
-    },
+    { id: "safety", name: "Safety Controls", icon: Shield, color: "red" },
+    { id: "security", name: "Security", icon: Lock, color: "orange" },
+    { id: "preferences", name: "Preferences", icon: SettingsIcon, color: "teal" },
     { id: "appearance", name: "Appearance", icon: Palette, color: "purple" },
   ];
 
