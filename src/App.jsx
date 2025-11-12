@@ -4,6 +4,8 @@ import { useEffect, lazy, Suspense } from "react";
 import Layout from "./components/layout/Layout";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import NotificationSystem from "./components/ui/NotificationSystem";
+import { AuthProvider } from "./contexts/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import websocketService from "./services/websocket";
 import "./App.css";
 
@@ -21,6 +23,11 @@ const Settings = lazy(() => import("./pages/Settings"));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+
+// Auth pages
+const Login = lazy(() => import("./pages/auth/Login"));
+const Signup = lazy(() => import("./pages/auth/Signup"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -62,21 +69,93 @@ function AppContent() {
       <Layout>
         <Suspense fallback={<PageLoader />}>
           <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/calculator" element={<Calculator />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/investments" element={<Investments />} />
-            <Route path="/ai-analysis" element={<AIAnalysis />} />
-            <Route path="/live-trading" element={<LiveTrading />} />
-            <Route path="/transactions" element={<Transactions />} />
-            <Route path="/auto-invest" element={<AutoInvest />} />
-            <Route path="/settings" element={<Settings />} />
 
-            {/* Legal Pages */}
+            {/* Auth Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+
+            {/* Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/calculator"
+              element={
+                <ProtectedRoute>
+                  <Calculator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/results"
+              element={
+                <ProtectedRoute>
+                  <Results />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/investments"
+              element={
+                <ProtectedRoute>
+                  <Investments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ai-analysis"
+              element={
+                <ProtectedRoute>
+                  <AIAnalysis />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/live-trading"
+              element={
+                <ProtectedRoute>
+                  <LiveTrading />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute>
+                  <Transactions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/auto-invest"
+              element={
+                <ProtectedRoute>
+                  <AutoInvest />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Legal Pages - Public */}
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
 
+            {/* 404 - Not Found */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
@@ -88,10 +167,12 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <NotificationSystem />
-        <AppContent />
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <NotificationSystem />
+          <AppContent />
+        </QueryClientProvider>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }

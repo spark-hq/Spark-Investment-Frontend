@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Sparkles, Menu, X, ChevronDown, Calculator, Settings, Target, CreditCard, TrendingUp, Bell, User, Brain } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Sparkles, Menu, X, ChevronDown, Calculator, Settings, Target, CreditCard, TrendingUp, Bell, User, Brain, LogOut } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
 
 const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -40,6 +43,20 @@ const Navbar = () => {
 
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    logout();
+    closeProfileDropdown();
+    navigate('/');
+  };
+
+  // Protected route handler for unauthenticated users
+  const handleProtectedRoute = (e, path) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      navigate('/login', { state: { from: { pathname: path } } });
+    }
   };
 
   // Close dropdowns when clicking outside
@@ -129,30 +146,39 @@ const Navbar = () => {
             </Link>
             <Link
               to="/dashboard"
+              onClick={(e) => handleProtectedRoute(e, '/dashboard')}
               className={`${
                 isActive("/dashboard")
                   ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : isAuthenticated
+                  ? "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : "text-gray-400 cursor-not-allowed opacity-60 blur-[0.5px]"
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
             >
               Dashboard
             </Link>
             <Link
               to="/investments"
+              onClick={(e) => handleProtectedRoute(e, '/investments')}
               className={`${
                 isActive("/investments")
                   ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : isAuthenticated
+                  ? "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : "text-gray-400 cursor-not-allowed opacity-60 blur-[0.5px]"
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
             >
               Investments
             </Link>
             <Link
               to="/live-trading"
+              onClick={(e) => handleProtectedRoute(e, '/live-trading')}
               className={`${
                 isActive("/live-trading")
                   ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : isAuthenticated
+                  ? "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : "text-gray-400 cursor-not-allowed opacity-60 blur-[0.5px]"
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center space-x-1`}
             >
               <span>🎯</span>
@@ -160,10 +186,13 @@ const Navbar = () => {
             </Link>
             <Link
               to="/auto-invest"
+              onClick={(e) => handleProtectedRoute(e, '/auto-invest')}
               className={`${
                 isActive("/auto-invest")
                   ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : isAuthenticated
+                  ? "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  : "text-gray-400 cursor-not-allowed opacity-60 blur-[0.5px]"
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
             >
               Auto-Invest
@@ -172,11 +201,14 @@ const Navbar = () => {
             {/* More Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
-                onClick={toggleMoreDropdown}
+                onClick={isAuthenticated ? toggleMoreDropdown : undefined}
+                disabled={!isAuthenticated}
                 className={`${
                   isMoreDropdownOpen
                     ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                    : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                    : isAuthenticated
+                    ? "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                    : "text-gray-400 cursor-not-allowed opacity-60 blur-[0.5px]"
                 } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center space-x-1`}
               >
                 <span>More</span>
@@ -233,61 +265,80 @@ const Navbar = () => {
 
           {/* Desktop Right Section */}
           <div className="hidden lg:flex items-center space-x-3">
-            {/* Notifications */}
-            <button className="relative p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-200">
-              <Bell size={20} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            {isAuthenticated ? (
+              <>
+                {/* Notifications */}
+                <button className="relative p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-200">
+                  <Bell size={20} />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
 
-            {/* Profile Dropdown */}
-            <div className="relative" ref={profileDropdownRef}>
-              <button
-                onClick={toggleProfileDropdown}
-                className="flex items-center space-x-2 p-2 pr-3 hover:bg-indigo-50 rounded-xl transition-all duration-200 group"
-              >
-                <div className="w-9 h-9 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md group-hover:shadow-lg transition-all duration-200">
-                  <User size={18} />
-                </div>
-                <ChevronDown
-                  size={16}
-                  className={`text-gray-600 transition-transform duration-300 ${
-                    isProfileDropdownOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {isProfileDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeIn">
-                  <div className="px-4 py-3 border-b-2 border-gray-100">
-                    <p className="text-sm font-bold text-gray-900">Demo User</p>
-                    <p className="text-xs text-gray-500 mt-0.5">demo@sparkinvest.ai</p>
-                  </div>
-                  <Link
-                    to="/settings"
-                    onClick={closeProfileDropdown}
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200"
-                  >
-                    <Settings size={18} />
-                    <span className="text-sm font-semibold">Settings</span>
-                  </Link>
+                {/* Profile Dropdown */}
+                <div className="relative" ref={profileDropdownRef}>
                   <button
-                    className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-all duration-200"
+                    onClick={toggleProfileDropdown}
+                    className="flex items-center space-x-2 p-2 pr-3 hover:bg-indigo-50 rounded-xl transition-all duration-200 group"
                   >
-                    <X size={18} />
-                    <span className="text-sm font-semibold">Logout</span>
+                    <div className="w-9 h-9 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md group-hover:shadow-lg transition-all duration-200">
+                      {user?.avatar ? (
+                        <img src={user.avatar} alt={user.name} className="w-full h-full rounded-xl object-cover" />
+                      ) : (
+                        <span className="text-sm">{user?.name?.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <ChevronDown
+                      size={16}
+                      className={`text-gray-600 transition-transform duration-300 ${
+                        isProfileDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
-                </div>
-              )}
-            </div>
 
-            {/* CTA Button */}
-            <Link
-              to="/dashboard"
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2.5 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center space-x-2 text-sm"
-            >
-              <span>Get Started</span>
-              <Sparkles size={16} />
-            </Link>
+                  {isProfileDropdownOpen && (
+                    <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeIn">
+                      <div className="px-4 py-3 border-b-2 border-gray-100">
+                        <p className="text-sm font-bold text-gray-900">{user?.name || 'User'}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{user?.email || ''}</p>
+                      </div>
+                      <Link
+                        to="/settings"
+                        onClick={closeProfileDropdown}
+                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200"
+                      >
+                        <Settings size={18} />
+                        <span className="text-sm font-semibold">Settings</span>
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-all duration-200"
+                      >
+                        <LogOut size={18} />
+                        <span className="text-sm font-semibold">Logout</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Login Button */}
+                <Link
+                  to="/login"
+                  className="px-5 py-2.5 border-2 border-indigo-600 text-indigo-600 rounded-xl hover:bg-indigo-50 transition-all duration-200 font-bold text-sm"
+                >
+                  Login
+                </Link>
+
+                {/* Signup Button */}
+                <Link
+                  to="/signup"
+                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2.5 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center space-x-2 text-sm"
+                >
+                  <span>Sign Up</span>
+                  <Sparkles size={16} />
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -313,85 +364,120 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <Link
-              to="/dashboard"
-              className={`${
-                isActive("/dashboard")
-                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
-              onClick={closeMobileMenu}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/investments"
-              className={`${
-                isActive("/investments")
-                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
-              onClick={closeMobileMenu}
-            >
-              My Investments
-            </Link>
-            <Link
-              to="/live-trading"
-              className={`${
-                isActive("/live-trading")
-                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
-              onClick={closeMobileMenu}
-            >
-              🎯 Live Trading
-            </Link>
-            <Link
-              to="/auto-invest"
-              className={`${
-                isActive("/auto-invest")
-                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
-              onClick={closeMobileMenu}
-            >
-              Auto-Invest
-            </Link>
 
-            {/* Mobile More Section */}
-            <div className="border-t-2 border-gray-100 pt-3 mt-3">
-              <p className="px-4 py-2 text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center space-x-2">
-                <Sparkles size={14} />
-                <span>More Features</span>
-              </p>
-              {moreItems.map((item) => {
-                const Icon = item.icon;
-                return (
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className={`${
+                    isActive("/dashboard")
+                      ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                      : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
+                  onClick={closeMobileMenu}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/investments"
+                  className={`${
+                    isActive("/investments")
+                      ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                      : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
+                  onClick={closeMobileMenu}
+                >
+                  My Investments
+                </Link>
+                <Link
+                  to="/live-trading"
+                  className={`${
+                    isActive("/live-trading")
+                      ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                      : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
+                  onClick={closeMobileMenu}
+                >
+                  🎯 Live Trading
+                </Link>
+                <Link
+                  to="/auto-invest"
+                  className={`${
+                    isActive("/auto-invest")
+                      ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                      : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
+                  onClick={closeMobileMenu}
+                >
+                  Auto-Invest
+                </Link>
+
+                {/* Mobile More Section */}
+                <div className="border-t-2 border-gray-100 pt-3 mt-3">
+                  <p className="px-4 py-2 text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center space-x-2">
+                    <Sparkles size={14} />
+                    <span>More Features</span>
+                  </p>
+                  {moreItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        className={`${
+                          isActive(item.path)
+                            ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                            : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                        } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center space-x-3 active:scale-95`}
+                        onClick={closeMobileMenu}
+                      >
+                        <Icon size={20} />
+                        <span>{item.name}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* User Info & Logout (Mobile) */}
+                <div className="border-t-2 border-gray-100 pt-3 mt-3 space-y-2">
+                  <div className="px-4 py-3 bg-indigo-50 rounded-xl">
+                    <p className="text-sm font-bold text-gray-900">{user?.name || 'User'}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{user?.email || ''}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      closeMobileMenu();
+                    }}
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all duration-200 font-bold"
+                  >
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Login/Signup Buttons (Mobile) */}
+                <div className="space-y-2 pt-4">
                   <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`${
-                      isActive(item.path)
-                        ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                        : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                    } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center space-x-3 active:scale-95`}
+                    to="/login"
+                    className="w-full flex items-center justify-center px-4 py-3 border-2 border-indigo-600 text-indigo-600 rounded-xl hover:bg-indigo-50 transition-all duration-200 font-bold active:scale-95"
                     onClick={closeMobileMenu}
                   >
-                    <Icon size={20} />
-                    <span>{item.name}</span>
+                    Login
                   </Link>
-                );
-              })}
-            </div>
-
-            <Link
-              to="/dashboard"
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3.5 min-h-[48px] rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-bold text-center shadow-lg flex items-center justify-center space-x-2 mt-4 active:scale-95"
-              onClick={closeMobileMenu}
-            >
-              <span>Get Started</span>
-              <Sparkles size={18} />
-            </Link>
+                  <Link
+                    to="/signup"
+                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-bold text-center shadow-lg flex items-center justify-center space-x-2 active:scale-95"
+                    onClick={closeMobileMenu}
+                  >
+                    <span>Sign Up</span>
+                    <Sparkles size={18} />
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
