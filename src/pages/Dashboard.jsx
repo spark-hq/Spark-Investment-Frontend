@@ -95,58 +95,62 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-6 sm:py-8 md:py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         {/* Disclaimer Section - Legal Compliance */}
-        <div className="mb-6">
+        <div className="animate-fadeIn">
           <Disclaimer fullVersion />
         </div>
 
         {/* Header */}
-        <div className="mb-8 animate-fadeIn">
-          <div className="flex items-center space-x-2 mb-2">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
-              {greeting}! 👋
-            </h1>
-            <Sparkles className="text-indigo-600 animate-pulse" size={32} />
+        <div className="animate-fadeIn">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="flex items-center space-x-2 sm:space-x-3 mb-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+                  {greeting}! 👋
+                </h1>
+                <Sparkles className="text-indigo-600 animate-pulse" size={28} />
+              </div>
+              <p className="text-base sm:text-lg md:text-xl text-gray-600">
+                Here's your AI-powered investment portfolio overview
+              </p>
+            </div>
           </div>
-          <p className="text-xl text-gray-600">
-            Here's your AI-powered investment portfolio overview
-          </p>
         </div>
 
         {/* Portfolio Summary Cards */}
-        <div className="mb-8 animate-fadeIn">
+        <div className="animate-fadeIn">
           <PortfolioSummary summary={portfolioSummary} />
         </div>
 
         {/* Quick Actions */}
-        <Card className="mb-8 animate-fadeIn border-2 border-indigo-100">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl">
-                <Zap className="text-white" size={24} />
+        <Card className="animate-fadeIn border-2 border-indigo-100 shadow-lg">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
+            <div className="flex items-center space-x-4">
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3.5 rounded-2xl shadow-lg">
+                <Zap className="text-white" size={26} />
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1">Quick Actions</h3>
-                <p className="text-gray-600 text-sm">Manage your investments efficiently</p>
+                <p className="text-gray-600 text-sm md:text-base">Manage your investments efficiently</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3 w-full sm:w-auto">
-              <Link to="/investments" className="w-full sm:w-auto">
-                <Button variant="primary" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%]">
+            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+              <Link to="/investments" className="w-full sm:flex-1 lg:w-auto">
+                <Button variant="primary" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%] shadow-md hover:shadow-lg transition-all">
                   <TrendingUp size={18} />
-                  <span>View Investments</span>
+                  <span>Investments</span>
                 </Button>
               </Link>
-              <Link to="/live-trading" className="w-full sm:w-auto">
-                <Button variant="success" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%]">
+              <Link to="/live-trading" className="w-full sm:flex-1 lg:w-auto">
+                <Button variant="success" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%] shadow-md hover:shadow-lg transition-all">
                   <Activity size={18} />
                   <span>Live Trading</span>
                 </Button>
               </Link>
-              <Link to="/ai-analysis" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full hover-lift flex items-center justify-center space-x-2">
+              <Link to="/ai-analysis" className="w-full sm:flex-1 lg:w-auto">
+                <Button variant="outline" className="w-full hover-lift flex items-center justify-center space-x-2 border-2 shadow-sm hover:shadow-md transition-all">
                   <Brain size={18} />
                   <span>AI Analysis</span>
                 </Button>
@@ -156,7 +160,7 @@ const Dashboard = () => {
         </Card>
 
         {/* Platform Cards */}
-        <div className="mb-8 animate-fadeIn">
+        <div className="animate-fadeIn">
           {platformsLoading ? (
             <Card><LoadingSpinner message="Loading connected platforms..." /></Card>
           ) : (
@@ -165,7 +169,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 md:gap-8">
           {/* Performance Chart */}
           <Card title="Portfolio Performance" subtitle="Last 12 months" className="animate-fadeIn hover-lift border-2 border-gray-100">
             {performanceLoading ? (
@@ -265,12 +269,12 @@ const Dashboard = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
           {/* Top Performers - Takes 2 columns */}
           <Card
             title="Top Performers"
             subtitle="Best performing investments"
-            className="md:col-span-2 lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
+            className="lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100 shadow-lg"
           >
             {performersLoading ? (
               <LoadingSpinner message="Loading top performers..." />
@@ -321,7 +325,7 @@ const Dashboard = () => {
           <Card
             title="Recent Activity"
             subtitle="Latest transactions"
-            className="animate-fadeIn hover-lift border-2 border-blue-100"
+            className="lg:col-span-1 animate-fadeIn hover-lift border-2 border-blue-100 shadow-lg"
           >
             {activityLoading ? (
               <LoadingSpinner message="Loading recent activity..." />
@@ -370,33 +374,33 @@ const Dashboard = () => {
         </div>
 
         {/* AI Insights Teaser */}
-        <Card className="mt-8 bg-gradient-to-r from-indigo-600 to-purple-600 text-white animate-fadeIn hover-lift shadow-xl border-0 overflow-hidden relative">
+        <Card className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white animate-fadeIn hover-lift shadow-2xl border-0 overflow-hidden relative transform hover:scale-[1.02] transition-transform duration-300">
           <div className="absolute inset-0 bg-white opacity-5">
             <div className="absolute inset-0" style={{
               backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
               backgroundSize: '40px 40px'
             }}></div>
           </div>
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-white bg-opacity-20 p-4 rounded-2xl backdrop-blur-sm">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 flex-1">
+              <div className="bg-white bg-opacity-20 p-4 sm:p-5 rounded-2xl backdrop-blur-sm shadow-lg">
                 <Brain className="text-white" size={48} />
               </div>
-              <div>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex items-center space-x-2">
+              <div className="flex-1">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex flex-col sm:flex-row sm:items-center gap-2">
                   <span>AI-Powered Investment Insights</span>
-                  <Sparkles className="animate-pulse" size={24} />
+                  <Sparkles className="animate-pulse inline" size={24} />
                 </h3>
-                <p className="text-indigo-100">
+                <p className="text-indigo-100 text-sm sm:text-base">
                   Get personalized analysis, predictions, and recommendations for your portfolio
                 </p>
               </div>
             </div>
-            <Link to="/ai-analysis">
-              <Button 
+            <Link to="/ai-analysis" className="w-full sm:w-auto">
+              <Button
                 variant='view_ai_insights'
-                size="lg" 
-                className="bg-white text-indigo-800 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
+                size="lg"
+                className="w-full bg-white text-indigo-800 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg font-bold"
               >
                 View AI Insights →
               </Button>
@@ -405,34 +409,33 @@ const Dashboard = () => {
         </Card>
 
         {/* Smart Trading Teaser */}
-        <Card className="mt-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white animate-fadeIn hover-lift shadow-xl border-0 overflow-hidden relative">
+        <Card className="bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 text-white animate-fadeIn hover-lift shadow-2xl border-0 overflow-hidden relative transform hover:scale-[1.02] transition-transform duration-300">
           <div className="absolute inset-0 bg-white opacity-5">
             <div className="absolute inset-0" style={{
               backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
               backgroundSize: '40px 40px'
             }}></div>
           </div>
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-white bg-opacity-20 p-4 rounded-2xl backdrop-blur-sm">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 flex-1">
+              <div className="bg-white bg-opacity-20 p-4 sm:p-5 rounded-2xl backdrop-blur-sm shadow-lg">
                 <Activity className="text-white" size={48} />
               </div>
-              <div>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex items-center space-x-2">
+              <div className="flex-1">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex flex-col sm:flex-row sm:items-center gap-2">
                   <span>Live Smart Trading</span>
-                  <Zap className="animate-pulse" size={24} />
+                  <Zap className="animate-pulse inline" size={24} />
                 </h3>
-                <p className="text-green-100">
+                <p className="text-green-100 text-sm sm:text-base">
                   Trade with AI assistance - Get real-time insights, recommendations, and automated trading
                 </p>
               </div>
             </div>
-            <Link to="/live-trading">
-              <Button 
+            <Link to="/live-trading" className="w-full sm:w-auto">
+              <Button
                 variant='start_trading'
-                size="lg" 
-                className="bg-white text-green-900 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg"
-                      
+                size="lg"
+                className="w-full bg-white text-green-900 hover:bg-gray-100 hover-lift whitespace-nowrap shadow-lg font-bold"
               >
                 Start Trading →
               </Button>
