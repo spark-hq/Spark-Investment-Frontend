@@ -74,9 +74,9 @@ export const mockTransactions = {
 // Auto-Invest Mock Data
 // ===================================
 export const mockAutoInvest = {
-  strategies: autoInvestData.autoInvestStrategies,
-  backtestResults: autoInvestData.historicalBacktestData,
-  sipRecommendations: autoInvestData.smartSIPRecommendations,
+  strategies: autoInvestData.aiInvestmentPlans, // Fixed: was autoInvestStrategies
+  backtestResults: autoInvestData.backtestResults, // Fixed: was historicalBacktestData
+  sipRecommendations: autoInvestData.aiInvestmentPlans.filter(plan => plan.type === 'SIP'), // Fixed: was smartSIPRecommendations
 };
 
 // ===================================
