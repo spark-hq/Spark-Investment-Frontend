@@ -1,12 +1,12 @@
 // src/components/ai-analysis/PredictionChart.jsx
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, AreaChart, ReferenceLine } from 'recharts';
 import { TrendingUp, Brain } from 'lucide-react';
 //  investmentName to be addded in future for dynamic titles
 const PredictionChart = ({ historicalData, predictions, formatCurrency }) => {
-  // Combine historical and prediction data
-  const combinedData = [
+  // Combine historical and prediction data - Memoized to prevent recalculation
+  const combinedData = useMemo(() => [
     ...historicalData.map(item => ({
       year: item.year === 0 ? 'Now' : `${Math.abs(item.year)}Y ago`,
       yearNum: item.year,
@@ -21,7 +21,7 @@ const PredictionChart = ({ historicalData, predictions, formatCurrency }) => {
       type: 'prediction',
       confidence: item.confidence,
     }))
-  ];
+  ], [historicalData, predictions]);
 
   // Custom tooltip
   const CustomTooltip = ({ active, payload }) => {
