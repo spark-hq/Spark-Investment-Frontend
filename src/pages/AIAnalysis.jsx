@@ -52,47 +52,7 @@ const AIAnalysis = () => {
   // Combine loading states
   const isLoading = investmentsLoading || aiLoading;
 
-  // Format currency
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  // Handle investment change
-  const handleInvestmentChange = (e) => {
-    setSelectedInvestmentId(e.target.value);
-  };
-
-  // Handle refresh analysis
-  const handleRefresh = () => {
-    refetch(); // Refetch all AI data
-  };
-
-  // Handle download report
-  const handleDownload = () => {
-    alert('Download feature will be implemented with backend!');
-  };
-
-  // Show loading spinner while fetching data
-  if (investmentsLoading) {
-    return <LoadingSpinner fullScreen message="Loading your investments..." />;
-  }
-
-  // Show error if AI data fetch fails
-  if (aiError) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4 flex items-center justify-center">
-        <div className="max-w-md">
-          <ErrorDisplay error={aiError} retry={refetch} />
-        </div>
-      </div>
-    );
-  }
-
-  // Create currentAnalysis object from investment-specific AI data
+  // Create currentAnalysis object from investment-specific AI data (MUST be before any returns)
   const currentAnalysis = useMemo(() => {
     console.log('🔄 Recalculating currentAnalysis for:', selectedInvestment?.name);
     console.log('📊 Using investment analysis:', investmentAnalysis);
@@ -165,6 +125,46 @@ const AIAnalysis = () => {
       investmentName: selectedInvestment?.name || investmentAnalysis.investmentName || 'Investment'
     };
   }, [investmentAnalysis, selectedInvestment]);
+
+  // Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  // Handle investment change
+  const handleInvestmentChange = (e) => {
+    setSelectedInvestmentId(e.target.value);
+  };
+
+  // Handle refresh analysis
+  const handleRefresh = () => {
+    refetch(); // Refetch all AI data
+  };
+
+  // Handle download report
+  const handleDownload = () => {
+    alert('Download feature will be implemented with backend!');
+  };
+
+  // Show loading spinner while fetching data
+  if (investmentsLoading) {
+    return <LoadingSpinner fullScreen message="Loading your investments..." />;
+  }
+
+  // Show error if AI data fetch fails
+  if (aiError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8 px-4 flex items-center justify-center">
+        <div className="max-w-md">
+          <ErrorDisplay error={aiError} retry={refetch} />
+        </div>
+      </div>
+    );
+  }
 
   if (!currentAnalysis) {
     return (
