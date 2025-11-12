@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Sparkles, Menu, X, ChevronDown, Calculator, Settings, Target, CreditCard, TrendingUp, Bell, User } from "lucide-react";
+import { Sparkles, Menu, X, ChevronDown, Calculator, Settings, Target, CreditCard, TrendingUp, Bell, User, Brain } from "lucide-react";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -66,6 +66,12 @@ const Navbar = () => {
 
   // Additional features for dropdown
   const moreItems = [
+    {
+      name: "AI Analysis",
+      path: "/ai-analysis",
+      icon: Brain,
+      description: "AI-powered portfolio insights",
+    },
     {
       name: "Calculator",
       path: "/calculator",
@@ -161,16 +167,6 @@ const Navbar = () => {
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
             >
               Auto-Invest
-            </Link>
-            <Link
-              to="/ai-analysis"
-              className={`${
-                isActive("/ai-analysis")
-                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center space-x-1`}
-            >
-              <span>AI Analysis</span>
             </Link>
 
             {/* More Dropdown */}
@@ -360,17 +356,6 @@ const Navbar = () => {
               onClick={closeMobileMenu}
             >
               Auto-Invest
-            </Link>
-            <Link
-              to="/ai-analysis"
-              className={`${
-                isActive("/ai-analysis")
-                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
-                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
-              onClick={closeMobileMenu}
-            >
-              AI Analysis
             </Link>
 
             {/* Mobile More Section */}
