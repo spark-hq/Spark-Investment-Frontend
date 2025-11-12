@@ -79,22 +79,10 @@ const Navbar = () => {
       description: "View transaction history",
     },
     {
-      name: "Auto-Invest",
-      path: "/auto-invest",
-      icon: TrendingUp,
-      description: "Automated investing",
-    },
-    {
       name: "Goals",
       path: "/goals",
       icon: Target,
       description: "Financial goals tracker",
-    },
-    {
-      name: "Settings",
-      path: "/settings",
-      icon: Settings,
-      description: "Account settings",
     },
   ];
 
@@ -163,6 +151,16 @@ const Navbar = () => {
             >
               <span>🎯</span>
               <span>Trading</span>
+            </Link>
+            <Link
+              to="/auto-invest"
+              className={`${
+                isActive("/auto-invest")
+                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+              } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
+            >
+              Auto-Invest
             </Link>
             <Link
               to="/ai-analysis"
@@ -351,6 +349,17 @@ const Navbar = () => {
               onClick={closeMobileMenu}
             >
               🎯 Live Trading
+            </Link>
+            <Link
+              to="/auto-invest"
+              className={`${
+                isActive("/auto-invest")
+                  ? "text-indigo-600 bg-indigo-50 shadow-sm"
+                  : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+              } transition-all duration-200 font-semibold px-4 py-3 min-h-[48px] rounded-xl flex items-center active:scale-95`}
+              onClick={closeMobileMenu}
+            >
+              Auto-Invest
             </Link>
             <Link
               to="/ai-analysis"
