@@ -12,7 +12,7 @@ const Card = ({
     lg: 'p-8',
   };
   
-  const hoverEffect = hover ? 'hover:shadow-xl hover:-translate-y-1 transition-all duration-300' : '';
+  const hoverEffect = hover ? 'hover:shadow-xl hover:-translate-y-1 transition-all duration-300 active:scale-98 active:shadow-md cursor-pointer' : '';
   
   return (
     <div className={`bg-white rounded-xl shadow-lg ${paddings[padding]} ${hoverEffect} ${className}`}>

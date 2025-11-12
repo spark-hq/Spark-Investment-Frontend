@@ -105,7 +105,7 @@ const Dashboard = () => {
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
           <div className="flex items-center space-x-2 mb-2">
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
               {greeting}! 👋
             </h1>
             <Sparkles className="text-indigo-600 animate-pulse" size={32} />
@@ -128,25 +128,25 @@ const Dashboard = () => {
                 <Zap className="text-white" size={24} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-1">Quick Actions</h3>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1">Quick Actions</h3>
                 <p className="text-gray-600 text-sm">Manage your investments efficiently</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/investments">
-                <Button variant="primary" className="hover-lift flex items-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%]">
+            <div className="flex flex-wrap gap-3 w-full sm:w-auto">
+              <Link to="/investments" className="w-full sm:w-auto">
+                <Button variant="primary" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%]">
                   <TrendingUp size={18} />
                   <span>View Investments</span>
                 </Button>
               </Link>
-              <Link to="/live-trading">
-                <Button variant="success" className="hover-lift flex items-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%]">
+              <Link to="/live-trading" className="w-full sm:w-auto">
+                <Button variant="success" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%]">
                   <Activity size={18} />
                   <span>Live Trading</span>
                 </Button>
               </Link>
-              <Link to="/ai-analysis">
-                <Button variant="outline" className="hover-lift flex items-center space-x-2">
+              <Link to="/ai-analysis" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full hover-lift flex items-center justify-center space-x-2">
                   <Brain size={18} />
                   <span>AI Analysis</span>
                 </Button>
@@ -165,7 +165,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts Row */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 mb-8">
           {/* Performance Chart */}
           <Card title="Portfolio Performance" subtitle="Last 12 months" className="animate-fadeIn hover-lift border-2 border-gray-100">
             {performanceLoading ? (
@@ -184,16 +184,16 @@ const Dashboard = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis 
-                  dataKey="month" 
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 14, fill: '#6b7280' }}
                   angle={-45}
                   textAnchor="end"
                   height={80}
                 />
-                <YAxis 
+                <YAxis
                   tickFormatter={(value) => `₹${(value / 100000).toFixed(0)}L`}
-                  tick={{ fontSize: 12, fill: '#6b7280' }}
+                  tick={{ fontSize: 14, fill: '#6b7280' }}
                 />
                 <Tooltip 
                   formatter={(value) => formatCurrency(value)}
@@ -265,12 +265,12 @@ const Dashboard = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Top Performers - Takes 2 columns */}
           <Card
             title="Top Performers"
             subtitle="Best performing investments"
-            className="lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
+            className="md:col-span-2 lg:col-span-2 animate-fadeIn hover-lift border-2 border-green-100"
           >
             {performersLoading ? (
               <LoadingSpinner message="Loading top performers..." />
@@ -286,7 +286,7 @@ const Dashboard = () => {
                       #{index + 1}
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-bold text-gray-900">{investment.name}</h4>
+                      <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900">{investment.name}</h4>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-xs text-gray-600">{investment.platform}</span>
                         <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 text-xs rounded-full font-semibold">
@@ -310,7 +310,7 @@ const Dashboard = () => {
             )}
             <div className="mt-6 text-center">
               <Link to="/investments">
-                <Button variant="outline" size="md" className="hover-lift">
+                <Button variant="outline" size="lg" className="hover-lift">
                   View All Investments →
                 </Button>
               </Link>
@@ -361,7 +361,7 @@ const Dashboard = () => {
             )}
             <div className="mt-6 text-center">
               <Link to="/transactions">
-                <Button variant="outline" size="md" fullWidth className="hover-lift">
+                <Button variant="outline" size="lg" fullWidth className="hover-lift">
                   View All Transactions →
                 </Button>
               </Link>
@@ -383,7 +383,7 @@ const Dashboard = () => {
                 <Brain className="text-white" size={48} />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex items-center space-x-2">
                   <span>AI-Powered Investment Insights</span>
                   <Sparkles className="animate-pulse" size={24} />
                 </h3>
@@ -418,7 +418,7 @@ const Dashboard = () => {
                 <Activity className="text-white" size={48} />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2 flex items-center space-x-2">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 flex items-center space-x-2">
                   <span>Live Smart Trading</span>
                   <Zap className="animate-pulse" size={24} />
                 </h3>
