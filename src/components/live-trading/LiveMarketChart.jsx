@@ -18,6 +18,31 @@ const LiveMarketChart = ({ selectedAsset, marketData }) => {
     { id: 'All', label: 'All', days: 3650 },
   ];
 
+  // Helper functions - defined before useMemo hooks that use them
+  const formatTime = (timestamp, timeframe) => {
+    const date = new Date(timestamp);
+    if (timeframe === '1D') {
+      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    } else if (timeframe === '1W' || timeframe === '1M') {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } else {
+      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
+  const formatPercentage = (value) => {
+    const sign = value >= 0 ? '+' : '';
+    return `${sign}${value.toFixed(2)}%`;
+  };
+
   // Generate chart data based on selected asset and timeframe
   const chartData = useMemo(() => {
     if (!selectedAsset) return [];
@@ -51,30 +76,6 @@ const LiveMarketChart = ({ selectedAsset, marketData }) => {
 
     return data;
   }, [selectedAsset, selectedTimeframe]);
-
-  const formatTime = (timestamp, timeframe) => {
-    const date = new Date(timestamp);
-    if (timeframe === '1D') {
-      return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-    } else if (timeframe === '1W' || timeframe === '1M') {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    }
-  };
-
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 2,
-    }).format(value);
-  };
-
-  const formatPercentage = (value) => {
-    const sign = value >= 0 ? '+' : '';
-    return `${sign}${value.toFixed(2)}%`;
-  };
 
   // Calculate statistics
   const stats = useMemo(() => {
