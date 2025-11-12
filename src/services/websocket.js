@@ -1,7 +1,10 @@
 // ===================================
 // WebSocket Service for Real-time Updates
 // ===================================
-import { io } from 'socket.io-client';
+// This service now uses the generic WebSocketManager under the hood
+// for broker-agnostic connections with exponential backoff reconnection
+
+import websocketManager from './websocketManager';
 import { generateMockMarketUpdate } from '../data/mockData';
 
 const WEBSOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL || 'ws://localhost:5000';
@@ -18,140 +21,74 @@ if (DEBUG_MODE) {
   });
 }
 
-let socket = null;
-let mockUpdateInterval = null;
-let eventHandlers = new Map();
+// Register mock data generators for different events
+if (MOCK_MODE) {
+  websocketManager.registerMockGenerator('market:update', generateMockMarketUpdate);
+
+  // Register additional mock generators for other events
+  websocketManager.registerMockGenerator('portfolio:update', () => ({
+    timestamp: new Date().toISOString(),
+    totalValue: Math.random() * 1000000 + 500000,
+    dailyChange: (Math.random() - 0.5) * 10000,
+  }));
+
+  websocketManager.registerMockGenerator('trade:executed', () => ({
+    id: `TRADE-${Date.now()}`,
+    symbol: ['AAPL', 'GOOGL', 'MSFT', 'AMZN'][Math.floor(Math.random() * 4)],
+    type: Math.random() > 0.5 ? 'buy' : 'sell',
+    quantity: Math.floor(Math.random() * 100) + 1,
+    price: Math.random() * 200 + 50,
+    timestamp: new Date().toISOString(),
+  }));
+}
 
 // ===================================
 // WebSocket Connection Management
 // ===================================
 
-export const connectWebSocket = () => {
-  // Always use mock mode in development without backend
-  if (MOCK_MODE) {
-    console.log('🔌 WebSocket: MOCK_MODE enabled - simulating real-time updates');
-    console.log('💡 To use real WebSocket, set VITE_MOCK_MODE=false in .env and restart dev server');
-    startMockUpdates();
-    return;
-  }
-
-  if (socket?.connected) {
-    if (DEBUG_MODE) {
-      console.log('🔌 WebSocket: Already connected');
-    }
-    return;
-  }
-
-  console.log('🔌 WebSocket: Attempting connection to', WEBSOCKET_URL);
-
+export const connectWebSocket = async () => {
   try {
-    socket = io(WEBSOCKET_URL, {
-      transports: ['websocket'],
-      reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5,
-      // Suppress console errors if backend is not available
-      autoConnect: true,
+    await websocketManager.connect(WEBSOCKET_URL, {
+      mockMode: MOCK_MODE,
+      provider: 'socketio', // Can be 'socketio', 'native', or 'auto'
+      mockUpdateInterval: 3000,
     });
 
-    socket.on('connect', () => {
-      if (DEBUG_MODE) {
-        console.log('✅ WebSocket: Connected to', WEBSOCKET_URL);
-      }
-    });
+    if (DEBUG_MODE) {
+      console.log('🔌 WebSocket: Connected successfully');
+      console.log('📊 Status:', websocketManager.getStatus());
+    }
 
-    socket.on('disconnect', (reason) => {
-      if (DEBUG_MODE) {
-        console.log('❌ WebSocket: Disconnected -', reason);
-      }
-    });
-
-    socket.on('connect_error', (error) => {
-      // Only log if in debug mode - suppress normal connection failures
-      if (DEBUG_MODE) {
-        console.warn('⚠️ WebSocket: Connection error (backend may not be running)', error.message);
-      }
-    });
-
-    socket.on('error', (error) => {
-      // Only log if in debug mode
-      if (DEBUG_MODE) {
-        console.error('❌ WebSocket Error:', error);
-      }
-    });
-
-    socket.on('reconnect', (attemptNumber) => {
-      if (DEBUG_MODE) {
-        console.log('🔄 WebSocket: Reconnected after', attemptNumber, 'attempts');
-      }
-    });
-
-    // Real-time market data
-    socket.on('market:update', (data) => {
-      if (DEBUG_MODE) {
-        console.log('📊 Market Update:', data);
-      }
-      triggerEvent('market:update', data);
-    });
-
-    // Portfolio updates
-    socket.on('portfolio:update', (data) => {
-      if (DEBUG_MODE) {
-        console.log('💼 Portfolio Update:', data);
-      }
-      triggerEvent('portfolio:update', data);
-    });
-
-    // Trade execution updates
-    socket.on('trade:executed', (data) => {
-      if (DEBUG_MODE) {
-        console.log('✅ Trade Executed:', data);
-      }
-      triggerEvent('trade:executed', data);
-    });
-
-    // Order status updates
-    socket.on('order:update', (data) => {
-      if (DEBUG_MODE) {
-        console.log('📝 Order Update:', data);
-      }
-      triggerEvent('order:update', data);
-    });
-
-    // AI analysis updates
-    socket.on('ai:insight', (data) => {
-      if (DEBUG_MODE) {
-        console.log('🤖 AI Insight:', data);
-      }
-      triggerEvent('ai:insight', data);
-    });
-
+    // Setup event listeners for all WebSocket events
+    setupEventListeners();
   } catch (error) {
-    console.error('❌ WebSocket Connection Error:', error);
+    console.error('❌ WebSocket: Connection failed', error);
   }
 };
 
 export const disconnectWebSocket = () => {
-  if (MOCK_MODE) {
-    stopMockUpdates();
-    return;
-  }
+  websocketManager.disconnect();
 
-  if (socket) {
-    socket.disconnect();
-    socket = null;
-    if (DEBUG_MODE) {
-      console.log('🔌 WebSocket: Disconnected');
-    }
+  if (DEBUG_MODE) {
+    console.log('🔌 WebSocket: Disconnected');
   }
 };
 
 export const isConnected = () => {
-  if (MOCK_MODE) {
-    return mockUpdateInterval !== null;
-  }
-  return socket?.connected || false;
+  return websocketManager.isConnected();
+};
+
+export const getConnectionStatus = () => {
+  return websocketManager.getStatus();
+};
+
+// ===================================
+// Event Listeners Setup
+// ===================================
+
+const setupEventListeners = () => {
+  // The manager automatically handles event distribution
+  // Individual components can subscribe to events using the subscribe() function
 };
 
 // ===================================
@@ -159,85 +96,23 @@ export const isConnected = () => {
 // ===================================
 
 export const subscribe = (eventName, handler) => {
-  if (!eventHandlers.has(eventName)) {
-    eventHandlers.set(eventName, []);
-  }
-
-  const handlers = eventHandlers.get(eventName);
-  handlers.push(handler);
-
-  if (DEBUG_MODE) {
-    console.log(`📡 Subscribed to ${eventName} (${handlers.length} handlers)`);
-  }
-
-  // Return unsubscribe function
-  return () => {
-    const handlers = eventHandlers.get(eventName);
-    const index = handlers.indexOf(handler);
-    if (index > -1) {
-      handlers.splice(index, 1);
-    }
-    if (DEBUG_MODE) {
-      console.log(`📡 Unsubscribed from ${eventName}`);
-    }
-  };
+  return websocketManager.on(eventName, handler);
 };
 
 export const unsubscribe = (eventName, handler) => {
-  const handlers = eventHandlers.get(eventName);
-  if (handlers) {
-    const index = handlers.indexOf(handler);
-    if (index > -1) {
-      handlers.splice(index, 1);
-    }
-  }
-};
-
-const triggerEvent = (eventName, data) => {
-  const handlers = eventHandlers.get(eventName);
-  if (handlers) {
-    handlers.forEach((handler) => {
-      try {
-        handler(data);
-      } catch (error) {
-        console.error(`Error in ${eventName} handler:`, error);
-      }
-    });
-  }
+  websocketManager.off(eventName, handler);
 };
 
 // ===================================
-// Mock Updates (for development without backend)
+// Connection State Monitoring
 // ===================================
 
-const startMockUpdates = () => {
-  if (mockUpdateInterval) {
-    return; // Already running
-  }
-
-  // Send mock market updates every 3 seconds
-  mockUpdateInterval = setInterval(() => {
-    const mockData = generateMockMarketUpdate();
-    triggerEvent('market:update', mockData);
-
-    if (DEBUG_MODE && Math.random() < 0.2) {
-      console.log('📊 Mock Market Update:', mockData);
-    }
-  }, 3000);
-
-  if (DEBUG_MODE) {
-    console.log('🔄 Mock WebSocket updates started');
-  }
+export const onConnectionChange = (callback) => {
+  return websocketManager.onConnectionStateChange(callback);
 };
 
-const stopMockUpdates = () => {
-  if (mockUpdateInterval) {
-    clearInterval(mockUpdateInterval);
-    mockUpdateInterval = null;
-    if (DEBUG_MODE) {
-      console.log('🛑 Mock WebSocket updates stopped');
-    }
-  }
+export const onConnectionError = (callback) => {
+  return websocketManager.onConnectionError(callback);
 };
 
 // ===================================
@@ -245,21 +120,7 @@ const stopMockUpdates = () => {
 // ===================================
 
 export const sendMessage = (event, data) => {
-  if (MOCK_MODE) {
-    if (DEBUG_MODE) {
-      console.log('📤 Mock Send:', event, data);
-    }
-    return;
-  }
-
-  if (socket?.connected) {
-    socket.emit(event, data);
-    if (DEBUG_MODE) {
-      console.log('📤 Sent:', event, data);
-    }
-  } else {
-    console.warn('⚠️ WebSocket not connected. Message not sent:', event);
-  }
+  websocketManager.emit(event, data);
 };
 
 // ===================================
@@ -282,6 +143,18 @@ export const unsubscribeFromPortfolio = () => {
   sendMessage('portfolio:unsubscribe', {});
 };
 
+export const placeOrder = (orderData) => {
+  sendMessage('order:place', orderData);
+};
+
+export const cancelOrder = (orderId) => {
+  sendMessage('order:cancel', { orderId });
+};
+
+export const updateStrategy = (strategyId, updates) => {
+  sendMessage('strategy:update', { strategyId, updates });
+};
+
 // ===================================
 // Export WebSocket Service
 // ===================================
@@ -289,6 +162,7 @@ export default {
   connect: connectWebSocket,
   disconnect: disconnectWebSocket,
   isConnected,
+  getStatus: getConnectionStatus,
   subscribe,
   unsubscribe,
   sendMessage,
@@ -296,7 +170,9 @@ export default {
   unsubscribeFromMarket,
   subscribeToPortfolio,
   unsubscribeFromPortfolio,
+  placeOrder,
+  cancelOrder,
+  updateStrategy,
+  onConnectionChange,
+  onConnectionError,
 };
-
-// Auto-connect on module load (optional - you may want to do this in App.jsx instead)
-// connectWebSocket();
