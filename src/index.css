@@ -205,6 +205,38 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Mobile touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Improve touch scrolling on all scrollable elements */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Remove hover effects on touch devices */
+  .hover-lift:hover {
+    transform: none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Ensure smooth momentum scrolling */
+  .overflow-x-auto,
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Disable text selection on buttons and interactive elements */
+  button,
+  [role="button"],
+  .cursor-pointer {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
 /* Custom utility classes */
 .text-shadow {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

@@ -210,38 +210,38 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
 
         {/* Tabs */}
         <div className="border-b border-gray-200 px-6">
-          <div className="flex space-x-8">
+          <div className="flex space-x-4 sm:space-x-8">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
-                activeTab === 'overview' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700'
+              className={`py-3 px-3 sm:px-4 font-medium transition-all relative min-h-[44px] active:scale-95 ${
+                activeTab === 'overview' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700 active:text-gray-900'
               }`}
             >
               Overview
               {activeTab === 'overview' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-t"></div>
               )}
             </button>
             <button
               onClick={() => setActiveTab('transactions')}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
-                activeTab === 'transactions' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700'
+              className={`py-3 px-3 sm:px-4 font-medium transition-all relative min-h-[44px] active:scale-95 ${
+                activeTab === 'transactions' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700 active:text-gray-900'
               }`}
             >
               Transactions
               {activeTab === 'transactions' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-t"></div>
               )}
             </button>
             <button
               onClick={() => setActiveTab('analysis')}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
-                activeTab === 'analysis' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700'
+              className={`py-3 px-3 sm:px-4 font-medium transition-all relative min-h-[44px] active:scale-95 ${
+                activeTab === 'analysis' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700 active:text-gray-900'
               }`}
             >
               Analysis
               {activeTab === 'analysis' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-t"></div>
               )}
             </button>
           </div>

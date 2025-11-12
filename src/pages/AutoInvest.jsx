@@ -170,40 +170,40 @@ const AutoInvest = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             <button
               onClick={() => setActiveTab('plans')}
-              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'plans'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               AI Plans
             </button>
             <button
               onClick={() => setActiveTab('performance')}
-              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'performance'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               Performance
             </button>
             <button
               onClick={() => setActiveTab('backtest')}
-              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'backtest'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               Backtest
             </button>
             <button
               onClick={() => setActiveTab('rules')}
-              className={`py-2 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'rules'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               Rules
