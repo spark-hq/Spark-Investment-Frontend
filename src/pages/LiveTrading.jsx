@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Sparkles, Zap, Shield, BarChart3 } from 'lucide-react';
 import Card from '../components/ui/StockCard';
 import ScreenCapturePanel from '../components/live-trading/ScreenCapturePanel';
+import LiveMarketChart from '../components/live-trading/LiveMarketChart';
 import AIScreenAnalyst from '../components/live-trading/AIScreenAnalyst';
 import AutoTradeSettings from '../components/live-trading/AutoTradeSettings';
 import ExecutionLog from '../components/live-trading/ExecutionLog';
@@ -34,6 +35,7 @@ const LiveTrading = () => {
   const [chartData, setChartData] = useState([]);
   const [screenCaptureActive, setScreenCaptureActive] = useState(false);
   const [autoTradeSettings, setAutoTradeSettings] = useState(defaultAutoTradeSettings);
+  const [viewMode, setViewMode] = useState('chart'); // 'chart' or 'capture'
 
   // Extract symbols from initialMarketData
   const symbols = useMemo(() => initialMarketData.map(asset => asset.symbol), []);
@@ -283,11 +285,45 @@ const LiveTrading = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fadeIn">
           {/* Left Column - Charts & Orders */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Screen Capture Panel */}
-            <ScreenCapturePanel
-              onStatusChange={handleScreenCaptureStatusChange}
-              selectedAsset={selectedAsset}
-            />
+            {/* View Mode Toggle */}
+            <div className="flex items-center justify-center gap-2 p-2 bg-white rounded-xl border-2 border-gray-200 shadow-sm">
+              <button
+                onClick={() => setViewMode('chart')}
+                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                  viewMode === 'chart'
+                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+                aria-label="Live Market Chart View"
+                aria-pressed={viewMode === 'chart'}
+              >
+                <BarChart3 size={18} />
+                <span>Live Market Chart</span>
+              </button>
+              <button
+                onClick={() => setViewMode('capture')}
+                className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
+                  viewMode === 'capture'
+                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
+                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+                aria-label="Screen Capture View"
+                aria-pressed={viewMode === 'capture'}
+              >
+                <Shield size={18} />
+                <span>Screen Capture</span>
+              </button>
+            </div>
+
+            {/* Conditional Rendering based on View Mode */}
+            {viewMode === 'chart' ? (
+              <LiveMarketChart selectedAsset={selectedAsset} marketData={marketData} />
+            ) : (
+              <ScreenCapturePanel
+                onStatusChange={handleScreenCaptureStatusChange}
+                selectedAsset={selectedAsset}
+              />
+            )}
 
             {/* Order Panel */}
             <OrderPanel
