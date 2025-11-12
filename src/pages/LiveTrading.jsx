@@ -172,7 +172,7 @@ const LiveTrading = () => {
         <div className="mb-8 animate-fadeIn">
           <button
             onClick={() => navigate(-1)}
-            className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 flex items-center space-x-2 transition-colors"
+            className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium mb-4 flex items-center space-x-2 transition-colors px-4 py-3 rounded-lg min-h-[44px]"
           >
             <span>← Back</span>
           </button>

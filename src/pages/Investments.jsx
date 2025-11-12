@@ -239,7 +239,7 @@ const Investments = () => {
           {/* Back Button */}
           <button
             onClick={() => navigate("/dashboard")}
-            className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 font-medium mb-4 transition-colors"
+            className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium mb-4 transition-colors px-4 py-3 rounded-lg min-h-[44px]"
           >
             <ArrowLeft size={20} />
             <span>Back to Dashboard</span>

@@ -263,7 +263,7 @@ const AutoInvest = () => {
                     <button
                       key={plan.id}
                       onClick={() => handleSelectPlanForBacktest(plan.id)}
-                      className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                      className={`px-4 py-3 min-h-[44px] rounded-lg font-semibold transition-all flex items-center ${
                         selectedPlanForBacktest === plan.id
                           ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
                           : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-purple-300'
@@ -303,7 +303,7 @@ const AutoInvest = () => {
                     <button
                       key={plan.id}
                       onClick={() => handleSelectPlanForRules(plan)}
-                      className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                      className={`px-4 py-3 min-h-[44px] rounded-lg font-semibold transition-all flex items-center ${
                         selectedPlanForRules?.id === plan.id
                           ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                           : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-indigo-300'

@@ -310,7 +310,7 @@ const Dashboard = () => {
             )}
             <div className="mt-6 text-center">
               <Link to="/investments">
-                <Button variant="outline" size="md" className="hover-lift">
+                <Button variant="outline" size="lg" className="hover-lift">
                   View All Investments →
                 </Button>
               </Link>
@@ -361,7 +361,7 @@ const Dashboard = () => {
             )}
             <div className="mt-6 text-center">
               <Link to="/transactions">
-                <Button variant="outline" size="md" fullWidth className="hover-lift">
+                <Button variant="outline" size="lg" fullWidth className="hover-lift">
                   View All Transactions →
                 </Button>
               </Link>

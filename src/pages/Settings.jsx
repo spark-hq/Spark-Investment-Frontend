@@ -222,7 +222,7 @@ const Settings = () => {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/dashboard")}
-            className="flex items-center space-x-2 bg-white hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all shadow-md"
+            className="flex items-center space-x-2 bg-white hover:bg-gray-50 text-gray-700 px-4 py-3 min-h-[44px] rounded-lg font-semibold transition-all shadow-md"
           >
             <ArrowLeft size={18} />
             <span>Back to Dashboard</span>
