@@ -113,6 +113,15 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
+        {/* Drag Handle - Mobile Swipe Indicator */}
+        <div className="sticky top-0 bg-white pt-3 pb-0 rounded-t-2xl z-20 flex justify-center">
+          <div
+            className="w-12 h-1 bg-gray-300 rounded-full"
+            role="separator"
+            aria-label="Swipe down to close"
+          ></div>
+        </div>
+
         {/* Modal Header */}
         <div className="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-t-2xl z-10">
           <div className="flex items-start justify-between">
@@ -201,38 +210,38 @@ const InvestmentDetailModal = ({ investment, onClose }) => {
 
         {/* Tabs */}
         <div className="border-b border-gray-200 px-6">
-          <div className="flex space-x-8">
+          <div className="flex space-x-4 sm:space-x-8">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
-                activeTab === 'overview' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700'
+              className={`py-3 px-3 sm:px-4 font-medium transition-all relative min-h-[44px] active:scale-95 ${
+                activeTab === 'overview' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700 active:text-gray-900'
               }`}
             >
               Overview
               {activeTab === 'overview' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-t"></div>
               )}
             </button>
             <button
               onClick={() => setActiveTab('transactions')}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
-                activeTab === 'transactions' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700'
+              className={`py-3 px-3 sm:px-4 font-medium transition-all relative min-h-[44px] active:scale-95 ${
+                activeTab === 'transactions' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700 active:text-gray-900'
               }`}
             >
               Transactions
               {activeTab === 'transactions' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-t"></div>
               )}
             </button>
             <button
               onClick={() => setActiveTab('analysis')}
-              className={`pb-4 px-2 font-medium transition-colors relative ${
-                activeTab === 'analysis' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700'
+              className={`py-3 px-3 sm:px-4 font-medium transition-all relative min-h-[44px] active:scale-95 ${
+                activeTab === 'analysis' ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700 active:text-gray-900'
               }`}
             >
               Analysis
               {activeTab === 'analysis' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-indigo-600 rounded-t"></div>
               )}
             </button>
           </div>

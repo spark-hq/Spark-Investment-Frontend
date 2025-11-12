@@ -159,13 +159,13 @@ const Transactions = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-4 sm:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
           <button
             onClick={() => navigate(-1)}
-            className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 flex items-center space-x-2 transition-colors"
+            className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium mb-4 flex items-center space-x-2 transition-colors px-4 py-3 rounded-lg min-h-[44px]"
           >
             <ArrowLeft size={20} />
             <span>Back</span>
@@ -176,7 +176,7 @@ const Transactions = () => {
               <Receipt className="text-white" size={32} />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Transaction History</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Transaction History</h1>
               <p className="text-xl text-gray-600">Complete record of all your investments</p>
             </div>
             <Sparkles className="text-purple-600 animate-pulse" size={32} />
@@ -193,7 +193,7 @@ const Transactions = () => {
                 <Receipt size={24} />
               </div>
               <p className="text-indigo-100 text-sm mb-2 font-medium">Total Transactions</p>
-              <h3 className="text-3xl font-bold mb-2">{transactionSummary?.totalTransactions || 0}</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">{transactionSummary?.totalTransactions || 0}</h3>
               <p className="text-indigo-100 text-sm">
                 {transactionSummary?.completedTransactions || 0} completed
               </p>
@@ -208,7 +208,7 @@ const Transactions = () => {
                 <TrendingUp size={24} />
               </div>
               <p className="text-green-100 text-sm mb-2 font-medium">Total Buy Amount</p>
-              <h3 className="text-3xl font-bold mb-2">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
                 {formatCurrency(transactionSummary?.totalBuyAmount || 0)}
               </h3>
               <p className="text-green-100 text-sm">Including fees & taxes</p>
@@ -223,7 +223,7 @@ const Transactions = () => {
                 <DollarSign size={24} />
               </div>
               <p className="text-orange-100 text-sm mb-2 font-medium">Total Sell Amount</p>
-              <h3 className="text-3xl font-bold mb-2">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
                 {formatCurrency(transactionSummary?.totalSellAmount || 0)}
               </h3>
               <p className="text-orange-100 text-sm">After deductions</p>
@@ -238,7 +238,7 @@ const Transactions = () => {
                 <AlertCircle size={24} />
               </div>
               <p className="text-yellow-100 text-sm mb-2 font-medium">Pending/Failed</p>
-              <h3 className="text-3xl font-bold mb-2">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
                 {(transactionSummary?.pendingTransactions || 0) + (transactionSummary?.failedTransactions || 0)}
               </h3>
               <p className="text-yellow-100 text-sm">
@@ -252,7 +252,7 @@ const Transactions = () => {
         <div className="mb-8 animate-fadeIn">
           <div className="flex items-center space-x-2 mb-4">
             <BarChart3 className="text-indigo-600" size={24} />
-            <h2 className="text-2xl font-bold text-gray-900">Analytics & Insights</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">Analytics & Insights</h2>
           </div>
           <TransactionCharts />
         </div>

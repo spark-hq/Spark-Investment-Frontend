@@ -179,9 +179,9 @@ const AIAnalysis = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
-          <button 
-            onClick={() => navigate('/dashboard')} 
-            className="text-indigo-600 hover:text-indigo-700 font-medium mb-4 flex items-center space-x-2 transition-colors"
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium mb-4 flex items-center space-x-2 transition-colors px-4 py-3 rounded-lg min-h-[44px]"
           >
             <ArrowLeft size={20} />
             <span>Back to Dashboard</span>
@@ -191,7 +191,7 @@ const AIAnalysis = () => {
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-2xl shadow-lg">
               <Brain className="text-white" size={32} />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
               AI Investment Analysis
             </h1>
             <Sparkles className="text-purple-600 animate-pulse" size={32} />
@@ -231,7 +231,7 @@ const AIAnalysis = () => {
               </div>
             </div>
 
-            <div className="flex space-x-3">
+            <div className="flex flex-wrap gap-3">
               <Button
                 onClick={handleRefresh}
                 variant="outline"
@@ -266,7 +266,7 @@ const AIAnalysis = () => {
             <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-6 rounded-2xl mb-6 animate-pulse">
               <Brain className="text-white" size={64} />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Analyzing Investment...</h3>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2">Analyzing Investment...</h3>
             <p className="text-gray-600">AI is processing market data and generating insights</p>
             <div className="mt-6 flex space-x-2">
               <div className="w-3 h-3 bg-indigo-600 rounded-full animate-bounce"></div>
@@ -277,7 +277,7 @@ const AIAnalysis = () => {
         ) : (
           <>
             {/* Three Column Layout - Risk, Health, Valuation */}
-            <div className="grid md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
               <RiskMeter
                 riskLevel={currentAnalysis.riskLevel}
                 riskScore={currentAnalysis.riskScore}
@@ -334,7 +334,7 @@ const AIAnalysis = () => {
                   <Sparkles className="text-yellow-600" size={24} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-2 text-lg">AI Analysis Disclaimer</h4>
+                  <h4 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2">AI Analysis Disclaimer</h4>
                   <p className="text-sm text-gray-700 leading-relaxed mb-3">
                     This AI-powered analysis is generated using advanced machine learning algorithms, historical market data, 
                     and current market trends. The insights, predictions, and recommendations provided are for informational 
@@ -365,7 +365,7 @@ const AIAnalysis = () => {
                     <Brain className="text-white" size={48} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold mb-2">Ready to Take Action?</h3>
+                    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">Ready to Take Action?</h3>
                     <p className="text-indigo-100">
                       View your complete portfolio or start live trading with AI assistance
                     </p>

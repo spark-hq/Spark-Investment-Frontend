@@ -239,7 +239,7 @@ const Investments = () => {
           {/* Back Button */}
           <button
             onClick={() => navigate("/dashboard")}
-            className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 font-medium mb-4 transition-colors"
+            className="flex items-center space-x-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 font-medium mb-4 transition-colors px-4 py-3 rounded-lg min-h-[44px]"
           >
             <ArrowLeft size={20} />
             <span>Back to Dashboard</span>
@@ -248,22 +248,23 @@ const Investments = () => {
           {/* Page Title */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-2">
                 My Investments
               </h1>
               <p className="text-gray-600">
                 Track and manage all your investments in one place
               </p>
             </div>
-            <div className="hidden md:block">
-              <div className="bg-white rounded-xl shadow-md p-4">
+            <div>
+              <div className="bg-white rounded-xl shadow-md p-3 md:p-4">
                 <div className="flex items-center space-x-2 text-indigo-600">
-                  <Package size={24} />
-                  <span className="text-2xl font-bold">
+                  <Package size={20} className="md:hidden" />
+                  <Package size={24} className="hidden md:block" />
+                  <span className="text-xl md:text-2xl font-bold">
                     {liveInvestments.length}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">Total Investments</p>
+                <p className="text-xs md:text-sm text-gray-600 mt-1">Total Investments</p>
               </div>
             </div>
           </div>

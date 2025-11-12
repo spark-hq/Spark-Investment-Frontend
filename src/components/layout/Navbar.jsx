@@ -105,7 +105,7 @@ const Navbar = () => {
                 isActive("/")
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } px-4 py-2 rounded-lg transition-all duration-200 font-medium`}
+              } px-4 py-3 min-h-[44px] rounded-lg transition-all duration-200 font-medium flex items-center`}
             >
               Home
             </Link>
@@ -115,7 +115,7 @@ const Navbar = () => {
                 isActive("/dashboard")
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } px-4 py-2 rounded-lg transition-all duration-200 font-medium`}
+              } px-4 py-3 min-h-[44px] rounded-lg transition-all duration-200 font-medium flex items-center`}
             >
               Dashboard
             </Link>
@@ -125,7 +125,7 @@ const Navbar = () => {
                 isActive("/investments")
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } px-4 py-2 rounded-lg transition-all duration-200 font-medium`}
+              } px-4 py-3 min-h-[44px] rounded-lg transition-all duration-200 font-medium flex items-center`}
             >
               My Investments
             </Link>
@@ -135,7 +135,7 @@ const Navbar = () => {
                 isActive("/live-trading")
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } px-4 py-2 rounded-lg transition-all duration-200 font-medium`}
+              } px-4 py-3 min-h-[44px] rounded-lg transition-all duration-200 font-medium flex items-center`}
             >
               🎯 Live Trading
             </Link>
@@ -145,7 +145,7 @@ const Navbar = () => {
                 isActive("/ai-analysis")
                   ? "text-indigo-600 bg-indigo-50"
                   : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-              } px-4 py-2 rounded-lg transition-all duration-200 font-medium flex items-center space-x-1`}
+              } px-4 py-3 min-h-[44px] rounded-lg transition-all duration-200 font-medium flex items-center space-x-1`}
             >
               <span>AI Analysis</span>
             </Link>
@@ -158,7 +158,7 @@ const Navbar = () => {
                   isMoreDropdownOpen
                     ? "text-indigo-600 bg-indigo-50"
                     : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                } px-4 py-2 rounded-lg transition-all duration-200 font-medium flex items-center space-x-1`}
+                } px-4 py-3 min-h-[44px] rounded-lg transition-all duration-200 font-medium flex items-center space-x-1`}
               >
                 <span>More</span>
                 <ChevronDown
@@ -215,7 +215,7 @@ const Navbar = () => {
           <div className="hidden md:block">
             <Link
               to="/dashboard"
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center space-x-2"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 min-h-[44px] rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center space-x-2"
             >
               <span>Get Started</span>
               <Sparkles size={16} />
@@ -241,7 +241,7 @@ const Navbar = () => {
                   isActive("/")
                     ? "text-indigo-600 bg-indigo-50"
                     : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                } transition-all duration-200 font-medium px-4 py-2 rounded-lg`}
+                } transition-all duration-200 font-medium px-4 py-3 min-h-[44px] rounded-lg flex items-center`}
                 onClick={closeMobileMenu}
               >
                 Home
@@ -252,7 +252,7 @@ const Navbar = () => {
                   isActive("/dashboard")
                     ? "text-indigo-600 bg-indigo-50"
                     : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                } transition-all duration-200 font-medium px-4 py-2 rounded-lg`}
+                } transition-all duration-200 font-medium px-4 py-3 min-h-[44px] rounded-lg flex items-center`}
                 onClick={closeMobileMenu}
               >
                 Dashboard
@@ -263,7 +263,7 @@ const Navbar = () => {
                   isActive("/investments")
                     ? "text-indigo-600 bg-indigo-50"
                     : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                } transition-all duration-200 font-medium px-4 py-2 rounded-lg`}
+                } transition-all duration-200 font-medium px-4 py-3 min-h-[44px] rounded-lg flex items-center`}
                 onClick={closeMobileMenu}
               >
                 My Investments
@@ -274,7 +274,7 @@ const Navbar = () => {
                   isActive("/live-trading")
                     ? "text-indigo-600 bg-indigo-50"
                     : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                } transition-all duration-200 font-medium px-4 py-2 rounded-lg`}
+                } transition-all duration-200 font-medium px-4 py-3 min-h-[44px] rounded-lg flex items-center`}
                 onClick={closeMobileMenu}
               >
                 🎯 Live Trading
@@ -285,7 +285,7 @@ const Navbar = () => {
                   isActive("/ai-analysis")
                     ? "text-indigo-600 bg-indigo-50"
                     : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                } transition-all duration-200 font-medium px-4 py-2 rounded-lg`}
+                } transition-all duration-200 font-medium px-4 py-3 min-h-[44px] rounded-lg flex items-center`}
                 onClick={closeMobileMenu}
               >
                 AI Analysis
@@ -306,7 +306,7 @@ const Navbar = () => {
                         isActive(item.path)
                           ? "text-indigo-600 bg-indigo-50"
                           : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                      } transition-all duration-200 font-medium px-4 py-2 rounded-lg flex items-center space-x-3`}
+                      } transition-all duration-200 font-medium px-4 py-3 min-h-[44px] rounded-lg flex items-center space-x-3`}
                       onClick={closeMobileMenu}
                     >
                       <Icon size={18} />
@@ -318,7 +318,7 @@ const Navbar = () => {
 
               <Link
                 to="/dashboard"
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium text-center shadow-lg flex items-center justify-center space-x-2 mt-2"
+                className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 min-h-[44px] rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-medium text-center shadow-lg flex items-center justify-center space-x-2 mt-2"
                 onClick={closeMobileMenu}
               >
                 <span>Get Started</span>

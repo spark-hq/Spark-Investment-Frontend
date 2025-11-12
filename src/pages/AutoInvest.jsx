@@ -102,8 +102,8 @@ const AutoInvest = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-4 sm:py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 animate-fadeIn">
           <button
@@ -119,7 +119,7 @@ const AutoInvest = () => {
               <Bot className="text-white" size={32} />
             </div>
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Auto-Invest AI</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Auto-Invest AI</h1>
               <p className="text-xl text-gray-600">Automated investing powered by artificial intelligence</p>
             </div>
             <Sparkles className="text-purple-600 animate-pulse" size={32} />
@@ -135,7 +135,7 @@ const AutoInvest = () => {
               </div>
               <div>
                 <p className="text-blue-100 text-sm font-medium">AI Plans Available</p>
-                <h3 className="text-3xl font-bold">{aiInvestmentPlans.length}</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">{aiInvestmentPlans.length}</h3>
               </div>
             </div>
           </Card>
@@ -147,7 +147,7 @@ const AutoInvest = () => {
               </div>
               <div>
                 <p className="text-green-100 text-sm font-medium">Total Returns</p>
-                <h3 className="text-3xl font-bold">+{formatCurrency(performanceMetrics.totalReturns)}</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">+{formatCurrency(performanceMetrics.totalReturns)}</h3>
               </div>
             </div>
           </Card>
@@ -159,7 +159,7 @@ const AutoInvest = () => {
               </div>
               <div>
                 <p className="text-purple-100 text-sm font-medium">Active Plans</p>
-                <h3 className="text-3xl font-bold">{performanceMetrics.totalPlansActive}</h3>
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold">{performanceMetrics.totalPlansActive}</h3>
               </div>
             </div>
           </Card>
@@ -167,43 +167,43 @@ const AutoInvest = () => {
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-xl shadow-md p-2 mb-8 animate-fadeIn">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
             <button
               onClick={() => setActiveTab('plans')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'plans'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               AI Plans
             </button>
             <button
               onClick={() => setActiveTab('performance')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'performance'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               Performance
             </button>
             <button
               onClick={() => setActiveTab('backtest')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'backtest'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               Backtest
             </button>
             <button
               onClick={() => setActiveTab('rules')}
-              className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+              className={`py-3 px-3 sm:py-3 sm:px-4 rounded-lg font-semibold transition-all text-xs sm:text-sm min-h-[44px] active:scale-95 ${
                 activeTab === 'rules'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : 'text-gray-700 hover:bg-gray-100 active:bg-gray-200'
               }`}
             >
               Rules
@@ -217,7 +217,7 @@ const AutoInvest = () => {
           {activeTab === 'plans' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center space-x-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center space-x-2">
                   <Bot className="text-indigo-600" size={28} />
                   <span>AI-Recommended Investment Plans</span>
                 </h2>
@@ -252,7 +252,7 @@ const AutoInvest = () => {
           {activeTab === 'backtest' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Historical Backtesting</h2>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4">Historical Backtesting</h2>
                 <p className="text-gray-600 mb-4">
                   Select a plan to view its historical performance over the past 5 years
                 </p>
@@ -263,7 +263,7 @@ const AutoInvest = () => {
                     <button
                       key={plan.id}
                       onClick={() => handleSelectPlanForBacktest(plan.id)}
-                      className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                      className={`px-4 py-3 min-h-[44px] rounded-lg font-semibold transition-all flex items-center ${
                         selectedPlanForBacktest === plan.id
                           ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md'
                           : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-purple-300'
@@ -289,7 +289,7 @@ const AutoInvest = () => {
           {activeTab === 'rules' && (
             <div>
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
                   <Settings className="text-indigo-600" size={28} />
                   <span>Investment Rule Builder</span>
                 </h2>
@@ -303,7 +303,7 @@ const AutoInvest = () => {
                     <button
                       key={plan.id}
                       onClick={() => handleSelectPlanForRules(plan)}
-                      className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                      className={`px-4 py-3 min-h-[44px] rounded-lg font-semibold transition-all flex items-center ${
                         selectedPlanForRules?.id === plan.id
                           ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
                           : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-indigo-300'
@@ -323,7 +323,7 @@ const AutoInvest = () => {
         {/* Transaction Log Section */}
         {activeTab === 'performance' && autoInvestTransactions.length > 0 && (
           <div className="mt-8 bg-white rounded-xl shadow-md p-6 border-2 border-gray-100 animate-fadeIn">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Recent Auto-Invest Transactions</h3>
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4">Recent Auto-Invest Transactions</h3>
             <div className="space-y-2">
               {autoInvestTransactions.slice(0, 5).map((transaction) => (
                 <div
