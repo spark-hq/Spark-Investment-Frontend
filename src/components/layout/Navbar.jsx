@@ -59,7 +59,7 @@ const Navbar = () => {
     }
   };
 
-  // Close dropdowns when clicking outside
+  // Close dropdowns when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -70,9 +70,19 @@ const Navbar = () => {
       }
     };
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMoreDropdownOpen(false);
+        setIsProfileDropdownOpen(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -110,7 +120,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-gray-100 backdrop-blur-sm bg-opacity-95">
+    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-gray-100 backdrop-blur-sm bg-opacity-95" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-18">
           {/* Logo */}
@@ -118,8 +128,9 @@ const Navbar = () => {
             to="/"
             className="flex items-center space-x-2 group py-4"
             onClick={closeMobileMenu}
+            aria-label="Spark Investment Home"
           >
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-2.5 rounded-xl group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-lg">
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-2.5 rounded-xl group-hover:scale-110 transition-all duration-300 shadow-md group-hover:shadow-lg" aria-hidden="true">
               <Sparkles className="text-white" size={22} />
             </div>
             <div className="flex items-center space-x-2">
@@ -141,6 +152,7 @@ const Navbar = () => {
                   ? "text-indigo-600 bg-indigo-50 shadow-sm"
                   : "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
+              aria-current={isActive("/") ? "page" : undefined}
             >
               Home
             </Link>
@@ -154,6 +166,8 @@ const Navbar = () => {
                   ? "text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
                   : "text-gray-400 cursor-not-allowed opacity-60 blur-[0.5px]"
               } px-4 py-2.5 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center`}
+              aria-current={isActive("/dashboard") ? "page" : undefined}
+              aria-disabled={!isAuthenticated}
             >
               Dashboard
             </Link>
@@ -203,6 +217,10 @@ const Navbar = () => {
               <button
                 onClick={isAuthenticated ? toggleMoreDropdown : undefined}
                 disabled={!isAuthenticated}
+                aria-haspopup="true"
+                aria-expanded={isMoreDropdownOpen}
+                aria-label="More options menu"
+                aria-disabled={!isAuthenticated}
                 className={`${
                   isMoreDropdownOpen
                     ? "text-indigo-600 bg-indigo-50 shadow-sm"
@@ -217,15 +235,16 @@ const Navbar = () => {
                   className={`transition-transform duration-300 ${
                     isMoreDropdownOpen ? "rotate-180" : ""
                   }`}
+                  aria-hidden="true"
                 />
               </button>
 
               {/* Dropdown Menu with improved animation */}
               {isMoreDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-3 z-50 transform transition-all duration-200 origin-top-right animate-fadeIn">
+                <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-3 z-50 transform transition-all duration-200 origin-top-right animate-fadeIn" role="menu" aria-label="More features menu">
                   <div className="px-4 py-2 border-b-2 border-gray-100 bg-gradient-to-r from-indigo-50 to-purple-50">
                     <p className="text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center space-x-2">
-                      <Sparkles size={14} />
+                      <Sparkles size={14} aria-hidden="true" />
                       <span>More Features</span>
                     </p>
                   </div>
@@ -236,6 +255,8 @@ const Navbar = () => {
                         key={item.path}
                         to={item.path}
                         onClick={closeMoreDropdown}
+                        role="menuitem"
+                        aria-current={isActive(item.path) ? "page" : undefined}
                         className={`${
                           isActive(item.path)
                             ? "bg-indigo-50 text-indigo-600"
@@ -248,6 +269,7 @@ const Navbar = () => {
                               ? "bg-indigo-600 text-white shadow-md"
                               : "bg-gray-100 text-gray-600 group-hover:bg-indigo-100 group-hover:text-indigo-600"
                           } p-2.5 rounded-xl transition-all duration-200`}
+                          aria-hidden="true"
                         >
                           <Icon size={18} />
                         </div>
@@ -268,9 +290,12 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 {/* Notifications */}
-                <button className="relative p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-200">
-                  <Bell size={20} />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                <button
+                  className="relative p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-200"
+                  aria-label="Notifications (1 unread)"
+                >
+                  <Bell size={20} aria-hidden="true" />
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" aria-hidden="true"></span>
                 </button>
 
                 {/* Profile Dropdown */}
@@ -278,12 +303,15 @@ const Navbar = () => {
                   <button
                     onClick={toggleProfileDropdown}
                     className="flex items-center space-x-2 p-2 pr-3 hover:bg-indigo-50 rounded-xl transition-all duration-200 group"
+                    aria-haspopup="true"
+                    aria-expanded={isProfileDropdownOpen}
+                    aria-label={`User menu for ${user?.name || 'User'}`}
                   >
                     <div className="w-9 h-9 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-md group-hover:shadow-lg transition-all duration-200">
                       {user?.avatar ? (
-                        <img src={user.avatar} alt={user.name} className="w-full h-full rounded-xl object-cover" />
+                        <img src={user.avatar} alt="" className="w-full h-full rounded-xl object-cover" />
                       ) : (
-                        <span className="text-sm">{user?.name?.charAt(0).toUpperCase()}</span>
+                        <span className="text-sm" aria-hidden="true">{user?.name?.charAt(0).toUpperCase()}</span>
                       )}
                     </div>
                     <ChevronDown
@@ -291,12 +319,13 @@ const Navbar = () => {
                       className={`text-gray-600 transition-transform duration-300 ${
                         isProfileDropdownOpen ? "rotate-180" : ""
                       }`}
+                      aria-hidden="true"
                     />
                   </button>
 
                   {isProfileDropdownOpen && (
-                    <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeIn">
-                      <div className="px-4 py-3 border-b-2 border-gray-100">
+                    <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeIn" role="menu" aria-label="User menu">
+                      <div className="px-4 py-3 border-b-2 border-gray-100" role="presentation">
                         <p className="text-sm font-bold text-gray-900">{user?.name || 'User'}</p>
                         <p className="text-xs text-gray-500 mt-0.5">{user?.email || ''}</p>
                       </div>
@@ -304,15 +333,17 @@ const Navbar = () => {
                         to="/settings"
                         onClick={closeProfileDropdown}
                         className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200"
+                        role="menuitem"
                       >
-                        <Settings size={18} />
+                        <Settings size={18} aria-hidden="true" />
                         <span className="text-sm font-semibold">Settings</span>
                       </Link>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-all duration-200"
+                        role="menuitem"
                       >
-                        <LogOut size={18} />
+                        <LogOut size={18} aria-hidden="true" />
                         <span className="text-sm font-semibold">Logout</span>
                       </button>
                     </div>
@@ -333,9 +364,10 @@ const Navbar = () => {
                 <Link
                   to="/signup"
                   className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-2.5 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 font-bold shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center space-x-2 text-sm"
+                  aria-label="Sign up for Spark Investment"
                 >
                   <span>Sign Up</span>
-                  <Sparkles size={16} />
+                  <Sparkles size={16} aria-hidden="true" />
                 </Link>
               </>
             )}
@@ -345,14 +377,17 @@ const Navbar = () => {
           <button
             className="lg:hidden text-gray-700 hover:text-indigo-600 transition-colors p-2.5 hover:bg-indigo-50 rounded-xl active:scale-95"
             onClick={toggleMobileMenu}
+            aria-expanded={isMobileMenuOpen}
+            aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+            aria-controls="mobile-menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden pb-4 pt-2 space-y-2 animate-fadeIn border-t border-gray-100 mt-2">
+          <div id="mobile-menu" className="lg:hidden pb-4 pt-2 space-y-2 animate-fadeIn border-t border-gray-100 mt-2" role="navigation" aria-label="Mobile navigation">
             <Link
               to="/"
               className={`${

@@ -283,20 +283,24 @@ const Signup = () => {
       <div className="max-w-2xl w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center justify-center space-x-2 mb-6">
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl shadow-lg">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center space-x-2 mb-6"
+            aria-label="Go to Spark Investment homepage"
+          >
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl shadow-lg" aria-hidden="true">
               <Sparkles className="text-white" size={28} />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Spark Investment
             </span>
           </Link>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Your Account</h2>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Account</h1>
           <p className="text-gray-600">Start your investment journey with AI-powered insights</p>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-8">
+        <div className="mb-8" role="progressbar" aria-valuenow={currentStep} aria-valuemin="1" aria-valuemax={totalSteps} aria-label={`Signup progress: Step ${currentStep} of ${totalSteps}`}>
           <div className="flex justify-between mb-3">
             {[1, 2, 3, 4].map((step) => (
               <div key={step} className="flex items-center">
@@ -308,31 +312,34 @@ const Signup = () => {
                       ? 'bg-indigo-600 text-white ring-4 ring-indigo-200'
                       : 'bg-gray-200 text-gray-500'
                   }`}
+                  aria-label={`Step ${step}: ${step < currentStep ? 'Completed' : step === currentStep ? 'Current' : 'Not started'}`}
+                  aria-current={step === currentStep ? 'step' : undefined}
                 >
-                  {step < currentStep ? <CheckCircle2 size={20} /> : step}
+                  {step < currentStep ? <CheckCircle2 size={20} aria-hidden="true" /> : step}
                 </div>
                 {step < 4 && (
                   <div
                     className={`w-16 sm:w-24 h-1 mx-2 transition-all ${
                       step < currentStep ? 'bg-green-500' : 'bg-gray-200'
                     }`}
+                    aria-hidden="true"
                   ></div>
                 )}
               </div>
             ))}
           </div>
-          <div className="text-center text-sm font-semibold text-gray-600">
+          <div className="text-center text-sm font-semibold text-gray-600" aria-live="polite">
             Step {currentStep} of {totalSteps}
           </div>
         </div>
 
         {/* Signup Form */}
         <div className="bg-white rounded-2xl shadow-xl border-2 border-gray-100 p-8">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} aria-label="Multi-step signup form">
             {/* Form Error */}
             {errors.form && (
-              <div className="mb-6 bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-start space-x-3">
-                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
+              <div className="mb-6 bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-start space-x-3" role="alert" aria-live="polite" aria-atomic="true">
+                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} aria-hidden="true" />
                 <p className="text-sm text-red-800 font-medium">{errors.form}</p>
               </div>
             )}

@@ -126,25 +126,34 @@ const Login = () => {
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center justify-center space-x-2 mb-6">
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl shadow-lg">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center space-x-2 mb-6"
+            aria-label="Go to Spark Investment homepage"
+          >
+            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-3 rounded-xl shadow-lg" aria-hidden="true">
               <Sparkles className="text-white" size={28} />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Spark Investment
             </span>
           </Link>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to access your investment dashboard</p>
         </div>
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-xl border-2 border-gray-100 p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" aria-label="Login form">
             {/* Form Error */}
             {errors.form && (
-              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-start space-x-3">
-                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
+              <div
+                className="bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-start space-x-3"
+                role="alert"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} aria-hidden="true" />
                 <p className="text-sm text-red-800 font-medium">{errors.form}</p>
               </div>
             )}
@@ -155,7 +164,7 @@ const Login = () => {
                 Email Address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" aria-hidden="true">
                   <Mail className="text-gray-400" size={20} />
                 </div>
                 <input
@@ -163,6 +172,10 @@ const Login = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  required
+                  aria-required="true"
+                  aria-invalid={errors.email && touched.email ? 'true' : 'false'}
+                  aria-describedby={errors.email && touched.email ? 'email-error' : undefined}
                   value={formData.email}
                   onChange={handleInputChange}
                   onBlur={() => handleBlur('email')}
@@ -175,8 +188,8 @@ const Login = () => {
                 />
               </div>
               {errors.email && touched.email && (
-                <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
-                  <AlertCircle size={14} />
+                <p id="email-error" className="mt-2 text-sm text-red-600 flex items-center space-x-1" role="alert">
+                  <AlertCircle size={14} aria-hidden="true" />
                   <span>{errors.email}</span>
                 </p>
               )}
@@ -188,7 +201,7 @@ const Login = () => {
                 Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" aria-hidden="true">
                   <Lock className="text-gray-400" size={20} />
                 </div>
                 <input
@@ -196,6 +209,10 @@ const Login = () => {
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
+                  required
+                  aria-required="true"
+                  aria-invalid={errors.password && touched.password ? 'true' : 'false'}
+                  aria-describedby={errors.password && touched.password ? 'password-error' : undefined}
                   value={formData.password}
                   onChange={handleInputChange}
                   onBlur={() => handleBlur('password')}
@@ -209,14 +226,16 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
                 </button>
               </div>
               {errors.password && touched.password && (
-                <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
-                  <AlertCircle size={14} />
+                <p id="password-error" className="mt-2 text-sm text-red-600 flex items-center space-x-1" role="alert">
+                  <AlertCircle size={14} aria-hidden="true" />
                   <span>{errors.password}</span>
                 </p>
               )}
@@ -250,17 +269,19 @@ const Login = () => {
             <button
               type="submit"
               disabled={isSubmitting}
+              aria-busy={isSubmitting}
+              aria-live="polite"
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-xl font-bold text-base hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 group"
             >
               {isSubmitting ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
                   <span>Signing in...</span>
                 </>
               ) : (
                 <>
                   <span>Sign In</span>
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </>
               )}
             </button>
