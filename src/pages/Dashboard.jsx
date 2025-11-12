@@ -132,21 +132,21 @@ const Dashboard = () => {
                 <p className="text-gray-600 text-sm">Manage your investments efficiently</p>
               </div>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/investments">
-                <Button variant="primary" className="hover-lift flex items-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%]">
+            <div className="flex flex-wrap gap-3 w-full sm:w-auto">
+              <Link to="/investments" className="w-full sm:w-auto">
+                <Button variant="primary" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-violet-700 via-blue-700 to-green-500 animate-gradient bg-[length:200%_200%]">
                   <TrendingUp size={18} />
                   <span>View Investments</span>
                 </Button>
               </Link>
-              <Link to="/live-trading">
-                <Button variant="success" className="hover-lift flex items-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%]">
+              <Link to="/live-trading" className="w-full sm:w-auto">
+                <Button variant="success" className="w-full hover-lift flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 via-blue-600 to-violet-700 animate-gradient bg-[length:200%_200%]">
                   <Activity size={18} />
                   <span>Live Trading</span>
                 </Button>
               </Link>
-              <Link to="/ai-analysis">
-                <Button variant="outline" className="hover-lift flex items-center space-x-2">
+              <Link to="/ai-analysis" className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full hover-lift flex items-center justify-center space-x-2">
                   <Brain size={18} />
                   <span>AI Analysis</span>
                 </Button>

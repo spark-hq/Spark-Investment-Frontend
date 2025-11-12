@@ -190,14 +190,14 @@ const LiveTrading = () => {
             </div>
 
             {/* Platform Selector */}
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:space-x-3 w-full sm:w-auto">
               <label className="text-sm font-semibold text-gray-700">Platform:</label>
               <select
                 value={selectedPlatform.id}
                 onChange={(e) =>
                   setSelectedPlatform(platforms.find((p) => p.id === e.target.value))
                 }
-                className="px-4 py-2 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:outline-none font-semibold text-gray-900 bg-white shadow-md"
+                className="w-full sm:w-auto px-4 py-2 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:outline-none font-semibold text-gray-900 bg-white shadow-md"
               >
                 {platforms.map((platform) => (
                   <option key={platform.id} value={platform.id}>

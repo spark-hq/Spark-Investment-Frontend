@@ -231,7 +231,7 @@ const AIAnalysis = () => {
               </div>
             </div>
 
-            <div className="flex space-x-3">
+            <div className="flex flex-wrap gap-3">
               <Button
                 onClick={handleRefresh}
                 variant="outline"
@@ -277,7 +277,7 @@ const AIAnalysis = () => {
         ) : (
           <>
             {/* Three Column Layout - Risk, Health, Valuation */}
-            <div className="grid md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fadeIn">
               <RiskMeter
                 riskLevel={currentAnalysis.riskLevel}
                 riskScore={currentAnalysis.riskScore}
