@@ -26,10 +26,7 @@ const AIAnalysis = () => {
 
   // Fetch AI analysis data for selected investment
   const {
-    insights,
-    recommendations,
-    riskAnalysis,
-    // marketSentiment,
+    data: investmentAnalysis,
     isLoading: aiLoading,
     isError: aiError,
     refetch
