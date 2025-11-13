@@ -18,6 +18,7 @@ const Investments = lazy(() => import("./pages/Investments"));
 const AIAnalysis = lazy(() => import("./pages/AIAnalysis"));
 const LiveTrading = lazy(() => import("./pages/LiveTrading"));
 const Transactions = lazy(() => import("./pages/Transactions"));
+const Goals = lazy(() => import("./pages/Goals"));
 const AutoInvest = lazy(() => import("./pages/AutoInvest"));
 const Settings = lazy(() => import("./pages/Settings"));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
@@ -131,6 +132,14 @@ function AppContent() {
               element={
                 <ProtectedRoute>
                   <Transactions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/goals"
+              element={
+                <ProtectedRoute>
+                  <Goals />
                 </ProtectedRoute>
               }
             />
