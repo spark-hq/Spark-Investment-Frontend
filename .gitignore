@@ -1,0 +1,102 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic reports
+report.*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage output
+coverage
+*.lcov
+.nyc_output
+
+# Dependency directories
+node_modules/
+bower_components/
+jspm_packages/
+web_modules/
+
+# Build output
+dist
+dist-ssr
+build/
+out/
+
+# Vite cache
+.vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Parcel cache
+.cache
+.parcel-cache
+
+# Snowpack
+web_modules/
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional npm cache
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Environment variables
+.env
+.env.* 
+!.env.example
+
+# Yarn / PnP
+.yarn/*
+.pnp.*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Serverless
+.serverless/
+
+# DynamoDB local dev
+.dynamodb/
+
+# VSCode settings (except extensions.json)
+.vscode/*
+!.vscode/extensions.json
+
+# IDE folders
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Output of `npm pack`
+*.tgz
+
+# Vite, Nuxt, Sveltekit, Next, Docusaurus, Vuepress outputs
+.next
+.nuxt
+.vuepress/dist
+.temp
+.svelte-kit/
+.docusaurus
