@@ -1,7 +1,19 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 
 // Create Auth Context
 export const AuthContext = createContext(null);
+
+// ===================================
+// Configuration
+// ===================================
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const AUTH_MOCK_MODE = import.meta.env.VITE_AUTH_MOCK_MODE === 'true';
+
+// Log configuration on startup
+console.log('🔧 Auth Configuration:');
+console.log('   AUTH_MOCK_MODE:', AUTH_MOCK_MODE ? '✅ ENABLED (Using Mock)' : '❌ DISABLED (Using Real Backend)');
+console.log('   API Base URL:', API_BASE_URL);
 
 // Token expiry times (in milliseconds)
 const ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000; // 15 minutes
@@ -120,110 +132,197 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // ===================================
-  // Login Function (Mock Implementation)
+  // Login Function
   // ===================================
   const login = useCallback(async (email, password, keepSignedIn = false) => {
     try {
-      // Mock authentication - in real app, this would be an API call
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log('🔐 Login attempt:', { email, AUTH_MOCK_MODE });
 
-      // Mock validation (accept any non-empty credentials for demo)
-      if (!email || !password) {
-        throw new Error('Email and password are required');
+      if (AUTH_MOCK_MODE) {
+        // ===== MOCK MODE =====
+        console.log('✅ Using Mock Login');
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        // Mock validation (accept any non-empty credentials for demo)
+        if (!email || !password) {
+          throw new Error('Email and password are required');
+        }
+
+        // Mock user data
+        const mockUser = {
+          id: `user_${Date.now()}`,
+          name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+          email: email,
+          avatar: null,
+          preferences: {
+            theme: 'light',
+            notifications: true,
+            currency: 'INR',
+          },
+          portfolioIds: ['portfolio_1', 'portfolio_2'],
+          createdAt: new Date().toISOString(),
+        };
+
+        // Generate mock tokens
+        const accessToken = `access_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const refreshToken = `refresh_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const tokenExpiry = Date.now() + ACCESS_TOKEN_EXPIRY;
+
+        // Store in localStorage
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(mockUser));
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+        localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, tokenExpiry.toString());
+
+        // Update state
+        setUser(mockUser);
+        setIsAuthenticated(true);
+
+        return { success: true, user: mockUser };
+      } else {
+        // ===== REAL BACKEND MODE =====
+        console.log('🌐 Using Real Backend Login - POST /auth/login');
+
+        const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+          email,
+          password,
+        });
+
+        if (response.data && response.data.success) {
+          const { user: userData, accessToken, refreshToken } = response.data;
+          const tokenExpiry = Date.now() + ACCESS_TOKEN_EXPIRY;
+
+          // Store in localStorage
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
+          localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+          localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+          localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, tokenExpiry.toString());
+
+          // Update state
+          setUser(userData);
+          setIsAuthenticated(true);
+
+          console.log('✅ Login successful:', userData);
+          return { success: true, user: userData };
+        } else {
+          throw new Error(response.data?.message || 'Login failed');
+        }
+      }
+    } catch (error) {
+      console.error('❌ Login error:', error);
+
+      // Handle API errors
+      if (error.response) {
+        const errorMessage = error.response.data?.message || error.response.data?.error || 'Login failed';
+        return { success: false, error: errorMessage };
       }
 
-      // Mock user data
-      const mockUser = {
-        id: `user_${Date.now()}`,
-        name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-        email: email,
-        avatar: null,
-        preferences: {
-          theme: 'light',
-          notifications: true,
-          currency: 'INR',
-        },
-        portfolioIds: ['portfolio_1', 'portfolio_2'],
-        createdAt: new Date().toISOString(),
-      };
-
-      // Generate mock tokens
-      const accessToken = `access_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const refreshToken = `refresh_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const tokenExpiry = Date.now() + ACCESS_TOKEN_EXPIRY;
-
-      // Store in localStorage
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(mockUser));
-      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
-      localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, tokenExpiry.toString());
-
-      // Update state
-      setUser(mockUser);
-      setIsAuthenticated(true);
-
-      return { success: true, user: mockUser };
-    } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message || 'Login failed. Please try again.' };
     }
   }, []);
 
   // ===================================
-  // Signup Function (Mock Implementation)
+  // Signup Function
   // ===================================
   const signup = useCallback(async (userData) => {
     try {
-      // Mock signup - in real app, this would be an API call
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log('📝 Signup attempt:', { email: userData.email, AUTH_MOCK_MODE });
 
-      // Validate required fields
-      const { name, email, password, phone, dob, riskProfile } = userData;
+      if (AUTH_MOCK_MODE) {
+        // ===== MOCK MODE =====
+        console.log('✅ Using Mock Signup');
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      if (!name || !email || !password) {
-        throw new Error('Name, email, and password are required');
+        // Validate required fields
+        const { name, email, password, phone, dob, riskProfile } = userData;
+
+        if (!name || !email || !password) {
+          throw new Error('Name, email, and password are required');
+        }
+
+        // Mock user creation
+        const newUser = {
+          id: `user_${Date.now()}`,
+          name: name,
+          email: email,
+          phone: phone || null,
+          dob: dob || null,
+          riskProfile: riskProfile || 'moderate',
+          avatar: null,
+          preferences: {
+            theme: 'light',
+            notifications: true,
+            currency: 'INR',
+          },
+          portfolioIds: [],
+          createdAt: new Date().toISOString(),
+          kycStatus: phone && dob ? 'pending' : 'incomplete',
+        };
+
+        // Generate mock tokens
+        const accessToken = `access_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const refreshToken = `refresh_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const tokenExpiry = Date.now() + ACCESS_TOKEN_EXPIRY;
+
+        // Store in localStorage
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+        localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, tokenExpiry.toString());
+
+        // Update state
+        setUser(newUser);
+        setIsAuthenticated(true);
+
+        return { success: true, user: newUser };
+      } else {
+        // ===== REAL BACKEND MODE =====
+        console.log('🌐 Using Real Backend Signup - POST /auth/signup');
+
+        const { name, email, password, phone, dob, riskProfile } = userData;
+
+        const response = await axios.post(`${API_BASE_URL}/auth/signup`, {
+          name,
+          email,
+          password,
+          phone,
+          dob,
+          riskProfile: riskProfile?.appetite || riskProfile || 'moderate',
+          investmentHorizon: riskProfile?.horizon || 'medium',
+        });
+
+        if (response.data && response.data.success) {
+          const { user: newUserData, accessToken, refreshToken } = response.data;
+          const tokenExpiry = Date.now() + ACCESS_TOKEN_EXPIRY;
+
+          // Store in localStorage
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUserData));
+          localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+          localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+          localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, tokenExpiry.toString());
+
+          // Update state
+          setUser(newUserData);
+          setIsAuthenticated(true);
+
+          console.log('✅ Signup successful:', newUserData);
+          return { success: true, user: newUserData };
+        } else {
+          throw new Error(response.data?.message || 'Signup failed');
+        }
+      }
+    } catch (error) {
+      console.error('❌ Signup error:', error);
+
+      // Handle API errors
+      if (error.response) {
+        const errorMessage = error.response.data?.message || error.response.data?.error || 'Signup failed';
+        return { success: false, error: errorMessage };
       }
 
-      // Mock user creation
-      const newUser = {
-        id: `user_${Date.now()}`,
-        name: name,
-        email: email,
-        phone: phone || null,
-        dob: dob || null,
-        riskProfile: riskProfile || 'moderate',
-        avatar: null,
-        preferences: {
-          theme: 'light',
-          notifications: true,
-          currency: 'INR',
-        },
-        portfolioIds: [],
-        createdAt: new Date().toISOString(),
-        kycStatus: phone && dob ? 'pending' : 'incomplete',
-      };
-
-      // Generate mock tokens
-      const accessToken = `access_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const refreshToken = `refresh_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      const tokenExpiry = Date.now() + ACCESS_TOKEN_EXPIRY;
-
-      // Store in localStorage
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
-      localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
-      localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, tokenExpiry.toString());
-
-      // Update state
-      setUser(newUser);
-      setIsAuthenticated(true);
-
-      return { success: true, user: newUser };
-    } catch (error) {
-      console.error('Signup error:', error);
-      return { success: false, error: error.message };
+      return { success: false, error: error.message || 'Signup failed. Please try again.' };
     }
   }, []);
 
