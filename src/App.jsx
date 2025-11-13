@@ -4,6 +4,7 @@ import { useEffect, lazy, Suspense } from "react";
 import Layout from "./components/layout/Layout";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import NotificationSystem from "./components/ui/NotificationSystem";
+import ScrollToTop from "./components/ui/ScrollToTop";
 import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import websocketService from "./services/websocket";
@@ -23,6 +24,7 @@ const AutoInvest = lazy(() => import("./pages/AutoInvest"));
 const Settings = lazy(() => import("./pages/Settings"));
 const TermsOfService = lazy(() => import("./pages/legal/TermsOfService"));
 const PrivacyPolicy = lazy(() => import("./pages/legal/PrivacyPolicy"));
+const DisclaimerPage = lazy(() => import("./pages/legal/DisclaimerPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Auth pages
@@ -67,6 +69,7 @@ function AppContent() {
 
   return (
     <Router basename="/Spark-Investment-Frontend">
+      <ScrollToTop />
       <Layout>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -163,6 +166,7 @@ function AppContent() {
             {/* Legal Pages - Public */}
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/disclaimer" element={<DisclaimerPage />} />
 
             {/* 404 - Not Found */}
             <Route path="*" element={<NotFound />} />
