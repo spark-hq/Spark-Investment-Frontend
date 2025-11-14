@@ -19,12 +19,13 @@ import {
 // ===================================
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 const MOCK_MODE = import.meta.env.VITE_MOCK_MODE === 'true';
+const PORTFOLIO_MOCK_MODE = import.meta.env.VITE_PORTFOLIO_MOCK_MODE === 'true';
 const DEBUG_MODE = import.meta.env.VITE_DEBUG_MODE === 'true';
 
 // Always log API configuration on startup
 console.log('🔧 API Configuration:');
 console.log('   MOCK_MODE:', MOCK_MODE ? '✅ ENABLED' : '❌ DISABLED');
-console.log('   VITE_MOCK_MODE env:', import.meta.env.VITE_MOCK_MODE);
+console.log('   PORTFOLIO_MOCK_MODE:', PORTFOLIO_MOCK_MODE ? '✅ ENABLED (Using Mock)' : '❌ DISABLED (Using Real Backend)');
 console.log('   Base URL:', API_BASE_URL);
 console.log('   WebSocket:', import.meta.env.VITE_WEBSOCKET_URL);
 
@@ -86,33 +87,33 @@ apiClient.interceptors.response.use(
 export const portfolioAPI = {
   // Get portfolio summary
   getSummary: async () => {
-    console.log('🔍 getSummary - MOCK_MODE:', MOCK_MODE, '| env value:', import.meta.env.VITE_MOCK_MODE);
-    if (MOCK_MODE) {
+    console.log('🔍 getSummary - PORTFOLIO_MOCK_MODE:', PORTFOLIO_MOCK_MODE);
+    if (PORTFOLIO_MOCK_MODE) {
       console.log('✅ Using Mock Data - GET /api/portfolio/summary');
       await simulateDelay(300);
       return mockResponse(mockPortfolio.summary);
     }
-    console.log('🌐 Calling Real API - GET /api/portfolio/summary');
+    console.log('🌐 Calling Real Backend - GET /api/portfolio/summary');
     const response = await apiClient.get('/portfolio/summary');
     return response.data;
   },
 
   // Get connected platforms
   getPlatforms: async () => {
-    console.log('🔍 getPlatforms - MOCK_MODE:', MOCK_MODE);
-    if (MOCK_MODE) {
+    console.log('🔍 getPlatforms - PORTFOLIO_MOCK_MODE:', PORTFOLIO_MOCK_MODE);
+    if (PORTFOLIO_MOCK_MODE) {
       console.log('✅ Using Mock Data - GET /api/portfolio/platforms');
       await simulateDelay(300);
       return mockResponse(mockPortfolio.platforms);
     }
-    console.log('🌐 Calling Real API - GET /api/portfolio/platforms');
+    console.log('🌐 Calling Real Backend - GET /api/portfolio/platforms');
     const response = await apiClient.get('/portfolio/platforms');
     return response.data;
   },
 
   // Get performance data
   getPerformance: async (period = '1M') => {
-    if (MOCK_MODE) {
+    if (PORTFOLIO_MOCK_MODE) {
       await simulateDelay(400);
       return mockResponse(mockPortfolio.performance);
     }
@@ -122,7 +123,7 @@ export const portfolioAPI = {
 
   // Get asset allocation
   getAllocation: async () => {
-    if (MOCK_MODE) {
+    if (PORTFOLIO_MOCK_MODE) {
       await simulateDelay(300);
       return mockResponse(mockPortfolio.allocation);
     }
@@ -132,7 +133,7 @@ export const portfolioAPI = {
 
   // Get top performers
   getTopPerformers: async () => {
-    if (MOCK_MODE) {
+    if (PORTFOLIO_MOCK_MODE) {
       await simulateDelay(350);
       return mockResponse(mockPortfolio.topPerformers);
     }
@@ -142,7 +143,7 @@ export const portfolioAPI = {
 
   // Get recent activity
   getRecentActivity: async (limit = 10) => {
-    if (MOCK_MODE) {
+    if (PORTFOLIO_MOCK_MODE) {
       await simulateDelay(250);
       return mockResponse(mockPortfolio.recentActivity.slice(0, limit));
     }
@@ -152,7 +153,7 @@ export const portfolioAPI = {
 
   // Connect new platform
   connectPlatform: async (platform, credentials) => {
-    if (MOCK_MODE) {
+    if (PORTFOLIO_MOCK_MODE) {
       await simulateDelay(1500);
       return mockResponse({ success: true, message: 'Platform connected successfully' });
     }
@@ -162,7 +163,7 @@ export const portfolioAPI = {
 
   // Disconnect platform
   disconnectPlatform: async (platformId) => {
-    if (MOCK_MODE) {
+    if (PORTFOLIO_MOCK_MODE) {
       await simulateDelay(800);
       return mockResponse({ success: true, message: 'Platform disconnected' });
     }
