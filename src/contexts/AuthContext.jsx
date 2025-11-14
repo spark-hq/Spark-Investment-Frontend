@@ -42,7 +42,12 @@ export const AuthProvider = ({ children }) => {
         const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
         const tokenExpiry = localStorage.getItem(STORAGE_KEYS.TOKEN_EXPIRY);
 
-        if (storedUser && accessToken && tokenExpiry) {
+        // Check for valid values (not null, not "undefined" string, not "null" string)
+        const isValidStoredUser = storedUser && storedUser !== 'undefined' && storedUser !== 'null';
+        const isValidToken = accessToken && accessToken !== 'undefined' && accessToken !== 'null';
+        const isValidExpiry = tokenExpiry && tokenExpiry !== 'undefined' && tokenExpiry !== 'null';
+
+        if (isValidStoredUser && isValidToken && isValidExpiry) {
           const expiryTime = parseInt(tokenExpiry, 10);
           const now = Date.now();
 

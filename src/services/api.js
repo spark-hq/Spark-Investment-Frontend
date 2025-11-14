@@ -41,9 +41,9 @@ const apiClient = axios.create({
 // Request interceptor (add auth tokens, logging)
 apiClient.interceptors.request.use(
   (config) => {
-    // Add auth token if available
-    const token = localStorage.getItem('auth_token');
-    if (token) {
+    // Add auth token if available (using same key as AuthContext)
+    const token = localStorage.getItem('spark_access_token');
+    if (token && token !== 'undefined' && token !== 'null') {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -72,8 +72,11 @@ apiClient.interceptors.response.use(
 
     // Handle specific error codes
     if (error.response?.status === 401) {
-      // Unauthorized - redirect to login
-      localStorage.removeItem('auth_token');
+      // Unauthorized - clear auth data and redirect to login
+      localStorage.removeItem('spark_user');
+      localStorage.removeItem('spark_access_token');
+      localStorage.removeItem('spark_refresh_token');
+      localStorage.removeItem('spark_token_expiry');
       window.location.href = '/login';
     }
 
